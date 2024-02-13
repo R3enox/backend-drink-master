@@ -2,6 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
+require("./db");
 
 const authRouter = require("./routes/api/auth");
 const usersRouter = require("./routes/api/users");
@@ -42,5 +43,3 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
-
-
