@@ -1,5 +1,7 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 
+// connect db categories
 const categoriesSchema = new mongoose.Schema({
   categories: [
     {
@@ -10,11 +12,22 @@ const categoriesSchema = new mongoose.Schema({
 
 const CategoriesDB = mongoose.model("categorie", categoriesSchema);
 
+// connect db ingredients
 const ingredientsSchema = new mongoose.Schema({
   title: {
     type: String,
   },
+  ingredientThumb: {
+    type: String,
+  },
+
   alcohol: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
+  type: {
     type: String,
   },
 });

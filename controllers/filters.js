@@ -1,8 +1,8 @@
-const { categoriesDB, IngredientsDB } = require("../models/filters.js");
+const { IngredientsDB, CategoriesDB } = require("../models/filters.js");
 const { ctrlWrapper } = require("../helpers/index.js");
 
 const listCategories = async (req, res, next) => {
-  const result = await categoriesDB.find();
+  const result = await CategoriesDB.find();
   res.json(result);
 };
 
