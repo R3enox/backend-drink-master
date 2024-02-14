@@ -1,10 +1,8 @@
-const mongoose = require("mongoose");
+const { CategoriesDB } = require("../models/filters.js");
 const { ctrlWrapper } = require("../helpers/index.js");
 
-const categoriesDB = mongoose.model("Categories");
-
 const listCategories = async (req, res, next) => {
-  const result = await categoriesDB.find();
+  const result = await CategoriesDB.find();
   res.json(result);
 };
 
