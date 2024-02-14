@@ -16,41 +16,45 @@ const ingredientSchema = new mongoose.Schema({
   },
 });
 
-const userDrinksSchema = new mongoose.Schema({
-  drink: {
-    type: String,
-    required: true,
+const userDrinksSchema = new mongoose.Schema(
+  {
+    drink: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    glass: {
+      type: String,
+      required: true,
+    },
+    alcoholic: {
+      type: String,
+      required: true,
+    },
+    instructions: {
+      type: String,
+      required: true,
+    },
+    drinkThumb: {
+      type: String,
+      required: true,
+    },
+    ingredients: [ingredientSchema],
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  glass: {
-    type: String,
-    required: true,
-  },
-  alcoholic: {
-    type: String,
-    required: true,
-  },
-  instructions: {
-    type: String,
-    required: true,
-  },
-  drinkThumb: {
-    type: String,
-    required: true,
-  },
-  ingredients: [ingredientSchema],
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-  },
-});
+  { versionKey: false, timestamps: true }
+);
 
 const UserDrinksDB = mongoose.model("user-drink", userDrinksSchema);
 
