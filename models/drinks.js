@@ -21,7 +21,7 @@ const userDrinksSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  shortDescription: {
+  description: {
     type: String,
     required: true,
   },
@@ -37,7 +37,7 @@ const userDrinksSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
+  instructions: {
     type: String,
     required: true,
   },
