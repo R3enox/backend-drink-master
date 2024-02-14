@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/categories", ctrl.listCategories);
 
-router.get("/ingredients", () => {});
+router.get("/ingredients", ctrl.listIngredients);
 
 router.get("/glasses", () => {});
 

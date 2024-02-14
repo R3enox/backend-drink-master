@@ -8,6 +8,17 @@ const categoriesSchema = new mongoose.Schema({
   ],
 });
 
-const CategoriesDB = mongoose.model("Categories", categoriesSchema);
+const CategoriesDB = mongoose.model("categorie", categoriesSchema);
 
-module.exports = CategoriesDB;
+const ingredientsSchema = new mongoose.Schema({
+  title: {
+    type: String,
+  },
+  alcohol: {
+    type: String,
+  },
+});
+
+const IngredientsDB = mongoose.model("ingredient", ingredientsSchema);
+
+module.exports = { CategoriesDB, IngredientsDB };
