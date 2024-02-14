@@ -27,7 +27,8 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.use("/api/users", authRouter);
+app.use("/api/auth", authRouter);
+
 app.use("/api/users", usersRouter);
 app.use("/api/filters", filtersRouter);
 app.use("/api/drinks", drinksRouter);
@@ -42,5 +43,3 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
-
-
