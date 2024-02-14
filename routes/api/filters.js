@@ -8,6 +8,6 @@ router.get("/categories", ctrl.listCategories);
 
 router.get("/ingredients", ctrl.listIngredients);
 
-router.get("/glasses", () => {});
+router.get("/glasses", ctrl.listGlasses);
 
 module.exports = router;

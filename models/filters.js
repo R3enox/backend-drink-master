@@ -19,7 +19,6 @@ const ingredientsSchema = new mongoose.Schema({
   ingredientThumb: {
     type: String,
   },
-
   alcohol: {
     type: String,
   },
@@ -33,4 +32,15 @@ const ingredientsSchema = new mongoose.Schema({
 
 const IngredientsDB = mongoose.model("ingredient", ingredientsSchema);
 
-module.exports = { CategoriesDB, IngredientsDB };
+// connect db glasses
+const glassesSchema = new mongoose.Schema({
+  glasses: [
+    {
+      type: String,
+    },
+  ],
+});
+
+const GlassesDB = mongoose.model("glasse", glassesSchema);
+
+module.exports = { CategoriesDB, IngredientsDB, GlassesDB };
