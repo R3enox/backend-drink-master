@@ -1,15 +1,62 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-// const Joi = require("joi");
+// connect db user-drinks
+const ingredientSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  measure: {
+    type: String,
+    required: true,
+  },
+  ingredientId: {
+    type: String,
+    required: true,
+  },
+});
 
-const { handleMongooseError } = require("../middlewares");
+const userDrinksSchema = new mongoose.Schema(
+  {
+    drink: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    glass: {
+      type: String,
+      required: true,
+    },
+    alcoholic: {
+      type: String,
+      required: true,
+    },
+    instructions: {
+      type: String,
+      required: true,
+    },
+    drinkThumb: {
+      type: String,
+      required: true,
+    },
+    ingredients: [ingredientSchema],
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const drinkSchema = new Schema({});
+const UserDrinksDB = mongoose.model("user-drink", userDrinksSchema);
+const Drink = mongoose.model("recipe", userDrinksSchema);
 
-drinkSchema.post("save", handleMongooseError);
-
-const Drink = model("recipe", drinkSchema);
-
-module.exports = {
-  Drink,
-};
+module.exports = { UserDrinksDB, Drink };
