@@ -1,7 +1,7 @@
-const ctrlWrapper = (controller) => {
+const ctrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
     try {
-      await controller(req, res, next);
+      await ctrl(req, res, next);
     } catch (error) {
       next(error);
     }
