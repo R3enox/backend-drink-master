@@ -1,5 +1,5 @@
 const express = require("express");
-const getContactById = require("../controllers/drinkController");
+const getContactById = require("../../controllers/drinkController");
 const router = express.Router();
 
 
