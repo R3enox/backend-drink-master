@@ -2,11 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const authRouter = require("./routes/auth");
-const usersRouter = require("./routes/users");
-const filtersRouter = require("./routes/filters");
-const drinksRouter = require("./routes/drinks");
-const drinkRouter = require("./routes/drink");
+
+const authRouter = require("./routes/api/auth");
+const usersRouter = require("./routes/api/users");
+const filtersRouter = require("./routes/api/filters");
+const drinksRouter = require("./routes/api/drinks");
+
 const fs = require("fs/promises");
 const moment = require("moment");
 
@@ -26,7 +27,8 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.use("/api/users", authRouter);
+app.use("/api/auth", authRouter);
+
 app.use("/api/users", usersRouter);
 app.use("/api/filters", filtersRouter);
 app.use("/api/drinks", drinksRouter);
@@ -42,5 +44,3 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
-
-
