@@ -1,6 +1,6 @@
-const calculateAge = (birthDate) => {
+const userAge = (birthDate) => {
   // Разбиваем строку на компоненты
-  const [day, month, year] = birthDate.split("-").map(Number);
+  const [day, month, year] = birthDate.split("/").map(Number);
 
   // Получаем текущую дату
   const today = new Date();
@@ -13,10 +13,10 @@ const calculateAge = (birthDate) => {
 
   // Учитываем месяц и день рождения
   if (currentMonth < month || (currentMonth === month && currentDay < day)) {
-    age--;
+    age -= 1;
   }
 
   return age;
 };
 
-module.exports = calculateAge;
+module.exports = userAge;
