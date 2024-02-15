@@ -165,3 +165,8 @@ POST /api/drinks/own/add 15-02-2024_07:57:50
 
 POST /api/auth/signup 14-02-2024_08:32:58
 
+
+GET /api/drinks 15-02-2024_10:28:04
+GET /api/drinks 15-02-2024_10:28:04
+GET /api/drinks 15-02-2024_10:28:21
+GET /api/drinks 15-02-2024_10:28:21
