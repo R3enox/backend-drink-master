@@ -1,13 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-require("dotenv").config();
-
-const authRouter = require("./routes/api/auth");
-const usersRouter = require("./routes/api/users");
-const filtersRouter = require("./routes/api/filters");
-const drinksRouter = require("./routes/api/drinks");
-
+const authRouter = require("./routes/auth");
+const usersRouter = require("./routes/users");
+const filtersRouter = require("./routes/filters");
+const drinksRouter = require("./routes/drinks");
+const drinkRouter = require("./routes/drink");
 const fs = require("fs/promises");
 const moment = require("moment");
 
@@ -31,6 +30,7 @@ app.use("/api/users", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/filters", filtersRouter);
 app.use("/api/drinks", drinksRouter);
+app.use("/api/drink/",drinkRouter );
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
