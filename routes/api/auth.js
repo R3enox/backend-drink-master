@@ -20,8 +20,6 @@ router.post(
   authController.signIn
 );
 
-router.get("/current", isAuthenticated, authController.getCurrent);
-
 router.post("/signout", isAuthenticated, authController.signOut);
 
 module.exports = router;
