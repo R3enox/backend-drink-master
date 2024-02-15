@@ -26,6 +26,5 @@ const addDrink = async (req, res, next) => {
 
 module.exports = {
   listDrink: ctrlWrapper(listDrink),
-
   addDrink: ctrlWrapper(addDrink),
 };
