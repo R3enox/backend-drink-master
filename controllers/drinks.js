@@ -21,19 +21,42 @@ const getMyDrinks = async (req, res, next) => {
   const { _id: owner } = req.user;
   const user = await User.findById(owner);
   if (!user) {
-    throw HttpError(404, "User not found");
+    throw HttpError(404);
   }
   const drinks = await UserDrinksDB.find(owner);
 
   if (drinks.length === 0) {
-    return res
-      .status(404)
-      .json({ message: "You don't have your own drinks yet" });
+    throw HttpError(404, "You don't have your own drinks yet");
   }
   res.json(drinks);
+};
+
+const deleteMyDrink = async (req, res, next) => {
+  const { _id: owner } = req.user;
+  const { id: drinkId } = req.params;
+
+  // Перевіряю, чи підтвердив користувач видалення
+  if (!req.isConfirmed) {
+    return res
+      .status(400)
+      .json({ message: "No confirmation of deletion provided" });
+  }
+
+  // Видаляємо напій, перевіряючи обидва поля _id напою та owner
+  const result = await UserDrinksDB.findByIdAndDelete({
+    _id: drinkId,
+    owner: owner,
+  });
+
+  if (!result) {
+    throw HttpError(404, "Drink not found or you are not the owner");
+  }
+
+  res.status(200).json({ message: "Drink deleted" });
 };
 
 module.exports = {
   addDrink: ctrlWrapper(addDrink),
   getMyDrinks: ctrlWrapper(getMyDrinks),
+  deleteMyDrink: ctrlWrapper(deleteMyDrink),
 };

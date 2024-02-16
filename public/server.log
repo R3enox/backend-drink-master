@@ -111,3 +111,9 @@ GET /api/drinks/own 16-02-2024_03:44:35
 GET /api/drinks/own 16-02-2024_03:44:53
 GET /api/drinks/own 16-02-2024_03:47:34
 GET /api/drinks/own 16-02-2024_03:47:38
+
+POST /api/drinks/own/add 16-02-2024_08:01:31
+POST /api/auth/signin 16-02-2024_08:01:49
+POST /api/drinks/own/add 16-02-2024_08:02:04
+GET /api/drinks/own 16-02-2024_08:02:19
+GET /api/drinks/own 16-02-2024_09:02:10
