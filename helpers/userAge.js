@@ -15,7 +15,7 @@ const userAge = (birthDate) => {
   if (currentMonth < month || (currentMonth === month && currentDay < day)) {
     age -= 1;
   }
-
+  console.log(age);
   return age;
 };
 

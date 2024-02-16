@@ -2,6 +2,15 @@ const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 const { User } = require("../models/user");
 
+const { Drink } = require("../models/drinks");
+
+const listDrink = async (req, res) => {
+  // checking age +18
+  // checking login user
+  const data = await Drink.find();
+  res.json(data);
+};
+
 const addDrink = async (req, res, next) => {
   const { _id: owner, dateOfBirth } = req.user;
   const { alcoholic } = req.body;
@@ -54,6 +63,7 @@ const deleteMyDrink = async (req, res, next) => {
 };
 
 module.exports = {
+  listDrink: ctrlWrapper(listDrink),
   addDrink: ctrlWrapper(addDrink),
   getMyDrinks: ctrlWrapper(getMyDrinks),
   deleteMyDrink: ctrlWrapper(deleteMyDrink),
