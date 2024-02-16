@@ -57,5 +57,6 @@ const userDrinksSchema = new mongoose.Schema(
 );
 
 const UserDrinksDB = mongoose.model("user-drink", userDrinksSchema);
+const Drink = mongoose.model("recipe", userDrinksSchema);
 
-module.exports = { UserDrinksDB };
+module.exports = { UserDrinksDB, Drink };
