@@ -3,9 +3,9 @@ const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 const { User } = require("../models/user");
 
 const addDrink = async (req, res, next) => {
-  const { _id: owner, birthdate } = req.user;
+  const { _id: owner, dateOfBirth } = req.user;
   const { alcoholic } = req.body;
-  const age = userAge(birthdate);
+  const age = userAge(dateOfBirth);
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
@@ -37,9 +37,7 @@ const deleteMyDrink = async (req, res, next) => {
 
   // Перевіряю, чи підтвердив користувач видалення
   if (!req.isConfirmed) {
-    return res
-      .status(400)
-      .json({ message: "No confirmation of deletion provided" });
+    throw HttpError(404, "No confirmation of deletion provided");
   }
 
   // Видаляємо напій, перевіряючи обидва поля _id напою та owner

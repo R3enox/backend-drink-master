@@ -117,3 +117,14 @@ POST /api/auth/signin 16-02-2024_08:01:49
 POST /api/drinks/own/add 16-02-2024_08:02:04
 GET /api/drinks/own 16-02-2024_08:02:19
 GET /api/drinks/own 16-02-2024_09:02:10
+POST /api/drinks/own/add 16-02-2024_10:36:58
+POST /api/auth/signin 16-02-2024_10:37:08
+POST /api/drinks/own/add 16-02-2024_10:37:38
+POST /api/drinks/own/add 16-02-2024_10:40:19
+DELETE /api/drinks/own/remove/65cfd64389209dd3086156b0 16-02-2024_10:41:24
+DELETE /api/drinks/own/remove/65cfd64389209dd3086156b0 16-02-2024_10:41:52
+DELETE /api/drinks/own/remove/65cfd64389209dd3086156b0 16-02-2024_10:46:46
+DELETE /api/drinks/own/remove/65cfd64389209dd3086156b0 16-02-2024_10:47:39
+DELETE /api/drinks/own/remove/65cfd64389209dd3086156b0 16-02-2024_10:48:59
+DELETE /api/drinks/own/remove/65cfd64389209dd3086156b0 16-02-2024_10:49:04
+DELETE /api/drinks/own/remove/65cfd64389209dd3086156b0 16-02-2024_10:49:30
