@@ -2,6 +2,7 @@ const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 
 const { Drink } = require("../models/drinks");
+
 const listDrink = async (req, res) => {
   // checking age +18
   // checking login user
