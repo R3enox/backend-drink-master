@@ -1,10 +1,9 @@
 // const fs = require("fs/promises");
 // const path = require("path");
-const Jimp = require("jimp");
+// const Jimp = require("jimp");
 const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 const { User } = require("../models/user");
-
 const { Drink } = require("../models/drinks");
 
 const listDrink = async (req, res) => {

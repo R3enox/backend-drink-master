@@ -1,6 +1,6 @@
-const userAge = (birthDate) => {
+const userAge = (dateOfBirth) => {
   // Разбиваем строку на компоненты
-  const [day, month, year] = birthDate.split("/").map(Number);
+  const [day, month, year] = dateOfBirth.split("/").map(Number);
 
   // Получаем текущую дату
   const today = new Date();

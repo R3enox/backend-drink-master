@@ -90,7 +90,6 @@ POST /api/auth/signup 14-02-2024_08:32:18
 POST /api/auth/signup 14-02-2024_08:32:26
 POST /api/auth/signup 14-02-2024_08:32:36
 POST /api/auth/signup 14-02-2024_08:32:58
-
 POST /api/drinks/own/add 15-02-2024_01:14:28
 POST /api/drinks/auth/signup 15-02-2024_04:31:16
 POST /api/drinks/auth/signup 15-02-2024_04:32:23
@@ -185,7 +184,6 @@ POST /api/drinks/own/add 17-02-2024_01:32:42
 POST /api/drinks/own/add 17-02-2024_01:33:23
 POST /api/drinks/own/add 17-02-2024_01:33:47
 POST /api/drinks/own/add 17-02-2024_01:41:01
-
 GET / 15-02-2024_09:59:27
 GET /favicon.ico 15-02-2024_09:59:27
 GET //api/drinks/my 15-02-2024_10:00:11
@@ -208,3 +206,11 @@ GET /api/drinks/own 16-02-2024_03:44:53
 GET /api/drinks/own 16-02-2024_03:47:34
 GET /api/drinks/own 16-02-2024_03:47:38
 
+
+GET /api/drinks/own 17-02-2024_02:23:31
+POST /api/auth/signin 17-02-2024_02:23:38
+GET /api/drinks/own 17-02-2024_02:23:50
+GET /api/drinks/own 17-02-2024_02:37:33
+POST /api/auth/signin 17-02-2024_02:37:38
+GET /api/drinks/own 17-02-2024_02:38:00
+POST /api/drinks/own/add 17-02-2024_02:38:12
