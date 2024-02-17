@@ -9,9 +9,6 @@ router.get("/", ctrl.listDrink);
 
 router.post("/own/add", isAuthenticated, ctrl.addDrink);
 
-// getDrinkById
-router.get("/:drinkId", isAuthenticated, ctrl.getById);
-
 // favorite
 router.post("/:drinkId/favorite/add/", isAuthenticated, ctrl.addFavorite);
 
@@ -22,5 +19,7 @@ router.delete(
 );
 
 router.get("/favorite", isAuthenticated, ctrl.getFavorite);
+// getDrinkById
+router.get("/:drinkId", isAuthenticated, ctrl.getById);
 
 module.exports = router;

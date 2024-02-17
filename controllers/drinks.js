@@ -2,7 +2,6 @@ const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 
 const { Drink } = require("../models/drinks");
-// const { default: mongoose } = require("mongoose");
 
 const listDrink = async (req, res) => {
   // checking age +18
@@ -74,11 +73,10 @@ const removeFavorite = async (req, res, next) => {
 
 const getFavorite = async (req, res, next) => {
   const { _id } = req.user;
-  // console.log('_id: ', _id);
 
   const favoriteDrinks = await UserDrinksDB.find({ favorite: _id });
 
-  if (!favoriteDrinks) {
+  if (favoriteDrinks.length === 0) {
     throw HttpError(400, "you don't have a favorite drink");
   }
 
