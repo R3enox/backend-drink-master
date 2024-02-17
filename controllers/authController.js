@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 
 const { ctrlWrapper, HttpError } = require("../helpers");
+const { default: mongoose } = require("mongoose");
 
 const { SECRET_KEY } = process.env;
 
@@ -18,16 +19,18 @@ const signUp = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
+  const _id = new mongoose.Types.ObjectId();
+  const payload = {
+    id: _id,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+
   const newUser = await User.create({
     ...req.body,
+    _id,
+    token,
     password: hashPassword,
   });
-
-  const payload = {
-    id: newUser._id,
-  };
-
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 
   res.status(201).json({
     token,

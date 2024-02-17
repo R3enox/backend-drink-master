@@ -20,7 +20,6 @@ const isAuthenticated = async (req, res, next) => {
       next(HttpError(401));
     }
     req.user = user;
-    console.log(req.user);
     next();
   } catch (error) {
     next(HttpError(401));
