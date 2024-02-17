@@ -3,6 +3,7 @@ const express = require("express");
 const ctrl = require("../../controllers/drinks");
 const checkConfirmation = require("../../middlewares/checkConfirmation");
 
+
 const router = express.Router();
 const { isAuthenticated } = require("../../middlewares");
 // isAuthenticated добавлю позже
