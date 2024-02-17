@@ -32,7 +32,7 @@ const getMyDrinks = async (req, res, next) => {
   if (!user) {
     throw HttpError(404);
   }
-  const drinks = await UserDrinksDB.find(owner);
+  const drinks = await UserDrinksDB.find({ owner });
 
   if (drinks.length === 0) {
     throw HttpError(404, "You don't have your own drinks yet");
@@ -44,12 +44,9 @@ const deleteMyDrink = async (req, res, next) => {
   const { _id: owner } = req.user;
   const { id: drinkId } = req.params;
 
-  // Перевіряю, чи підтвердив користувач видалення
   if (!req.isConfirmed) {
     throw HttpError(404, "No confirmation of deletion provided");
   }
-
-  // Видаляємо напій, перевіряючи обидва поля _id напою та owner
   const result = await UserDrinksDB.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
