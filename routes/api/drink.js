@@ -1,9 +1,10 @@
 const express = require("express");
-const getContactById = require("../../controllers/drinkController");
+
 const router = express.Router();
+const ctrl = require("../../controllers/drinkController");
 
 
-router.get("/:drinkId", getContactById);
+router.get("/:drinkId", ctrl.getContactById);
 
 
 module.exports = router;

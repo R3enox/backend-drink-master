@@ -176,3 +176,36 @@ POST /api/drinks/own/add 15-02-2024_07:57:50
 
 POST /api/auth/signup 14-02-2024_08:32:58
 
+
+GET /api/drinks/639b6de9ff77d221f190c50f 17-02-2024_07:05:12
+GET /api/drinks/639b6de9ff77d221f190c50f 17-02-2024_07:05:29
+GET /api/drinks/639b6de9ff77d221f190c50f 17-02-2024_07:05:32
+GET /api/drinks/ 17-02-2024_07:06:47
+GET /api/drinks/ 17-02-2024_07:07:22
+GET /api/drinks/ 17-02-2024_07:07:23
+GET /api/drink/asdasdsad 17-02-2024_07:11:23
+GET /api/drink/asdasdsad 17-02-2024_07:11:57
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:12:12
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:12:27
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:12:42
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:26:16
+GET /api/drink/asdasd 17-02-2024_07:26:21
+GET /api/drink/asdasd123123 17-02-2024_07:26:23
+GET /api/drink/assadadsasdasdasddsad12e1sdqd 17-02-2024_07:26:28
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:26:35
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:28:05
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:29:09
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:29:10
+GET /api/drink/639b6de9ff77d221f190c508 17-02-2024_07:29:13
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:30:39
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:31:09
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:31:22
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:34:57
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:35:01
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:35:50
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:35:50
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:35:51
+GET /api/drink/639b6de9ff77d221f190c50f 17-02-2024_07:35:52
+GET /api/drinks/ 17-02-2024_07:36:30
+GET /api/drinks/ 17-02-2024_07:36:34
+GET /api/drinks/ 17-02-2024_07:36:35
