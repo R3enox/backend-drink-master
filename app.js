@@ -4,7 +4,6 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const authRouter = require("./routes/api/auth");
-const usersRouter = require("./routes/api/users");
 const filtersRouter = require("./routes/api/filters");
 const drinksRouter = require("./routes/api/drinks");
 const drinkRouter = require("./routes/api/drink");
@@ -29,7 +28,6 @@ app.use(async (req, res, next) => {
 });
 
 app.use("/api/auth", authRouter);
-app.use("/api/users", usersRouter);
 app.use("/api/filters", filtersRouter);
 app.use("/api/drinks", drinksRouter);
 app.use("/api/drink/", drinkRouter);
