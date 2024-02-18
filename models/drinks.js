@@ -52,6 +52,10 @@ const userDrinksSchema = new mongoose.Schema(
       ref: "user",
       required: true,
     },
+    favorite: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+      default: [],
+    },
   },
   { versionKey: false, timestamps: true }
 );
