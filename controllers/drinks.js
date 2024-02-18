@@ -35,9 +35,13 @@ const getMyDrinks = async (req, res, next) => {
   const drinks = await UserDrinksDB.find({ owner });
 
   if (drinks.length === 0) {
-    throw HttpError(404, "You don't have your own drinks yet");
+    return res.status(200).json({
+      success: true,
+      message: "You don't have your own drinks yet",
+      data: [],
+    });
   }
-  res.json(drinks);
+  res.status(200).json(drinks);
 };
 
 const deleteMyDrink = async (req, res, next) => {
