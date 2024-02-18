@@ -25,6 +25,50 @@ const addDrink = async (req, res, next) => {
   res.status(201).json(updatedResult);
 };
 
+const addFavorite = async (req, res, next) => {
+  const { drinkId } = req.params;
+
+  const { _id } = req.user;
+
+  const drink = await Drink.findById(drinkId);
+
+  if (drink.favorite.includes(_id)) {
+    throw HttpError(400, "cocktail is already in favorites");
+  }
+
+  const result = await Drink.findByIdAndUpdate(
+    drinkId,
+    { $push: { favorite: _id } },
+    { new: true }
+  );
+
+  res.status(200).json(result);
+};
+
+const removeFavorite = async (req, res, next) => {
+  const { drinkId } = req.params;
+  const { _id } = req.user;
+
+  await Drink.findByIdAndUpdate(
+    drinkId,
+    { $pull: { favorite: _id } },
+    { new: true }
+  );
+  res.status(200).json({ message: "Drink removed from favorites" });
+};
+
+const getFavorite = async (req, res, next) => {
+  const { _id } = req.user;
+
+  const favoriteDrinks = await Drink.find({ favorite: _id });
+
+  if (favoriteDrinks.length === 0) {
+    throw HttpError(400, "You don't have a favorite drink");
+  }
+
+  res.status(200).json(favoriteDrinks);
+};
+
 const getMyDrinks = async (req, res, next) => {
   const { _id: owner } = req.user;
   const user = await User.findById(owner);
@@ -65,6 +109,9 @@ const deleteMyDrink = async (req, res, next) => {
 module.exports = {
   listDrink: ctrlWrapper(listDrink),
   addDrink: ctrlWrapper(addDrink),
+  addFavorite: ctrlWrapper(addFavorite),
+  removeFavorite: ctrlWrapper(removeFavorite),
+  getFavorite: ctrlWrapper(getFavorite),
   getMyDrinks: ctrlWrapper(getMyDrinks),
   deleteMyDrink: ctrlWrapper(deleteMyDrink),
 };
