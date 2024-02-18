@@ -4,6 +4,6 @@ const router = express.Router();
 const ctrl = require("../../controllers/drinkController");
 const { isAuthenticated } = require("../../middlewares");
 
-router.get("/:drinkId", isAuthenticated, ctrl.getDrinkById);
+router.get("/:drinkId", ctrl.getDrinkById);
 
 module.exports = router;
