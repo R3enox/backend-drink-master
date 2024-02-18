@@ -1,4 +1,15 @@
 
+GET /drink/12312 14-02-2024_02:49:17
+GET /drink/12312 14-02-2024_02:51:57
+GET /api/drink/12312 14-02-2024_02:52:16
+GET /api/drink/12312 14-02-2024_02:52:32
+GET /api/drink/12312 14-02-2024_02:52:34
+GET /api/drink/12312 14-02-2024_02:52:43
+GET /api/drink/12312 14-02-2024_02:52:57
+GET /api/drink/sdfsdfsdf 14-02-2024_02:53:47
+GET /api/drink/sdfsdfsdf 14-02-2024_02:54:07
+GET /api/drink/sdfsdfsdf 14-02-2024_02:55:35
+GET /api/drink/sdfsdfsdf 14-02-2024_02:55:45
 
 GET /api/filters/categories 14-02-2024_01:35:31
 GET /api/filters/categories 14-02-2024_01:40:41
@@ -111,4 +122,4 @@ GET /api/drinks/own 16-02-2024_03:44:35
 GET /api/drinks/own 16-02-2024_03:44:53
 GET /api/drinks/own 16-02-2024_03:47:34
 GET /api/drinks/own 16-02-2024_03:47:38
-GET /api/drinks/own 17-02-2024_05:07:56
+
