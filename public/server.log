@@ -240,3 +240,17 @@ POST /api/auth/signup 17-02-2024_02:42:58
 POST /api/auth/signin 17-02-2024_02:43:38
 POST /api/auth/signin 17-02-2024_02:43:43
 PATCH /api/users/avatar 17-02-2024_02:44:23
+POST /api/auth/signin 18-02-2024_11:31:36
+POST /api/users/avatar 18-02-2024_11:32:08
+POST /api/users/avatar 18-02-2024_12:02:01
+POST /api/users/avatar 18-02-2024_12:04:49
+POST /api/users/avatar 18-02-2024_12:08:35
+POST /api/users/avatar 18-02-2024_12:12:52
+POST /api/users/avatar 18-02-2024_12:13:21
+POST /api/users/avatar 18-02-2024_12:14:07
+POST /api/users/avatar 18-02-2024_12:15:35
+POST /api/users/avatar 18-02-2024_12:15:40
+POST /api/users/avatar 18-02-2024_12:16:07
+POST /api/users/avatar 18-02-2024_12:18:10
+POST /api/users/avatar 18-02-2024_12:20:10
+POST /api/users/avatar 18-02-2024_01:05:40

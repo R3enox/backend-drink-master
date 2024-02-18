@@ -7,15 +7,7 @@ const { User } = require("../models/user");
 const { ctrlWrapper, HttpError } = require("../helpers");
 const { default: mongoose } = require("mongoose");
 
-const fs = require("node:fs/promises");
-
-const path = require("node:path");
-
-const Jimp = require("jimp");
-
 const { SECRET_KEY } = process.env;
-
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const signUp = async (req, res) => {
   const { email, password } = req.body;
@@ -86,36 +78,8 @@ const signOut = async (req, res) => {
   res.status(204).json({ message: "No Content" });
 };
 
-const updateAvatar = async (req, res, next) => {
-  const { _id } = req.user;
-  console.log(req.file);
-  const { path: tempUpload, originalname } = req.file;
-
-  if (!req.file) {
-    console.log("Please upload a file");
-    next();
-  }
-
-  const filename = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, filename);
-
-  const picture = await Jimp.read(tempUpload);
-  await picture.scaleToFit(250, 250).writeAsync(tempUpload);
-
-  await fs.rename(tempUpload, resultUpload);
-
-  const avatarURL = path.join("avatars", filename);
-
-  await User.findByIdAndUpdate(_id, { avatarURL });
-
-  res.json({
-    avatarURL,
-  });
-};
-
 module.exports = {
   signUp: ctrlWrapper(signUp),
   signIn: ctrlWrapper(signIn),
   signOut: ctrlWrapper(signOut),
-  updateAvatar: ctrlWrapper(updateAvatar),
 };

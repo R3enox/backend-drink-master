@@ -7,6 +7,7 @@ const authRouter = require("./routes/api/auth");
 const filtersRouter = require("./routes/api/filters");
 const drinksRouter = require("./routes/api/drinks");
 const drinkRouter = require("./routes/api/drink");
+const avatarR = require("./routes/api/users")
 
 const fs = require("fs/promises");
 const moment = require("moment");
@@ -31,6 +32,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/filters", filtersRouter);
 app.use("/api/drinks", drinksRouter);
 app.use("/api/drink/", drinkRouter);
+app.use("/api/users", avatarR);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

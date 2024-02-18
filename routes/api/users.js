@@ -1,16 +1,17 @@
 const express = require("express");
-const router = express.Router();
-
-const authController = require("../../controllers/authController");
+const ctrl = require("../../controllers/updateAvatar");
 
 const { isAuthenticated, upload } = require("../../middlewares");
 
-router.patch(
+
+const router = express.Router();
+
+
+router.post(
   "/avatar",
   isAuthenticated,
   upload.single("avatar"),
-  authController.updateAvatar
-  
+ ctrl.updateAvatar
 );
 
 module.exports = router;
