@@ -1,7 +1,6 @@
 const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 const { User } = require("../models/user");
-
 const { Drink } = require("../models/drinks");
 
 const listDrink = async (req, res) => {
