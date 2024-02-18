@@ -1,7 +1,6 @@
 const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 const { User } = require("../models/user");
-
 const { Drink } = require("../models/drinks");
 
 const listDrink = async (req, res) => {
@@ -76,16 +75,16 @@ const getMyDrinks = async (req, res, next) => {
   if (!user) {
     throw HttpError(404);
   }
-  const drinks = await UserDrinksDB.find({ owner });
+  const myDrink = await Drink.find({ owner });
 
-  if (drinks.length === 0) {
+  if (myDrink.length === 0) {
     return res.status(200).json({
       success: true,
       message: "You don't have your own drinks yet",
       data: [],
     });
   }
-  res.status(200).json(drinks);
+  res.status(200).json(myDrink);
 };
 
 const deleteMyDrink = async (req, res, next) => {
@@ -95,12 +94,12 @@ const deleteMyDrink = async (req, res, next) => {
   if (!req.isConfirmed) {
     throw HttpError(404, "No confirmation of deletion provided");
   }
-  const result = await UserDrinksDB.findByIdAndDelete({
+  const deletedDrink = await Drink.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
   });
 
-  if (!result) {
+  if (!deletedDrink) {
     throw HttpError(404, "Drink not found or you are not the owner");
   }
 
