@@ -1,6 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
 const cloudinary = require("cloudinary").v2;
-
 const { User } = require("../models/user");
 const path = require("path");
 const { ctrlWrapper } = require("../helpers/index.js");
