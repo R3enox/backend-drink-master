@@ -1,7 +1,6 @@
 const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 const { User } = require("../models/user");
-
 const { Drink } = require("../models/drinks");
 
 const listDrink = async (req, res) => {
@@ -32,7 +31,7 @@ const getMyDrinks = async (req, res, next) => {
   if (!user) {
     throw HttpError(404);
   }
-  const drinks = await UserDrinksDB.find({ owner });
+  const drinks = await Drink.find({ owner });
 
   if (drinks.length === 0) {
     return res.status(200).json({
