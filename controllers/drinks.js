@@ -32,7 +32,7 @@ const getMyDrinks = async (req, res, next) => {
   if (!user) {
     throw HttpError(404);
   }
-  const myDrink = await UserDrinksDB.find({ owner });
+  const myDrink = await Drink.find({ owner });
 
   if (myDrink.length === 0) {
     return res.status(200).json({
@@ -51,7 +51,7 @@ const deleteMyDrink = async (req, res, next) => {
   if (!req.isConfirmed) {
     throw HttpError(404, "No confirmation of deletion provided");
   }
-  const deletedDrink = await UserDrinksDB.findByIdAndDelete({
+  const deletedDrink = await Drink.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
   });
