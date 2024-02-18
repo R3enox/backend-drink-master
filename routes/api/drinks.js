@@ -1,6 +1,7 @@
 const express = require("express");
 
 const ctrl = require("../../controllers/drinks");
+const checkConfirmation = require("../../middlewares/checkConfirmation");
 
 const router = express.Router();
 const { isAuthenticated } = require("../../middlewares");
@@ -19,7 +20,14 @@ router.delete(
 );
 
 router.get("/favorite", isAuthenticated, ctrl.getFavorite);
-// getDrinkById
-router.get("/:drinkId", isAuthenticated, ctrl.getById);
+
+router.get("/own", isAuthenticated, ctrl.getMyDrinks);
+
+router.delete(
+  "/own/remove/:id",
+  isAuthenticated,
+  checkConfirmation,
+  ctrl.deleteMyDrink
+);
 
 module.exports = router;
