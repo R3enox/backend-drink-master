@@ -31,13 +31,13 @@ const addFavorite = async (req, res, next) => {
 
   const { _id } = req.user;
 
-  const drink = await UserDrinksDB.findById(drinkId);
+  const drink = await Drink.findById(drinkId);
 
   if (drink.favorite.includes(_id)) {
     throw HttpError(400, "cocktail is already in favorites");
   }
 
-  const result = await UserDrinksDB.findByIdAndUpdate(
+  const result = await Drink.findByIdAndUpdate(
     drinkId,
     { $push: { favorite: _id } },
     { new: true }
@@ -49,21 +49,22 @@ const addFavorite = async (req, res, next) => {
 const removeFavorite = async (req, res, next) => {
   const { drinkId } = req.params;
   const { _id } = req.user;
-  const result = await UserDrinksDB.findByIdAndUpdate(
+
+  await Drink.findByIdAndUpdate(
     drinkId,
     { $pull: { favorite: _id } },
     { new: true }
   );
-  res.json(result);
+  res.status(200).json({ message: "Drink removed from favorites" });
 };
 
 const getFavorite = async (req, res, next) => {
   const { _id } = req.user;
 
-  const favoriteDrinks = await UserDrinksDB.find({ favorite: _id });
+  const favoriteDrinks = await Drink.find({ favorite: _id });
 
   if (favoriteDrinks.length === 0) {
-    throw HttpError(400, "you don't have a favorite drink");
+    throw HttpError(400, "You don't have a favorite drink");
   }
 
   res.status(200).json(favoriteDrinks);
