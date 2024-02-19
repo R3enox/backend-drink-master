@@ -23,7 +23,7 @@ const signUp = async (req, res) => {
   const payload = {
     id: _id,
   };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
 
   const newUser = await User.create({
     ...req.body,
@@ -37,6 +37,7 @@ const signUp = async (req, res) => {
     user: {
       name: newUser.name,
       avatarURL: newUser.avatarURL,
+      dateOfBirth: newUser.dateOfBirth,
     },
   });
 };
@@ -48,7 +49,6 @@ const signIn = async (req, res) => {
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
   }
-  console.log(user);
   const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
@@ -58,8 +58,7 @@ const signIn = async (req, res) => {
   const payload = {
     id: user._id,
   };
-
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
   await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
@@ -67,6 +66,7 @@ const signIn = async (req, res) => {
     user: {
       name: user.name,
       avatarURL: user.avatarURL,
+      dateOfBirth: user.dateOfBirth,
     },
   });
 };
