@@ -42,6 +42,18 @@ const updateAvatar = async (req, res) => {
   });
 };
 
+const getCurrent = async (req, res) => {
+  const { name, avatarUrl, dateOfBirth } = req.user;
+  res.json({
+    user: {
+      name,
+      avatarUrl,
+      dateOfBirth,
+    },
+  });
+};
+
 module.exports = {
   updateAvatar: ctrlWrapper(updateAvatar),
+  getCurrent: ctrlWrapper(getCurrent),
 };

@@ -1,23 +1,20 @@
-const {
-  IngredientsDB,
-  CategoriesDB,
-  GlassesDB,
-} = require("../models/filters.js");
-
+const { Category, Ingredient, Glass } = require("../models/filters.js");
 const { ctrlWrapper } = require("../helpers/index.js");
 
 const listCategories = async (req, res, next) => {
-  const result = await CategoriesDB.find();
+  const categories = await Category.find();
+  const result = categories.map(({ title }) => title);
   res.json(result);
 };
 
 const listIngredients = async (req, res, next) => {
-  const result = await IngredientsDB.find();
+  const result = await Ingredient.find();
   res.json(result);
 };
 
 const listGlasses = async (req, res, next) => {
-  const result = await GlassesDB.find();
+  const glasses = await Glass.find();
+  const result = glasses.map(({ title }) => title);
   res.json(result);
 };
 
