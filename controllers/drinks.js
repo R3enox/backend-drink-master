@@ -107,12 +107,8 @@ const getFavorite = async (req, res, next) => {
 
 const getMyDrinks = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const user = await User.findById(owner);
-  if (!user) {
-    throw HttpError(404);
-  }
-  const myDrink = await Drink.find({ owner });
 
+  const myDrink = await Drink.find({ owner });
   if (myDrink.length === 0) {
     return res.status(200).json({
       success: true,
@@ -124,12 +120,13 @@ const getMyDrinks = async (req, res, next) => {
 };
 
 const deleteMyDrink = async (req, res, next) => {
-  const { _id: owner } = req.user;
   const { id: drinkId } = req.params;
+  const { _id } = req.user;
+  const owner = _id.toString();
 
-  if (!req.isConfirmed) {
-    throw HttpError(404, "No confirmation of deletion provided");
-  }
+  // if (!req.isConfirmed) {
+  //   throw HttpError(404, "No confirmation of deletion provided");
+  // }
   const deletedDrink = await Drink.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
@@ -138,7 +135,6 @@ const deleteMyDrink = async (req, res, next) => {
   if (!deletedDrink) {
     throw HttpError(404, "Drink not found or you are not the owner");
   }
-
   res.status(200).json({ message: "Drink deleted" });
 };
 
