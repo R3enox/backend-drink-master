@@ -102,15 +102,15 @@ const getFavorite = async (req, res, next) => {
 };
 
 const getMyDrinks = async (req, res, next) => {
+  const { id: owner } = req.query;
   const { _id } = req.user;
+
   const user = await User.findById(_id);
   if (!user) {
     throw HttpError(404);
   }
 
-  const { id: owner } = req.query;
   const myDrink = await Drink.find({ owner });
-
   if (myDrink.length === 0) {
     return res.status(200).json({
       success: true,
@@ -122,8 +122,8 @@ const getMyDrinks = async (req, res, next) => {
 };
 
 const deleteMyDrink = async (req, res, next) => {
-  const { _id: owner } = req.user;
   const { id: drinkId } = req.params;
+  const { _id: owner } = req.user;
 
   if (!req.isConfirmed) {
     throw HttpError(404, "No confirmation of deletion provided");
