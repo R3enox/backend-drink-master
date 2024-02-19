@@ -26,11 +26,13 @@ const addDrink = async (req, res, next) => {
 };
 
 const getMyDrinks = async (req, res, next) => {
-  const { _id: owner } = req.user;
-  const user = await User.findById(owner);
+  const { _id } = req.user;
+  const user = await User.findById(_id);
   if (!user) {
     throw HttpError(404);
   }
+
+  const { id: owner } = req.query;
   const myDrink = await Drink.find({ owner });
 
   if (myDrink.length === 0) {
