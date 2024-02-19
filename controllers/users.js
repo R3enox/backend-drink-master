@@ -4,42 +4,55 @@ const { User } = require("../models/user");
 const path = require("path");
 const { ctrlWrapper } = require("../helpers/index.js");
 
-const updateAvatar = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "Please upload a file" });
+const updateUser = async (req, res) => {
+  const { body, file, user } = req;
+  // if (!file) {
+  //   return res.status(400).json({ message: "Please upload a file" });
+  // }
+
+  if (file) {
+    const uniqueFilename = uuidv4();
+    const extension = path.extname(file.originalname);
+    const fileName = `${uniqueFilename}${extension}`;
+
+    const result = await cloudinary.uploader.upload(file.path, {
+      public_id: `avatars/${fileName}`,
+      folder: "avatars",
+      use_filename: true,
+      unique_filename: false,
+      overwrite: true,
+    });
+    const avatarUrl = result.secure_url;
+    body.avatarUrl = avatarUrl;
+  } else {
+    body.avatarUrl = body.avatar;
   }
 
-  const { _id } = req.user;
+  const { _id } = user;
   console.log(_id);
 
-  const uniqueFilename = uuidv4();
-  const extension = path.extname(req.file.originalname);
-  const fileName = `${uniqueFilename}${extension}`;
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { $set: body },
+    { new: true }
+  );
 
-  const result = await cloudinary.uploader.upload(req.file.path, {
-    public_id: `avatars/${fileName}`,
-    folder: "avatars",
-    use_filename: true,
-    unique_filename: false,
-    overwrite: true,
-  });
-
-  const avatarUrl = result.secure_url;
-
-  const user = await User.findByIdAndUpdate(_id, { avatarUrl }, { new: true });
-
-  if (!user) {
+  if (!updatedUser) {
     return res.status(404).json({ message: "User not found" });
   }
 
   res.json({
     message: "Avatar uploaded successfully",
     user: {
-      name: user.name,
-      email: user.email,
-      avatar: user.avatar,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      avatar: updatedUser.avatar,
     },
   });
+};
+
+module.exports = {
+  updateUser: ctrlWrapper(updateUser),
 };
 
 const getCurrent = async (req, res) => {
@@ -54,6 +67,6 @@ const getCurrent = async (req, res) => {
 };
 
 module.exports = {
-  updateAvatar: ctrlWrapper(updateAvatar),
+  updateUser: ctrlWrapper(updateUser),
   getCurrent: ctrlWrapper(getCurrent),
 };
