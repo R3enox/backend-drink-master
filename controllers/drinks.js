@@ -1,10 +1,10 @@
-// const fs = require("fs/promises");
-// const path = require("path");
-// const Jimp = require("jimp");
 const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
 const { User } = require("../models/user");
 const { Drink } = require("../models/drinks");
+const path = require("path");
+const { nanoid } = require("nanoid");
+const cloudinary = require("cloudinary").v2;
 
 const listDrinks = async (req, res) => {
   const { dateOfBirth } = req.user;
@@ -49,30 +49,49 @@ const searchDrinks = async (req, res) => {
   res.json(filteredData);
 };
 
-// const avatarDir = path.join(__dirname, "../", "public", "avatars");
-
 const addDrink = async (req, res, next) => {
-  // const { path: tempUpload, originalname } = req.file;
+  const { file } = req;
+
+  const uniqueFilename = nanoid();
+  const extension = path.extname(file.originalname);
+  const fileName = `${uniqueFilename}${extension}`;
+
+  const resultCloudinary = await cloudinary.uploader.upload(file.path, {
+    public_id: `avatars/${fileName}`,
+    folder: "avatars",
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+  });
+  const avatarUrl = resultCloudinary.secure_url;
 
   const { _id: owner, dateOfBirth } = req.user;
   const { alcoholic } = req.body;
+  console.log(alcoholic);
   const age = userAge(dateOfBirth);
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
 
-  // const image = await Jimp.read(tempUpload);
-  // await image.resize(250, 250);
+  const drink = new UserDrinksDB({
+    drink: req.body.drink,
+    description: req.body.description,
+    category: req.body.category,
+    glass: req.body.glass,
+    alcoholic: req.body.alcoholic,
+    instructions: req.body.instructions,
+    drinkThumb: avatarUrl,
+    ingredients: [
+      {
+        title: req.body.ingredients[0][`title`],
+        measure: req.body.ingredients[0][`measure`],
+        ingredientId: nanoid(),
+      },
+    ],
+    owner: owner,
+  });
 
-  // const fileName = `${_id}_${originalname}`;
-  // console.log(fileName);
-  // const resultUpdateAvatar = path.join(avatarDir, fileName);
-
-  // await image.writeAsync(resultUpdateAvatar);
-  // await fs.unlink(tempUpload);
-  // const avatarURL = path.join("avatars", fileName);
-
-  const result = await UserDrinksDB.create({ ...req.body, owner });
+  const result = await UserDrinksDB.create(drink);
   const updatedResult = await UserDrinksDB.findById(result._id).select(
     "-createdAt -updatedAt"
   );
