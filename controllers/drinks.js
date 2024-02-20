@@ -81,13 +81,11 @@ const addDrink = async (req, res, next) => {
     alcoholic: req.body.alcoholic,
     instructions: req.body.instructions,
     drinkThumb: avatarUrl,
-    ingredients: [
-      {
-        title: req.body.ingredients[0][`title`],
-        measure: req.body.ingredients[0][`measure`],
-        ingredientId: nanoid(),
-      },
-    ],
+    ingredients: req.body.ingredients.map((ingredient) => ({
+      title: ingredient.title,
+      measure: ingredient.measure,
+      ingredientId: nanoid(),
+    })),
     owner: owner,
   });
 
