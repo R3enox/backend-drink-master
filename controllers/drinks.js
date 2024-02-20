@@ -73,6 +73,8 @@ const addDrink = async (req, res, next) => {
     throw HttpError(400);
   }
 
+  console.log(req.body.ingredients);
+
   const drink = new UserDrinksDB({
     drink: req.body.drink,
     description: req.body.description,
@@ -84,7 +86,7 @@ const addDrink = async (req, res, next) => {
     ingredients: req.body.ingredients.map((ingredient) => ({
       title: ingredient.title,
       measure: ingredient.measure,
-      ingredientId: nanoid(),
+      ingredientId: ingredient.ingredientId,
     })),
     owner: owner,
   });
