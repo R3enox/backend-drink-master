@@ -1843,3 +1843,12 @@ GET /api/ 18-02-2024_08:39:06
 GET /api/drinks/ 18-02-2024_08:39:08
 GET /api/drinks/ 18-02-2024_08:41:06
 GET /api/drinks/search?category=cocktail 18-02-2024_08:42:07
+GET /api/users/current 20-02-2024_02:46:18
+GET /api/users/current 20-02-2024_02:46:28
+GET /api/users/current 20-02-2024_02:46:39
+GET /api/users/current 20-02-2024_03:24:55
+POST /api/auth/signin 20-02-2024_03:25:09
+GET /api/users/current 20-02-2024_03:26:44
+GET /api/users/current 20-02-2024_03:27:12
+GET /api/users/current 20-02-2024_03:27:58
+GET /api/users/current 20-02-2024_03:28:23
