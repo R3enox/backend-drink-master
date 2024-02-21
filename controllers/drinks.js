@@ -50,7 +50,6 @@ const searchDrinks = async (req, res) => {
 
 const addDrink = async (req, res, next) => {
   const { file } = req;
-
   const uniqueFilename = nanoid();
   const extension = path.extname(file.originalname);
   const fileName = `${uniqueFilename}${extension}`;
@@ -65,30 +64,38 @@ const addDrink = async (req, res, next) => {
   const avatarUrl = resultCloudinary.secure_url;
 
   const { _id: owner, dateOfBirth } = req.user;
-  const { alcoholic } = req.body;
+  const {
+    drink,
+    description,
+    category,
+    glass,
+    alcoholic,
+    instructions,
+    ingredients,
+  } = req.body;
 
   const age = userAge(dateOfBirth);
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
 
-  const drink = new Drink({
-    drink: req.body.drink,
-    description: req.body.description,
-    category: req.body.category,
-    glass: req.body.glass,
-    alcoholic: req.body.alcoholic,
-    instructions: req.body.instructions,
+  const newDrink = new Drink({
+    drink,
+    description,
+    category,
+    glass,
+    alcoholic,
+    instructions,
     drinkThumb: avatarUrl,
-    ingredients: req.body.ingredients.map((ingredient) => ({
-      title: ingredient.title,
-      measure: ingredient.measure,
-      ingredientId: ingredient.ingredientId,
+    ingredients: ingredients.map(({ title, measure, ingredientId }) => ({
+      title,
+      measure,
+      ingredientId,
     })),
     owner: owner,
   });
 
-  const result = await Drink.create(drink);
+  const result = await Drink.create(newDrink);
   const updatedResult = await Drink.findById(result._id).select(
     "-createdAt -updatedAt"
   );
