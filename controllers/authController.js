@@ -67,6 +67,7 @@ const signIn = async (req, res) => {
       name: user.name,
       avatarURL: user.avatarURL,
       dateOfBirth: user.dateOfBirth,
+      id: user._id,
     },
   });
 };
