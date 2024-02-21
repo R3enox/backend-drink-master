@@ -1,48 +1,60 @@
 const { UserDrinksDB } = require("../models/drinks");
-const { ctrlWrapper, userAge, HttpError } = require("../helpers");
+
+const {
+  ctrlWrapper,
+  userAge,
+  HttpError,
+  setPagination,
+} = require("../helpers");
+
 const { Drink } = require("../models/drinks");
+const setAlcoholic = require("../helpers/setAlcoholic");
 
 const listDrinks = async (req, res) => {
   const { dateOfBirth } = req.user;
 
   const age = userAge(dateOfBirth);
-  const data = await Drink.find();
-  const filteredData =
-    age < 18
-      ? data.filter((drink) => drink.alcoholic === "Non alcoholic")
-      : data;
-  res.json(filteredData);
+  const alcoholic = setAlcoholic(age);
+
+  const drinks = await Drink.find({ alcoholic: { $in: alcoholic } });
+
+  res.json(drinks);
 };
+
 const searchDrinks = async (req, res) => {
-  const { category, ingredient, keyName } = req.query;
+  const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
+
   const age = userAge(dateOfBirth);
-  const data = await Drink.find();
-  let filteredData =
-    age < 18
-      ? data.filter((drink) => drink.alcoholic === "Non alcoholic")
-      : data;
+  const alcoholic = setAlcoholic(age);
 
-  if (category) {
-    filteredData = filteredData.filter(
-      (drink) => drink.category.toLowerCase().replace(/ /g, "%20") === category
-    );
-  }
-  if (ingredient) {
-    filteredData = filteredData.filter((drink) =>
-      drink.ingredients.includes(ingredient)
-    );
-  }
-  if (keyName) {
-    filteredData = filteredData.filter((drink) =>
-      drink.drink.toLowerCase().includes(keyName.toLowerCase())
-    );
-  }
-  // if (filteredData.length === 0) {
-  //   throw HttpError(404, "Not found");
-  // }
+  const query = { alcoholic: { $in: alcoholic } };
 
-  res.json(filteredData);
+  if (keyName) query.drink = { $regex: keyName, $options: "i" };
+  if (category) query.category = category;
+  if (ingredient) query.ingredients = { $elemMatch: { title: ingredient } };
+
+  const paginateOptions = setPagination(page, limit);
+
+  const [
+    {
+      paginatedResult,
+      totalCount: [{ totalCount } = { totalCount: 0 }],
+    },
+  ] = await Drink.aggregate([
+    {
+      $facet: {
+        paginatedResult: [
+          { $match: query },
+          { $skip: paginateOptions.skip },
+          { $limit: paginateOptions.limit },
+        ],
+        totalCount: [{ $match: query }, { $count: "totalCount" }],
+      },
+    },
+  ]);
+
+  res.json({ paginatedResult, totalCount });
 };
 
 const addDrink = async (req, res, next) => {
