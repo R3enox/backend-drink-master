@@ -1,6 +1,5 @@
 const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
-const { User } = require("../models/user");
 const { Drink } = require("../models/drinks");
 
 const listDrinks = async (req, res) => {
@@ -85,11 +84,14 @@ const removeFavorite = async (req, res, next) => {
   const { drinkId } = req.params;
   const { _id } = req.user;
 
-  await Drink.findByIdAndUpdate(
-    drinkId,
-    { $pull: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $pull: { favorite: _id },
+  });
+
+  if (!result) {
+    throw HttpError(404, "not found");
+  }
+
   res.status(200).json({ message: "Drink removed from favorites" });
 };
 
@@ -99,7 +101,11 @@ const getFavorite = async (req, res, next) => {
   const favoriteDrinks = await Drink.find({ favorite: _id });
 
   if (favoriteDrinks.length === 0) {
-    throw HttpError(400, "You don't have a favorite drink");
+    return res.status(200).json({
+      success: true,
+      message: "You don't have a favorite drink",
+      data: [],
+    });
   }
 
   res.status(200).json(favoriteDrinks);
