@@ -1,10 +1,12 @@
 const { UserDrinksDB } = require("../models/drinks");
+
 const {
   ctrlWrapper,
   userAge,
   HttpError,
   setPagination,
 } = require("../helpers");
+
 const { Drink } = require("../models/drinks");
 const setAlcoholic = require("../helpers/setAlcoholic");
 
@@ -81,11 +83,9 @@ const addFavorite = async (req, res, next) => {
     throw HttpError(400, "cocktail is already in favorites");
   }
 
-  const result = await Drink.findByIdAndUpdate(
-    drinkId,
-    { $push: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $push: { favorite: _id },
+  });
 
   res.status(200).json(result);
 };
@@ -94,11 +94,14 @@ const removeFavorite = async (req, res, next) => {
   const { drinkId } = req.params;
   const { _id } = req.user;
 
-  await Drink.findByIdAndUpdate(
-    drinkId,
-    { $pull: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $pull: { favorite: _id },
+  });
+
+  if (!result) {
+    throw HttpError(404, "not found");
+  }
+
   res.status(200).json({ message: "Drink removed from favorites" });
 };
 
@@ -108,7 +111,11 @@ const getFavorite = async (req, res, next) => {
   const favoriteDrinks = await Drink.find({ favorite: _id });
 
   if (favoriteDrinks.length === 0) {
-    throw HttpError(400, "You don't have a favorite drink");
+    return res.status(200).json({
+      success: true,
+      message: "You don't have a favorite drink",
+      data: [],
+    });
   }
 
   res.status(200).json(favoriteDrinks);
