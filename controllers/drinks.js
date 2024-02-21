@@ -57,8 +57,8 @@ const addDrink = async (req, res, next) => {
   const fileName = `${uniqueFilename}${extension}`;
 
   const resultCloudinary = await cloudinary.uploader.upload(file.path, {
-    public_id: `avatars/${fileName}`,
-    folder: "avatars",
+    public_id: `${fileName}`,
+    folder: "cocktail",
     use_filename: true,
     unique_filename: false,
     overwrite: true,
@@ -67,13 +67,11 @@ const addDrink = async (req, res, next) => {
 
   const { _id: owner, dateOfBirth } = req.user;
   const { alcoholic } = req.body;
-  console.log(alcoholic);
+
   const age = userAge(dateOfBirth);
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
-
-  console.log(req.body.ingredients);
 
   const drink = new UserDrinksDB({
     drink: req.body.drink,
