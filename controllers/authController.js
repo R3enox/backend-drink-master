@@ -38,6 +38,7 @@ const signUp = async (req, res) => {
       name: newUser.name,
       avatarURL: newUser.avatarURL,
       dateOfBirth: newUser.dateOfBirth,
+      id: newUser._id,
     },
   });
 };
@@ -67,6 +68,7 @@ const signIn = async (req, res) => {
       name: user.name,
       avatarURL: user.avatarURL,
       dateOfBirth: user.dateOfBirth,
+      id: user._id,
     },
   });
 };

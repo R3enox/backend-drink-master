@@ -8,7 +8,6 @@ const {
   HttpError,
   setPagination,
 } = require("../helpers");
-const { User } = require("../models/user");
 const { Drink } = require("../models/drinks");
 const setAlcoholic = require("../helpers/setAlcoholic");
 
