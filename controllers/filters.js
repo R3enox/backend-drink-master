@@ -1,5 +1,5 @@
 const { Category, Ingredient, Glass } = require("../models/filters.js");
-const { ctrlWrapper } = require("../helpers/index.js");
+const { ctrlWrapper, userAge } = require("../helpers/index.js");
 
 const listCategories = async (req, res, next) => {
   const categories = await Category.find();
@@ -8,7 +8,10 @@ const listCategories = async (req, res, next) => {
 };
 
 const listIngredients = async (req, res, next) => {
-  const result = await Ingredient.find();
+  const { dateOfBirth } = req.user;
+  const age = userAge(dateOfBirth);
+  const alcohol = age < 18 ? "No" : "Yes";
+  const result = await Ingredient.find({ alcohol });
   res.json(result);
 };
 

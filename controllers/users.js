@@ -121,12 +121,13 @@ module.exports = {
 // };
 
 const getCurrent = async (req, res) => {
-  const { name, avatarUrl, dateOfBirth } = req.user;
+  const { name, avatarUrl, dateOfBirth, _id } = req.user;
   res.json({
     user: {
       name,
       avatarUrl,
       dateOfBirth,
+      id: _id,
     },
   });
 };

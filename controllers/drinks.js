@@ -1,49 +1,60 @@
 const { UserDrinksDB } = require("../models/drinks");
-const { ctrlWrapper, userAge, HttpError } = require("../helpers");
-const { User } = require("../models/user");
+
+const {
+  ctrlWrapper,
+  userAge,
+  HttpError,
+  setPagination,
+} = require("../helpers");
+
 const { Drink } = require("../models/drinks");
+const setAlcoholic = require("../helpers/setAlcoholic");
 
 const listDrinks = async (req, res) => {
   const { dateOfBirth } = req.user;
 
   const age = userAge(dateOfBirth);
-  const data = await Drink.find();
-  const filteredData =
-    age < 18
-      ? data.filter((drink) => drink.alcoholic === "Non alcoholic")
-      : data;
-  res.json(filteredData);
+  const alcoholic = setAlcoholic(age);
+
+  const drinks = await Drink.find({ alcoholic: { $in: alcoholic } });
+
+  res.json(drinks);
 };
+
 const searchDrinks = async (req, res) => {
-  const { category, ingredient, keyName } = req.query;
+  const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
+
   const age = userAge(dateOfBirth);
-  const data = await Drink.find();
-  let filteredData =
-    age < 18
-      ? data.filter((drink) => drink.alcoholic === "Non alcoholic")
-      : data;
+  const alcoholic = setAlcoholic(age);
 
-  if (category) {
-    filteredData = filteredData.filter(
-      (drink) => drink.category.toLowerCase().replace(/ /g, "%20") === category
-    );
-  }
-  if (ingredient) {
-    filteredData = filteredData.filter((drink) =>
-      drink.ingredients.includes(ingredient)
-    );
-  }
-  if (keyName) {
-    filteredData = filteredData.filter((drink) =>
-      drink.drink.toLowerCase().includes(keyName.toLowerCase())
-    );
-  }
-  // if (filteredData.length === 0) {
-  //   throw HttpError(404, "Not found");
-  // }
+  const query = { alcoholic: { $in: alcoholic } };
 
-  res.json(filteredData);
+  if (keyName) query.drink = { $regex: keyName, $options: "i" };
+  if (category) query.category = category;
+  if (ingredient) query.ingredients = { $elemMatch: { title: ingredient } };
+
+  const paginateOptions = setPagination(page, limit);
+
+  const [
+    {
+      paginatedResult,
+      totalCount: [{ totalCount } = { totalCount: 0 }],
+    },
+  ] = await Drink.aggregate([
+    {
+      $facet: {
+        paginatedResult: [
+          { $match: query },
+          { $skip: paginateOptions.skip },
+          { $limit: paginateOptions.limit },
+        ],
+        totalCount: [{ $match: query }, { $count: "totalCount" }],
+      },
+    },
+  ]);
+
+  res.json({ paginatedResult, totalCount });
 };
 
 const addDrink = async (req, res, next) => {
@@ -72,11 +83,9 @@ const addFavorite = async (req, res, next) => {
     throw HttpError(400, "cocktail is already in favorites");
   }
 
-  const result = await Drink.findByIdAndUpdate(
-    drinkId,
-    { $push: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $push: { favorite: _id },
+  });
 
   res.status(200).json(result);
 };
@@ -85,11 +94,14 @@ const removeFavorite = async (req, res, next) => {
   const { drinkId } = req.params;
   const { _id } = req.user;
 
-  await Drink.findByIdAndUpdate(
-    drinkId,
-    { $pull: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $pull: { favorite: _id },
+  });
+
+  if (!result) {
+    throw HttpError(404, "not found");
+  }
+
   res.status(200).json({ message: "Drink removed from favorites" });
 };
 
@@ -99,7 +111,11 @@ const getFavorite = async (req, res, next) => {
   const favoriteDrinks = await Drink.find({ favorite: _id });
 
   if (favoriteDrinks.length === 0) {
-    throw HttpError(400, "You don't have a favorite drink");
+    return res.status(200).json({
+      success: true,
+      message: "You don't have a favorite drink",
+      data: [],
+    });
   }
 
   res.status(200).json(favoriteDrinks);
@@ -107,12 +123,8 @@ const getFavorite = async (req, res, next) => {
 
 const getMyDrinks = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const user = await User.findById(owner);
-  if (!user) {
-    throw HttpError(404);
-  }
-  const myDrink = await Drink.find({ owner });
 
+  const myDrink = await Drink.find({ owner });
   if (myDrink.length === 0) {
     return res.status(200).json({
       success: true,
@@ -124,12 +136,13 @@ const getMyDrinks = async (req, res, next) => {
 };
 
 const deleteMyDrink = async (req, res, next) => {
-  const { _id: owner } = req.user;
   const { id: drinkId } = req.params;
+  const { _id } = req.user;
+  const owner = _id.toString();
 
-  if (!req.isConfirmed) {
-    throw HttpError(404, "No confirmation of deletion provided");
-  }
+  // if (!req.isConfirmed) {
+  //   throw HttpError(404, "No confirmation of deletion provided");
+  // }
   const deletedDrink = await Drink.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
@@ -138,7 +151,6 @@ const deleteMyDrink = async (req, res, next) => {
   if (!deletedDrink) {
     throw HttpError(404, "Drink not found or you are not the owner");
   }
-
   res.status(200).json({ message: "Drink deleted" });
 };
 
