@@ -38,6 +38,7 @@ const signUp = async (req, res) => {
       name: newUser.name,
       avatarURL: newUser.avatarURL,
       dateOfBirth: newUser.dateOfBirth,
+      id: newUser._id,
     },
   });
 };
