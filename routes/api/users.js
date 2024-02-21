@@ -6,12 +6,6 @@ const { isAuthenticated, upload } = require("../../middlewares");
 const router = express.Router();
 
 
-// router.post(
-//   "/avatar",
-//   isAuthenticated,
-//   upload.single("avatar"),
-//  ctrl.updateAvatar
-// );
 
 
 router.get("/current", isAuthenticated, ctrl.getCurrent);
