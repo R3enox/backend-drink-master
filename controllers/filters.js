@@ -10,12 +10,10 @@ const listCategories = async (req, res, next) => {
 const listIngredients = async (req, res, next) => {
   const { dateOfBirth } = req.user;
   const age = userAge(dateOfBirth);
-  const result = await Ingredient.find();
-  const filteredResult =
-    age < 18
-      ? result.filter((ingredient) => ingredient.alcohol === "No")
-      : result;
-  res.json(filteredResult);
+  const alcohol = age < 18 ? "No" : "Yes";
+  const result = await Ingredient.find({ alcohol });
+
+  res.json(result);
 };
 
 const listGlasses = async (req, res, next) => {

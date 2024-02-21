@@ -7,43 +7,36 @@ const listDrinks = async (req, res) => {
   const { dateOfBirth } = req.user;
 
   const age = userAge(dateOfBirth);
-  const data = await Drink.find();
-  const filteredData =
+  const alcoholic =
     age < 18
-      ? data.filter((drink) => drink.alcoholic === "Non alcoholic")
-      : data;
-  res.json(filteredData);
+      ? ["Non alcoholic"]
+      : ["Alcoholic", "Optional alcohol", "Non alcoholic"];
+  const data = await Drink.find({ alcoholic: { $in: alcoholic } });
+  res.json(data);
 };
 const searchDrinks = async (req, res) => {
   const { category, ingredient, keyName } = req.query;
   const { dateOfBirth } = req.user;
   const age = userAge(dateOfBirth);
-  const data = await Drink.find();
-  let filteredData =
+  const alcoholic =
     age < 18
-      ? data.filter((drink) => drink.alcoholic === "Non alcoholic")
-      : data;
-
+      ? ["Non alcoholic"]
+      : ["Alcoholic", "Optional alcohol", "Non alcoholic"];
+  let data = await Drink.find({ alcoholic: { $in: alcoholic } });
   if (category) {
-    filteredData = filteredData.filter(
-      (drink) => drink.category.toLowerCase().replace(/ /g, "%20") === category
-    );
+    data = data.filter((drink) => drink.category.toLowerCase() === category);
   }
   if (ingredient) {
-    filteredData = filteredData.filter((drink) =>
-      drink.ingredients.includes(ingredient)
+    data = data.filter((drink) =>
+      drink.ingredients.find((item) => item.title.toLowerCase() === ingredient)
     );
   }
   if (keyName) {
-    filteredData = filteredData.filter((drink) =>
+    data = data.filter((drink) =>
       drink.drink.toLowerCase().includes(keyName.toLowerCase())
     );
   }
-  // if (filteredData.length === 0) {
-  //   throw HttpError(404, "Not found");
-  // }
-
-  res.json(filteredData);
+  res.json(data);
 };
 
 const addDrink = async (req, res, next) => {
