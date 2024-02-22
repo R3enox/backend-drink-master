@@ -1,42 +1,60 @@
 const { UserDrinksDB } = require("../models/drinks");
-const { ctrlWrapper, userAge, HttpError } = require("../helpers");
-// const { User } = require("../models/user");
+
+const {
+  ctrlWrapper,
+  userAge,
+  HttpError,
+  setPagination,
+} = require("../helpers");
+
 const { Drink } = require("../models/drinks");
+const setAlcoholic = require("../helpers/setAlcoholic");
 
 const listDrinks = async (req, res) => {
   const { dateOfBirth } = req.user;
 
   const age = userAge(dateOfBirth);
-  const alcoholic =
-    age < 18
-      ? ["Non alcoholic"]
-      : ["Alcoholic", "Optional alcohol", "Non alcoholic"];
-  const data = await Drink.find({ alcoholic: { $in: alcoholic } });
-  res.json(data);
+  const alcoholic = setAlcoholic(age);
+
+  const drinks = await Drink.find({ alcoholic: { $in: alcoholic } });
+
+  res.json(drinks);
 };
+
 const searchDrinks = async (req, res) => {
-  const { category, ingredient, keyName } = req.query;
+  const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
+
   const age = userAge(dateOfBirth);
-  const alcoholic =
-    age < 18
-      ? ["Non alcoholic"]
-      : ["Alcoholic", "Optional alcohol", "Non alcoholic"];
-  let data = await Drink.find({ alcoholic: { $in: alcoholic } });
-  if (category) {
-    data = data.filter((drink) => drink.category.toLowerCase() === category);
-  }
-  if (ingredient) {
-    data = data.filter((drink) =>
-      drink.ingredients.find((item) => item.title.toLowerCase() === ingredient)
-    );
-  }
-  if (keyName) {
-    data = data.filter((drink) =>
-      drink.drink.toLowerCase().includes(keyName.toLowerCase())
-    );
-  }
-  res.json(data);
+  const alcoholic = setAlcoholic(age);
+
+  const query = { alcoholic: { $in: alcoholic } };
+
+  if (keyName) query.drink = { $regex: keyName, $options: "i" };
+  if (category) query.category = category;
+  if (ingredient) query.ingredients = { $elemMatch: { title: ingredient } };
+
+  const paginateOptions = setPagination(page, limit);
+
+  const [
+    {
+      paginatedResult,
+      totalCount: [{ totalCount } = { totalCount: 0 }],
+    },
+  ] = await Drink.aggregate([
+    {
+      $facet: {
+        paginatedResult: [
+          { $match: query },
+          { $skip: paginateOptions.skip },
+          { $limit: paginateOptions.limit },
+        ],
+        totalCount: [{ $match: query }, { $count: "totalCount" }],
+      },
+    },
+  ]);
+
+  res.json({ paginatedResult, totalCount });
 };
 
 const addDrink = async (req, res, next) => {
@@ -65,11 +83,9 @@ const addFavorite = async (req, res, next) => {
     throw HttpError(400, "cocktail is already in favorites");
   }
 
-  const result = await Drink.findByIdAndUpdate(
-    drinkId,
-    { $push: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $push: { favorite: _id },
+  });
 
   res.status(200).json(result);
 };
@@ -78,11 +94,14 @@ const removeFavorite = async (req, res, next) => {
   const { drinkId } = req.params;
   const { _id } = req.user;
 
-  await Drink.findByIdAndUpdate(
-    drinkId,
-    { $pull: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $pull: { favorite: _id },
+  });
+
+  if (!result) {
+    throw HttpError(404, "not found");
+  }
+
   res.status(200).json({ message: "Drink removed from favorites" });
 };
 
@@ -92,7 +111,11 @@ const getFavorite = async (req, res, next) => {
   const favoriteDrinks = await Drink.find({ favorite: _id });
 
   if (favoriteDrinks.length === 0) {
-    throw HttpError(400, "You don't have a favorite drink");
+    return res.status(200).json({
+      success: true,
+      message: "You don't have a favorite drink",
+      data: [],
+    });
   }
 
   res.status(200).json(favoriteDrinks);
