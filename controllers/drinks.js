@@ -7,19 +7,52 @@ const {
   setPagination,
   isAdult,
 } = require("../helpers");
-
 const { Drink } = require("../models/drinks");
 
+const popularCategories = [
+  "Ordinary Drink",
+  "Cocktail",
+  "Shake",
+  "Other/Unknown",
+];
+
 const listDrinks = async (req, res) => {
+  const { limit = 3 } = req.query;
   const { dateOfBirth } = req.user;
 
   const age = getUserAge(dateOfBirth);
   const mustBeAlcoholic = isAdult(age);
 
-  const filter = {};
-  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  const query = { category: { $in: popularCategories } };
+  if (!mustBeAlcoholic) query.alcoholic = "Non alcoholic";
 
-  const drinks = await Drink.find(filter);
+  const drinks = await Drink.aggregate([
+    {
+      $match: {
+        category: {
+          $in: popularCategories,
+        },
+      },
+    },
+    { $sort: { category: 1, createdAt: 1 } },
+    {
+      $group: {
+        _id: "$category",
+        items: { $push: "$$ROOT" },
+      },
+    },
+    {
+      $project: {
+        items: { $slice: ["$items", Number(limit)] },
+      },
+    },
+    { $unwind: "$items" },
+    {
+      $replaceRoot: {
+        newRoot: "$items",
+      },
+    },
+  ]);
 
   res.json(drinks);
 };
