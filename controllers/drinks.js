@@ -2,21 +2,24 @@ const { UserDrinksDB } = require("../models/drinks");
 
 const {
   ctrlWrapper,
-  userAge,
+  getUserAge,
   HttpError,
   setPagination,
+  isAdult,
 } = require("../helpers");
 
 const { Drink } = require("../models/drinks");
-const setAlcoholic = require("../helpers/setAlcoholic");
 
 const listDrinks = async (req, res) => {
   const { dateOfBirth } = req.user;
 
-  const age = userAge(dateOfBirth);
-  const alcoholic = setAlcoholic(age);
+  const age = getUserAge(dateOfBirth);
+  const mustBeAlcoholic = isAdult(age);
 
-  const drinks = await Drink.find({ alcoholic: { $in: alcoholic } });
+  const filter = {};
+  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+
+  const drinks = await Drink.find(filter);
 
   res.json(drinks);
 };
@@ -25,11 +28,11 @@ const searchDrinks = async (req, res) => {
   const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
 
-  const age = userAge(dateOfBirth);
-  const alcoholic = setAlcoholic(age);
+  const age = getUserAge(dateOfBirth);
+  const mustBeAlcoholic = isAdult(age);
 
-  const query = { alcoholic: { $in: alcoholic } };
-
+  const query = {};
+  if (!mustBeAlcoholic) query.alcoholic = "Non alcoholic";
   if (keyName) query.drink = { $regex: keyName, $options: "i" };
   if (category) query.category = category;
   if (ingredient) query.ingredients = { $elemMatch: { title: ingredient } };
@@ -60,7 +63,7 @@ const searchDrinks = async (req, res) => {
 const addDrink = async (req, res, next) => {
   const { _id: owner, dateOfBirth } = req.user;
   const { alcoholic } = req.body;
-  const age = userAge(dateOfBirth);
+  const age = getUserAge(dateOfBirth);
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
