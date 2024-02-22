@@ -35,10 +35,11 @@ const signUp = async (req, res) => {
   res.status(201).json({
     token,
     user: {
-      name: newUser.name,
-      avatarURL: newUser.avatarURL,
-      dateOfBirth: newUser.dateOfBirth,
       id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      dateOfBirth: newUser.dateOfBirth,
+      avatarURL: newUser.avatarURL,
     },
   });
 };
@@ -65,10 +66,11 @@ const signIn = async (req, res) => {
   res.json({
     token,
     user: {
-      name: user.name,
-      avatarURL: user.avatarURL,
-      dateOfBirth: user.dateOfBirth,
       id: user._id,
+      name: user.name,
+      email: user.email,
+      dateOfBirth: user.dateOfBirth,
+      avatarURL: user.avatarURL,
     },
   });
 };
