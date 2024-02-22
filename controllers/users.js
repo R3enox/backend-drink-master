@@ -1,4 +1,3 @@
-
 const cloudinary = require("cloudinary").v2;
 const { User } = require("../models/user");
 const path = require("path");
@@ -50,7 +49,7 @@ const updateUser = async (req, res) => {
     user: {
       name: updatedUser.name,
       email: updatedUser.email,
-      avatar: updatedUser.avatar,
+      avatarURL: updatedUser.avatarURL,
     },
   });
 };
@@ -121,13 +120,14 @@ module.exports = {
 // };
 
 const getCurrent = async (req, res) => {
-  const { name, avatarUrl, dateOfBirth, _id } = req.user;
+  const { _id, name, email, avatarURL, dateOfBirth } = req.user;
   res.json({
     user: {
-      name,
-      avatarUrl,
-      dateOfBirth,
       id: _id,
+      name,
+      email,
+      dateOfBirth,
+      avatarURL,
     },
   });
 };

@@ -1,22 +1,30 @@
 const { Category, Ingredient, Glass } = require("../models/filters.js");
-const { ctrlWrapper, userAge } = require("../helpers/index.js");
+const { ctrlWrapper, getUserAge, isAdult } = require("../helpers/index.js");
 
-const listCategories = async (req, res, next) => {
-  const categories = await Category.find();
+const listCategories = async (req, res) => {
+  const categories = await Category.aggregate([{ $sort: { title: 1 } }]);
   const result = categories.map(({ title }) => title);
   res.json(result);
 };
 
-const listIngredients = async (req, res, next) => {
+const listIngredients = async (req, res) => {
   const { dateOfBirth } = req.user;
-  const age = userAge(dateOfBirth);
-  const alcohol = age < 18 ? "No" : ["Yes", "No"];
-  const result = await Ingredient.find({ alcohol });
+  
+  const age = getUserAge(dateOfBirth);
+  const mustHaveAlcohol = isAdult(age);
+
+  const query = {};
+  if (!mustHaveAlcohol) query.alcohol = "No";
+
+  const result = await Ingredient.aggregate([
+    { $sort: { title: 1 } },
+    { $match: query },
+  ]);
   res.json(result);
 };
 
-const listGlasses = async (req, res, next) => {
-  const glasses = await Glass.find();
+const listGlasses = async (req, res) => {
+  const glasses = await Glass.aggregate([{ $sort: { title: 1 } }]);
   const result = glasses.map(({ title }) => title);
   res.json(result);
 };
