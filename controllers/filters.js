@@ -9,7 +9,7 @@ const listCategories = async (req, res) => {
 
 const listIngredients = async (req, res) => {
   const { dateOfBirth } = req.user;
-
+  
   const age = getUserAge(dateOfBirth);
   const mustHaveAlcohol = isAdult(age);
 
@@ -20,7 +20,6 @@ const listIngredients = async (req, res) => {
     { $sort: { title: 1 } },
     { $match: query },
   ]);
-
   res.json(result);
 };
 
