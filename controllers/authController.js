@@ -35,9 +35,11 @@ const signUp = async (req, res) => {
   res.status(201).json({
     token,
     user: {
+      id: newUser._id,
       name: newUser.name,
-      avatarURL: newUser.avatarURL,
+      email: newUser.email,
       dateOfBirth: newUser.dateOfBirth,
+      avatarURL: newUser.avatarURL,
     },
   });
 };
@@ -64,9 +66,11 @@ const signIn = async (req, res) => {
   res.json({
     token,
     user: {
+      id: user._id,
       name: user.name,
-      avatarURL: user.avatarURL,
+      email: user.email,
       dateOfBirth: user.dateOfBirth,
+      avatarURL: user.avatarURL,
     },
   });
 };

@@ -4,22 +4,57 @@ const cloudinary = require("cloudinary").v2;
 
 const {
   ctrlWrapper,
-  userAge,
+  getUserAge,
   HttpError,
   setPagination,
+  isAdult,
 } = require("../helpers");
-const { User } = require("../models/user");
 const { Drink } = require("../models/drinks");
-const setAlcoholic = require("../helpers/setAlcoholic");
 
+const popularCategories = [
+  "Ordinary Drink",
+  "Cocktail",
+  "Shake",
+  "Other/Unknown",
+];
 
 const listDrinks = async (req, res) => {
+  const { limit = 3 } = req.query;
   const { dateOfBirth } = req.user;
 
-  const age = userAge(dateOfBirth);
-  const alcoholic = setAlcoholic(age);
+  const age = getUserAge(dateOfBirth);
+  const mustBeAlcoholic = isAdult(age);
 
-  const drinks = await Drink.find({ alcoholic: { $in: alcoholic } });
+  const query = { category: { $in: popularCategories } };
+  if (!mustBeAlcoholic) query.alcoholic = "Non alcoholic";
+
+  const drinks = await Drink.aggregate([
+    {
+      $match: {
+        category: {
+          $in: popularCategories,
+        },
+      },
+    },
+    { $sort: { category: 1, createdAt: 1 } },
+    {
+      $group: {
+        _id: "$category",
+        items: { $push: "$$ROOT" },
+      },
+    },
+    {
+      $project: {
+        items: { $slice: ["$items", Number(limit)] },
+      },
+    },
+    { $unwind: "$items" },
+    {
+      $replaceRoot: {
+        newRoot: "$items",
+      },
+    },
+  ]);
 
   res.json(drinks);
 };
@@ -28,11 +63,11 @@ const searchDrinks = async (req, res) => {
   const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
 
-  const age = userAge(dateOfBirth);
-  const alcoholic = setAlcoholic(age);
+  const age = getUserAge(dateOfBirth);
+  const mustBeAlcoholic = isAdult(age);
 
-  const query = { alcoholic: { $in: alcoholic } };
-
+  const query = {};
+  if (!mustBeAlcoholic) query.alcoholic = "Non alcoholic";
   if (keyName) query.drink = { $regex: keyName, $options: "i" };
   if (category) query.category = category;
   if (ingredient) query.ingredients = { $elemMatch: { title: ingredient } };
@@ -76,6 +111,7 @@ const addDrink = async (req, res, next) => {
   const avatarUrl = resultCloudinary.secure_url;
 
   const { _id: owner, dateOfBirth } = req.user;
+
   const {
     drink,
     description,
@@ -86,7 +122,8 @@ const addDrink = async (req, res, next) => {
     ingredients,
   } = req.body;
 
-  const age = userAge(dateOfBirth);
+  const age = getUserAge(dateOfBirth);
+
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
@@ -125,11 +162,9 @@ const addFavorite = async (req, res, next) => {
     throw HttpError(400, "cocktail is already in favorites");
   }
 
-  const result = await Drink.findByIdAndUpdate(
-    drinkId,
-    { $push: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $push: { favorite: _id },
+  });
 
   res.status(200).json(result);
 };
@@ -138,11 +173,14 @@ const removeFavorite = async (req, res, next) => {
   const { drinkId } = req.params;
   const { _id } = req.user;
 
-  await Drink.findByIdAndUpdate(
-    drinkId,
-    { $pull: { favorite: _id } },
-    { new: true }
-  );
+  const result = await Drink.findByIdAndUpdate(drinkId, {
+    $pull: { favorite: _id },
+  });
+
+  if (!result) {
+    throw HttpError(404, "not found");
+  }
+
   res.status(200).json({ message: "Drink removed from favorites" });
 };
 
@@ -152,7 +190,11 @@ const getFavorite = async (req, res, next) => {
   const favoriteDrinks = await Drink.find({ favorite: _id });
 
   if (favoriteDrinks.length === 0) {
-    throw HttpError(400, "You don't have a favorite drink");
+    return res.status(200).json({
+      success: true,
+      message: "You don't have a favorite drink",
+      data: [],
+    });
   }
 
   res.status(200).json(favoriteDrinks);
