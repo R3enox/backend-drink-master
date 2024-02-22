@@ -1,4 +1,6 @@
-const { UserDrinksDB } = require("../models/drinks");
+const path = require("path");
+const { nanoid } = require("nanoid");
+const cloudinary = require("cloudinary").v2;
 
 const {
   ctrlWrapper,
@@ -94,15 +96,56 @@ const searchDrinks = async (req, res) => {
 };
 
 const addDrink = async (req, res, next) => {
+  const { file } = req;
+  const uniqueFilename = nanoid();
+  const extension = path.extname(file.originalname);
+  const fileName = `${uniqueFilename}${extension}`;
+
+  const resultCloudinary = await cloudinary.uploader.upload(file.path, {
+    public_id: `${fileName}`,
+    folder: "cocktail",
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+  });
+  const avatarUrl = resultCloudinary.secure_url;
+
   const { _id: owner, dateOfBirth } = req.user;
-  const { alcoholic } = req.body;
+
+  const {
+    drink,
+    description,
+    category,
+    glass,
+    alcoholic,
+    instructions,
+    ingredients,
+  } = req.body;
+
   const age = getUserAge(dateOfBirth);
+
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
 
-  const result = await UserDrinksDB.create({ ...req.body, owner });
-  const updatedResult = await UserDrinksDB.findById(result._id).select(
+  const newDrink = new Drink({
+    drink,
+    description,
+    category,
+    glass,
+    alcoholic,
+    instructions,
+    drinkThumb: avatarUrl,
+    ingredients: ingredients.map(({ title, measure, ingredientId }) => ({
+      title,
+      measure,
+      ingredientId,
+    })),
+    owner: owner,
+  });
+
+  const result = await Drink.create(newDrink);
+  const updatedResult = await Drink.findById(result._id).select(
     "-createdAt -updatedAt"
   );
   res.status(201).json(updatedResult);
