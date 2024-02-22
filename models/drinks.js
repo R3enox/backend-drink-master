@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // connect db user-drinks
-const ingredientSchema = new mongoose.Schema({
+const ingredientSchema = {
   title: {
     type: String,
     required: true,
@@ -11,10 +11,10 @@ const ingredientSchema = new mongoose.Schema({
     required: true,
   },
   ingredientId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
-});
+};
 
 const userDrinksSchema = new mongoose.Schema(
   {
