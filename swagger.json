@@ -1,0 +1,2337 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "Drink Master",
+    "description": "Drink's search and create web API.\r\nUseful links:\n* [Backend GitHub repository](https://github.com/R3enox/backend-drink-master)\n* [Frontend GitHub repository](https://github.com/R3enox/frontend-drink-master)",
+    "name": "MIT",
+    "url": "https://opensource.org/licenses/MIT"
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    { "url": "https://drink-master-4fm6.onrender.com/api" },
+    { "url": "http://localhost:3000/api" }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "User's authorization"
+    },
+    {
+      "name": "Users",
+      "description": "All about the user"
+    },
+    {
+      "name": "Filters",
+      "description": "Filters for drink's searching & sorting"
+    },
+    {
+      "name": "Drinks",
+      "description": "All about drinks"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User's registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "User's registration data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignUpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignUpResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Email already exists"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User's log in",
+        "parameters": [],
+        "requestBody": {
+          "description": "Authorisation's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SinpInRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignInResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/auth/signout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User's log out",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "User information",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/users/update": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "User update",
+        "consumes": ["multipart/form-data"],
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Update object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/filters/categories": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Get categories list",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Categories list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoriesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/filters/ingredients": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Get ingredients list",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/filters/glasses": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Get glasses list",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Glasses list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlassesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get newest drinks sorted by popular categories",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrinksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks/popular": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get popular drinks",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PopularDrinksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks/search": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Search drinks by filters (key name, categories, ingredients)",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "page",
+            "description": "Page number, default 1"
+          },
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "limit",
+            "description": "Limit items per page, default 10"
+          },
+          {
+            "in": "query",
+            "name": "keyName",
+            "type": "string",
+            "description": "Search drinks by name"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "description": "Search drinks by category",
+            "type": "string",
+            "schema": {
+              "enum": [
+                "Ordinary Drink",
+                "Cocktail",
+                "Shake",
+                "Other/Unknown",
+                "Cocoa",
+                "Shot",
+                "Coffee / Tea",
+                "Homemade Liqueur",
+                "Punch / Party Drink",
+                "Beer",
+                "Soft Drink"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "ingredient",
+            "description": "Search drinks by ingredients",
+            "type": "string",
+            "schema": {
+              "enum": [
+                "7-Up",
+                "Agave Syrup",
+                "Allspice",
+                "Almond flavoring",
+                "Light rum",
+                "Lemon",
+                "Tomato juice",
+                "Yoghurt",
+                "Sugar",
+                "Milk"
+              ]
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchDrinksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drink/{id}": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get drink by id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Drink id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrinkByIdResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks/own/add": {
+      "post": {
+        "tags": ["Drinks"],
+        "summary": "Add new user's drink recipe",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "User's recipe object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/AddOwnDrinkRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Drink is successfully added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddOwnDrinkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks/own": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get user's own drinks",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "page",
+            "description": "Page number, default 1"
+          },
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "page",
+            "description": "Limit items per page, default 10"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllOwnDrinksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks/own/remove/{id}": {
+      "delete": {
+        "tags": ["Drinks"],
+        "summary": "Delete user's own drink by id",
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "id",
+            "required": true,
+            "description": "Drink id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Drink is deleted"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks/favorite": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get user's favorites drinks",
+        "parameters": [
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "page",
+            "description": "Page number, default 1"
+          },
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "page",
+            "description": "Limit items per page, default 10"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllFavoriteDrinksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks/{id}/favorite/add/": {
+      "post": {
+        "tags": ["Drinks"],
+        "summary": "Add drink to favorites",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "Drink id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddFavoriteDrinkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/drinks/{id}/favorite/remove": {
+      "delete": {
+        "tags": ["Drinks"],
+        "summary": "Remove drink from favorites",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Drink id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Drink is removed from favorites"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "SignUpRequest": {
+        "type": "object",
+        "required": ["name", "email", "password", "dateOfBirth"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "name": "Test",
+          "email": "test@example.com",
+          "password": "qwerty123",
+          "dateOfBirth": "20/08/2000"
+        }
+      },
+      "SignUpResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "dateOfBirth": {
+                "type": "string",
+                "format": "dd/mm/yyyy"
+              },
+              "avatarURL": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDg1YWZiMjVlZmIwZjM2OTQxNDE2ZiIsImlhdCI6MTcwODY3Nzg4MywiZXhwIjoxNzA4NzIxMDgzfQ.ZFgGpv4dOHiQ6tymYZanl6qbp1VRQj3IC-zPE2Ccg2M",
+          "user": {
+            "id": "65d85afb25efb0f36941416f",
+            "name": "Test",
+            "email": "test@example.com",
+            "dateOfBirth": "15/06/2010",
+            "avatarURL": "avatars/user.png"
+          }
+        }
+      },
+      "SignInRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "test@example.com",
+          "password": "qwerty123"
+        }
+      },
+      "SignInResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "dateOfBirth": {
+                "type": "string",
+                "format": "dd/mm/yyyy"
+              },
+              "avatarURL": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDg1YWZiMjVlZmIwZjM2OTQxNDE2ZiIsImlhdCI6MTcwODY3Nzg4MywiZXhwIjoxNzA4NzIxMDgzfQ.ZFgGpv4dOHiQ6tymYZanl6qbp1VRQj3IC-zPE2Ccg2M",
+          "user": {
+            "id": "65d85afb25efb0f36941416f",
+            "name": "Test",
+            "email": "test@example.com",
+            "dateOfBirth": "15/06/2010",
+            "avatarURL": "avatars/user.png"
+          }
+        }
+      },
+      "CurrentResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Test"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "test@example.com"
+          },
+          "birthDate": {
+            "type": "string",
+            "description": "User's birthDate",
+            "example": "20 Aug 2020"
+          }
+        },
+        "example": {
+          "name": "Test",
+          "email": "1example@gmail.com",
+          "birthDate": "20 Aug 2020"
+        }
+      },
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "format": "binary",
+            "example": "https://res.cloudinary.com/dzvvgvwgt/image/upload/v1699195131/drinkMaster/avatar/65456b585b4eb0cd117b6a6c.jpg"
+          },
+          "name": {
+            "type": "string",
+            "example": "Test2"
+          }
+        }
+      },
+      "UpdateUserResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "avatar": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "example": {
+          "message": "Avatar uploaded successfully",
+          "user": {
+            "name": "Test",
+            "email": "test@example.com",
+            "avatar": "https://res.cloudinary.com/dzvvgvwgt/image/upload/v1699195131/drinkMaster/avatar/65456b585b4eb0cd117b6a6c.jpg"
+          }
+        }
+      },
+      "CategoriesResponse": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": ["Beer", "Shot", "Shake"]
+      },
+      "IngredientsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "ingredientThumb": {
+              "type": "string",
+              "format": "uri"
+            },
+            "thumb-medium": {
+              "type": "string",
+              "format": "uri"
+            },
+            "thumb-small": {
+              "type": "string",
+              "format": "uri"
+            },
+            "abv": {
+              "type": "string"
+            },
+            "alcocol": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "flavour": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "64aebb7f82d96cc69e0eb4b3",
+            "title": "Amaretto",
+            "ingredientThumb": "https://ftp.goit.study/img/drinkify/ingredients/Amaretto.png",
+            "thumb-medium": "https://ftp.goit.study/img/drinkify/ingredients/Amaretto-Medium.png",
+            "thumb-small": "https://ftp.goit.study/img/drinkify/ingredients/Amaretto-Small.png",
+            "abv": "28",
+            "alcohol": "Yes",
+            "description": "Amaretto (Italian for \"a little bitter\") is a sweet, almond-flavoured, Italian liqueur associated with Saronno, Italy. Various commercial brands are made from a base of apricot pits, almonds, or both.\r\n\r\nWhen served as a beverage, amaretto can be drunk by itself, used as an ingredient to create several popular mixed drinks, or added to coffee. Amaretto is also commonly used in culinary applications.\r\n\r\nThe name amaretto originated as a diminutive of the Italian word amaro, meaning \"bitter\", which references the distinctive flavour lent by the mandorla amara (the bitter almond) or by the drupe kernel. However, the bitterness of amaretto tends to be mild, and sweeteners—and sometimes sweet almonds—enhance the flavour in the final products. Thus one can interpret the liqueur's name as a description of the taste as \"a little bitter\". Cyanide is processed out of the almond preparation prior to its use.\r\n\r\nConflation of amaro (\"bitter\") and amore (\"love\") has led to associations with romance.\r\n\r\nOne should not confuse amaretto with amaro, a different family of Italian liqueurs that, while also sweetened, have a stronger bitter flavour derived from herbs.",
+            "type": "Liqueur",
+            "flavour": "almond",
+            "country": "Italy"
+          }
+        ]
+      },
+      "GlassesResponse": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "example": ["Coffee mug", "Cocktail glass", "Cordial glass"]
+      },
+      "DrinksResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "drink": {
+              "type": "string"
+            },
+            "drinkAlternate": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "string"
+            },
+            "video": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "IBA": {
+              "type": "string"
+            },
+            "alcoholic": {
+              "type": "string"
+            },
+            "glass": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "instructions": {
+              "type": "string"
+            },
+            "instructionsES": {
+              "type": "string"
+            },
+            "instructionsDE": {
+              "type": "string"
+            },
+            "instructionsFR": {
+              "type": "string"
+            },
+            "instructionsIT": {
+              "type": "string"
+            },
+            "instructionsRU": {
+              "type": "string"
+            },
+            "instructionsPL": {
+              "type": "string"
+            },
+            "instructionsUK": {
+              "type": "string"
+            },
+            "drinkThumb": {
+              "type": "string"
+            },
+            "ingredients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "measure": {
+                    "type": "string"
+                  },
+                  "ingredientId": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "shortDescription": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "favorite": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "639b6de9ff77d221f190c56a",
+            "drink": "151 Florida Bushwacker",
+            "drinkAlternate": "Sorry, not specified",
+            "tags": "Sorry, not specified",
+            "video": "Sorry, not specified",
+            "category": "Shake",
+            "IBA": "Sorry, not specified",
+            "alcoholic": "Alcoholic",
+            "glass": "Beer mug",
+            "description": "151 Florida Bushwacker is a creamy and indulgent cocktail that combines the flavors of rum, coffee liqueur, cream of coconut, and milk. It is made by blending all the ingredients with ice until smooth and creamy. The result is a decadent and tropical drink that is reminiscent of a milkshake with a kick. Enjoy this delightful treat as a dessert or a special treat on a hot summer day.",
+            "instructions": "Combine all ingredients. Blend until smooth. Garnish with chocolate shavings if desired.",
+            "instructionsES": "Combina todos los ingredientes. Mezclar hasta que esté suave. Adorne con virutas de chocolate si lo desea.",
+            "instructionsDE": "Alle Zutaten vermengen. Mischen, bis alles glatt ist. Auf Wunsch mit Schokoladenraspeln garnieren.",
+            "instructionsFR": "Combinez tous les ingrédients. Mélanger jusqu'à consistance lisse. Garnir de copeaux de chocolat si désiré.",
+            "instructionsIT": "Combina tutti gli ingredienti.\r\nFrulla fino a che è liscio.\r\nGuarnire con scaglie di cioccolato se lo si desidera.",
+            "instructionsRU": "Смешайте все ингредиенты. Смешайте до однородности. По желанию украсьте шоколадной стружкой.",
+            "instructionsPL": "Połącz wszystkie składniki. Miksuj do uzyskania gładkości. W razie potrzeby udekoruj wiórkami czekoladowymi.",
+            "instructionsUK": "З'єднайте всі інгредієнти. Перемішайте до однорідності. За бажанням прикрасьте шоколадною стружкою.",
+            "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/151_Florida_Bushwacker.jpg",
+            "ingredients": [
+              {
+                "title": "Malibu rum",
+                "measure": "1/2 oz ",
+                "ingredientId": "64f1d5c269d8333cf130fb65"
+              },
+              {
+                "title": "Light rum",
+                "measure": "1/2 oz ",
+                "ingredientId": "64aebb7f82d96cc69e0eb4a4"
+              },
+              {
+                "title": "151 proof rum",
+                "measure": "1/2 oz Bacardi ",
+                "ingredientId": "64f1d5c269d8333cf130fb68"
+              },
+              {
+                "title": "Dark Creme de Cacao",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb6b"
+              },
+              {
+                "title": "Cointreau",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb6e"
+              },
+              {
+                "title": "Milk",
+                "measure": "3 oz ",
+                "ingredientId": "64aebb7f82d96cc69e0eb4d5"
+              },
+              {
+                "title": "Coconut liqueur",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb71"
+              },
+              {
+                "title": "Vanilla ice-cream",
+                "measure": "1 cup ",
+                "ingredientId": "64f1d5c369d8333cf130fb74"
+              }
+            ],
+            "shortDescription": "A creamy and indulgent cocktail with a blend of rum, coffee liqueur, and cream of coconut.",
+            "owner": "65cfbb8646c09b62b3f2d5ff",
+            "favorite": ["65cfbb8646c09b62b3f2d5ff"],
+            "updatedAt": "2024-02-22T18:51:18.801Z"
+          }
+        ]
+      },
+      "PopularDrinksResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "drink": {
+              "type": "string"
+            },
+            "drinkAlternate": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "string"
+            },
+            "video": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "IBA": {
+              "type": "string"
+            },
+            "alcoholic": {
+              "type": "string"
+            },
+            "glass": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "instructions": {
+              "type": "string"
+            },
+            "instructionsES": {
+              "type": "string"
+            },
+            "instructionsDE": {
+              "type": "string"
+            },
+            "instructionsFR": {
+              "type": "string"
+            },
+            "instructionsIT": {
+              "type": "string"
+            },
+            "instructionsRU": {
+              "type": "string"
+            },
+            "instructionsPL": {
+              "type": "string"
+            },
+            "instructionsUK": {
+              "type": "string"
+            },
+            "drinkThumb": {
+              "type": "string"
+            },
+            "ingredients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "measure": {
+                    "type": "string"
+                  },
+                  "ingredientId": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "shortDescription": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "users": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "639b6de9ff77d221f190c50f",
+            "drink": "Quentin",
+            "drinkAlternate": "Sorry, not specified",
+            "tags": "IBA,ContemporaryClassic",
+            "video": "https://www.youtube.com/watch?v=2jtoa_t7g94",
+            "category": "Ordinary Drink",
+            "IBA": "Contemporary Classics",
+            "alcoholic": "Alcoholic",
+            "glass": "Cocktail glass",
+            "description": "Quentin is a refreshing cocktail that combines the flavors of citrus and mint. It is made with fresh lime juice, orange liqueur, and a touch of mint syrup. The drink is served over ice and garnished with a sprig of mint. It is the perfect beverage for a hot summer day.",
+            "instructions": "In a shaker half-filled with ice cubes, combine the rum, Kahlua, and cream. Shake well. Strain into a cocktail glass and garnish with the nutmeg.",
+            "instructionsES": "En una coctelera llena hasta la mitad con cubitos de hielo, combine el ron, Kahlua y la crema. Agite bien. Colar en una copa de cóctel y decorar con la nuez moscada.",
+            "instructionsDE": "In einem Shaker, der halb mit Eiswürfeln gefüllt ist, Rum, Kahlua und Sahne mischen. Gut schütteln. In ein Cocktailglas abseihen und mit der Muskatnuss garnieren.",
+            "instructionsFR": "Dans un shaker à moitié rempli de glaçons, mélanger le rhum, le Kahlua et la crème. Bien agiter. Versez dans un verre à cocktail et décorez avec la noix de muscade.",
+            "instructionsIT": "In uno shaker riempito a metà con cubetti di ghiaccio, unire il rum, il Kahlua e la panna. Filtrare in una coppetta da cocktail e guarnire con la noce moscata. Agitare bene.",
+            "instructionsRU": "В шейкере, наполовину наполненном кубиками льда, смешайте ром, Калуа и сливки. Хорошо встряхнуть. Процедите в коктейльный бокал и украсьте мускатным орехом.",
+            "instructionsPL": "W shakerze wypełnionym do połowy kostkami lodu wymieszać rum, Kahlua i śmietanę. Dobrze wstrząsnąć. Przelej do kieliszka koktajlowego i udekoruj gałką muszkatołową.",
+            "instructionsUK": "У шейкері, наповненому наполовину кубиками льоду, змішайте ром, Калуа та вершки. Добре струсити. Процідіть у келих для коктейлю та прикрасьте мускатним горіхом.",
+            "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/Quentin.jpg",
+            "ingredients": [
+              {
+                "title": "Dark rum",
+                "measure": "1 1/2 oz ",
+                "ingredientId": "64aebb7f82d96cc69e0eb4a7"
+              },
+              {
+                "title": "Kahlua",
+                "measure": "1/2 oz ",
+                "ingredientId": "64aebb7f82d96cc69e0eb4bd"
+              },
+              {
+                "title": "Light cream",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c069d8333cf130fb31"
+              },
+              {
+                "title": "Nutmeg",
+                "measure": "1/8 tsp grated ",
+                "ingredientId": "64f1d5c069d8333cf130fb34"
+              }
+            ],
+            "shortDescription": "A refreshing and citrusy cocktail with a hint of mint.",
+            "updatedAt": "2023-11-03T20:57:13.653Z",
+            "users": [
+              "653e747a0d2bb3830f82eb47",
+              "6543e1144b22e0e1b4948877",
+              "6540c1977366a77795807a1a"
+            ],
+            "popularity": 3
+          }
+        ]
+      },
+      "SearchDrinksResponse": {
+        "type": "object",
+        "properties": {
+          "paginatedResult": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "drink": {
+                  "type": "string"
+                },
+                "drinkAlternate": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "string"
+                },
+                "video": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "IBA": {
+                  "type": "string"
+                },
+                "alcoholic": {
+                  "type": "string"
+                },
+                "glass": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "instructions": {
+                  "type": "string"
+                },
+                "instructionsES": {
+                  "type": "string"
+                },
+                "instructionsDE": {
+                  "type": "string"
+                },
+                "instructionsFR": {
+                  "type": "string"
+                },
+                "instructionsIT": {
+                  "type": "string"
+                },
+                "instructionsRU": {
+                  "type": "string"
+                },
+                "instructionsPL": {
+                  "type": "string"
+                },
+                "instructionsUK": {
+                  "type": "string"
+                },
+                "drinkThumb": {
+                  "type": "string"
+                },
+                "ingredients": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string"
+                      },
+                      "measure": {
+                        "type": "string"
+                      },
+                      "ingredientId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "shortDescription": {
+                  "type": "string"
+                },
+                "owner": {
+                  "type": "string"
+                },
+                "favorite": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "totalCount": { "type": "integer" }
+        },
+        "example": {
+          "paginatedResult": [
+            {
+              "_id": "639b6de9ff77d221f190c556",
+              "drink": "Pysch Vitamin Light",
+              "drinkAlternate": "Sorry, not specified",
+              "tags": "Sorry, not specified",
+              "video": "Sorry, not specified",
+              "category": "Ordinary Drink",
+              "IBA": "Sorry, not specified",
+              "alcoholic": "Non alcoholic",
+              "glass": "Collins Glass",
+              "description": "Pysch Vitamin Light is a refreshing and invigorating cocktail that combines the zesty flavors of citrus with a hint of sweetness. This vibrant drink is made with a blend of citrus juices, soda, and a touch of sweetness, creating a balanced and revitalizing beverage. Sip on Pysch Vitamin Light to uplift your spirits and enjoy a burst of citrus goodness.",
+              "instructions": "Shake with ice.",
+              "instructionsES": "Agitar con hielo.",
+              "instructionsDE": "Mit Eis schütteln.",
+              "instructionsFR": "Agiter avec de la glace.",
+              "instructionsIT": "Shakerare con ghiaccio.",
+              "instructionsRU": "Встряхнуть со льдом.",
+              "instructionsPL": "Wstrząsnąć z lodem.",
+              "instructionsUK": "Струсити з льодом.",
+              "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/Pysch_Vitamin_Light.jpg",
+              "ingredients": [
+                {
+                  "title": "Orange juice",
+                  "measure": "1 part ",
+                  "ingredientId": "64f1d5c069d8333cf130fb3d"
+                },
+                {
+                  "title": "Apple juice",
+                  "measure": "1 part ",
+                  "ingredientId": "64aebb7f82d96cc69e0eb4d1"
+                },
+                {
+                  "title": "Pineapple juice",
+                  "measure": "1 part ",
+                  "ingredientId": "64aebb7f82d96cc69e0eb4d2"
+                },
+                {
+                  "title": "Ice",
+                  "ingredientId": "64f1d5c169d8333cf130fb4d"
+                }
+              ],
+              "shortDescription": "A refreshing and invigorating cocktail packed with citrus flavors and a hint of sweetness.",
+              "favorite": [],
+              "updatedAt": "2024-02-22T19:13:18.065Z"
+            },
+            {
+              "_id": "639b6de9ff77d221f190c559",
+              "drink": "Pineapple Gingerale Smoothie",
+              "drinkAlternate": "Sorry, not specified",
+              "tags": "Sorry, not specified",
+              "video": "Sorry, not specified",
+              "category": "Other/Unknown",
+              "IBA": "Sorry, not specified",
+              "alcoholic": "Non alcoholic",
+              "glass": "Highball Glass",
+              "description": "Pineapple Gingerale Smoothie is a delightful and creamy tropical smoothie that combines the tropical sweetness of pineapple with the fizzy kick of ginger ale. This refreshing beverage is perfect for hot summer days or as a refreshing treat any time of the year. Indulge in the creamy texture and tropical flavors of Pineapple Gingerale Smoothie and let it transport you to a sunny island getaway.",
+              "instructions": "Throw everything into a blender and liquify.",
+              "instructionsES": "Echar todo en una licuadora y licuar.",
+              "instructionsDE": "Alles in einen Mixer geben und aufschlagen.",
+              "instructionsFR": "Mettre le tout dans un blender et liquéfier.",
+              "instructionsIT": "Getta tutto in un frullatore e liquida.",
+              "instructionsRU": "Все бросить в блендер и измельчить.",
+              "instructionsPL": "Wrzuć wszystko do blendera i upłynnij.",
+              "instructionsUK": "Киньте все в блендер і перемішайте.",
+              "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/Pineapple_Gingerale_Smoothie.jpg",
+              "ingredients": [
+                {
+                  "title": "Ginger",
+                  "measure": "1/4 inch ",
+                  "ingredientId": "64aebb7f82d96cc69e0eb4da"
+                },
+                {
+                  "title": "Pineapple",
+                  "measure": "1/2 ",
+                  "ingredientId": "64f1d5c669d8333cf130fbb4"
+                }
+              ],
+              "shortDescription": "A creamy and tropical smoothie with the flavors of pineapple and ginger ale.",
+              "favorite": [],
+              "updatedAt": "2024-02-21T17:20:44.025Z"
+            }
+          ],
+          "totalCount": 2
+        }
+      },
+      "DrinkByIdResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "drink": {
+            "type": "string"
+          },
+          "drinkAlternate": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "string"
+          },
+          "video": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "IBA": {
+            "type": "string"
+          },
+          "alcoholic": {
+            "type": "string"
+          },
+          "glass": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "instructionsES": {
+            "type": "string"
+          },
+          "instructionsDE": {
+            "type": "string"
+          },
+          "instructionsFR": {
+            "type": "string"
+          },
+          "instructionsIT": {
+            "type": "string"
+          },
+          "instructionsRU": {
+            "type": "string"
+          },
+          "instructionsPL": {
+            "type": "string"
+          },
+          "instructionsUK": {
+            "type": "string"
+          },
+          "drinkThumb": {
+            "type": "string"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "measure": {
+                  "type": "string"
+                },
+                "ingredientId": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "shortDescription": {
+            "type": "string"
+          },
+          "owner": { "type": "string" },
+          "favorite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updatedAt": { "type": "string" }
+        },
+        "example": {
+          "_id": "639b6de9ff77d221f190c502",
+          "drink": "Yellow Bird",
+          "drinkAlternate": "Sorry, not specified",
+          "tags": "IBA,NewEra",
+          "video": "Sorry, not specified",
+          "category": "Cocktail",
+          "IBA": "New Era Drinks",
+          "alcoholic": "Alcoholic",
+          "glass": "Cocktail glass",
+          "description": "Yellow Bird is a tropical and fruity cocktail that captures the essence of a sunny paradise. It features the flavors of rum, Galliano liqueur, lime juice, and pineapple juice. This vibrant and refreshing drink is perfect for sipping by the pool or enjoying on a beach vacation. Treat yourself to a Yellow Bird and let its tropical flavors transport you to an island getaway.",
+          "instructions": "Shake and strain into a chilled cocktail glass",
+          "instructionsES": "Agitar y colar en una copa de cóctel fría",
+          "instructionsDE": "In ein gekühltes Cocktailglas schütteln und abseihen.",
+          "instructionsFR": "Secouer et filtrer dans un verre à cocktail refroidi",
+          "instructionsIT": "Shakerare e filtrare in una coppetta da cocktail ghiacciata",
+          "instructionsRU": "Встряхнуть и процедить в охлажденный коктейльный бокал",
+          "instructionsPL": "Wstrząśnij i przelej do schłodzonego kieliszka koktajlowego",
+          "instructionsUK": "Струсіть і процідіть у охолоджений келих для коктейлю",
+          "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/Yellow_Bird.jpg",
+          "ingredients": [
+            {
+              "_id": "654957fc8609e9d50ebca80c",
+              "title": "White Rum",
+              "measure": "3 cl",
+              "ingredientId": "64f1d5cf69d8333cf130fc52"
+            },
+            {
+              "_id": "654957fc8609e9d50ebca80d",
+              "title": "Galliano",
+              "measure": "1.5 cl",
+              "ingredientId": "64aebb7f82d96cc69e0eb4e4"
+            },
+            {
+              "_id": "654957fc8609e9d50ebca80e",
+              "title": "Triple Sec",
+              "measure": "1.5 cl",
+              "ingredientId": "64aebb7f82d96cc69e0eb4ac"
+            },
+            {
+              "_id": "654957fc8609e9d50ebca80f",
+              "title": "Lime Juice",
+              "measure": "1.5 cl",
+              "ingredientId": "64aebb7f82d96cc69e0eb4c1"
+            }
+          ],
+          "shortDescription": "A tropical and fruity cocktail with the flavors of rum, Galliano, lime juice, and pineapple juice.",
+          "owner": "65cfbb8646c09b62b3f2d5ff",
+
+          "favorite": [],
+          "updatedAt": "2024-02-22T20:19:03.200Z"
+        }
+      },
+      "AddOwnDrinkRequest": {
+        "type": "object",
+        "properties": {
+          "drink": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "alcoholic": {
+            "type": "string",
+            "enum": ["Alcoholic", "Non alcoholic", "Optional alcoholic"]
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Ordinary Drink",
+              "Cocktail",
+              "Shake",
+              "Other/Unknown",
+              "Cocoa",
+              "Shot",
+              "Coffee / Tea",
+              "Homemade Liqueur",
+              "Punch / Party Drink",
+              "Beer",
+              "Soft Drink"
+            ]
+          },
+          "glass": {
+            "type": "string",
+            "enum": [
+              "Highball glass",
+              "Cocktail glass",
+              "Old-fashioned glass",
+              "Whiskey Glass",
+              "Collins glass",
+              "Pousse cafe glass",
+              "Champagne flute",
+              "Whiskey sour glass",
+              "Cordial glass",
+              "Brandy snifter",
+              "White wine glass",
+              "Nick and Nora Glass",
+              "Hurricane glass",
+              "Coffee mug",
+              "Shot glass",
+              "Jar",
+              "Irish coffee cup",
+              "Punch bowl",
+              "Pitcher",
+              "Pint glass",
+              "Copper Mug",
+              "Wine Glass",
+              "Beer mug",
+              "Margarita / Coupette glass",
+              "Beer pilsner",
+              "Beer Glass",
+              "Parfait glass",
+              "Mason jar",
+              "Margarita glass",
+              "Martini Glass",
+              "Balloon Glass",
+              "Coupe Glass"
+            ]
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "Amaretto"
+                },
+                "ingredientId": {
+                  "type": "string",
+                  "example": "64aebb7f82d96cc69e0eb4b3"
+                },
+                "measure": {
+                  "type": "string",
+                  "example": "1cl"
+                }
+              }
+            }
+          },
+          "drinkThumb": {
+            "type": "string",
+            "format": "binary"
+          }
+        },
+        "example": {
+          "drink": "CovidKiller v5",
+          "category": "Soft Drink",
+          "alcoholic": "Alcoholic",
+          "glass": "Beer Glass",
+          "description": "For good kill covid v5",
+          "drinkThumb": "https://res.cloudinary.com/dzvvgvwgt/image/upload/v1698700062/drink/shutterstock.jpg.jpg",
+          "ingredients": [
+            {
+              "title": "Tequila1",
+              "measure": "2 cl",
+              "ingredientId": "64aebb7f82d96cc69e0eb4b8"
+            },
+            {
+              "title": "Beer",
+              "measure": "2 cl ",
+              "ingredientId": "64f1d5c169d8333cf130fb4a"
+            },
+            {
+              "title": "Vodka",
+              "measure": "3 cl",
+              "ingredientId": "64aebb7f82d96cc69e0eb4b9"
+            }
+          ]
+        }
+      },
+      "AddOwnDrinkResponse": {
+        "type": "object",
+        "properties": {
+          "drink": {
+            "type": "string"
+          },
+          "drinkAlternate": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "alcoholic": {
+            "type": "string",
+            "description": "Alcoholic / Non alcoholic"
+          },
+          "glass": {
+            "type": "string",
+            "description": "Type of glass the drink should be served in"
+          },
+          "description": {
+            "type": "string",
+            "description": "Drink description"
+          },
+          "drinkThumb": {
+            "type": "string",
+            "description": "Drink image url"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "measure": {
+                  "type": "string"
+                },
+                "ingredientId": {
+                  "type": "string"
+                },
+                "_id": {
+                  "type": "string",
+                  "description": "Unique identifier for the ingredient in the drink"
+                }
+              }
+            },
+            "description": "List of ingredients used in the drink"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "favorite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the new drink"
+          }
+        },
+        "example": {
+          "drink": "CovidKiller v5",
+          "drinkAlternate": "Sorry, not specified",
+          "category": "Soft Drink",
+          "alcoholic": "Alcoholic",
+          "glass": "Beer Glass",
+          "description": "For good kill covid v5",
+          "drinkThumb": "https://res.cloudinary.com/dzvvgvwgt/image/upload/v1698700062/drink/shutterstock.jpg.jpg",
+          "ingredients": [
+            {
+              "title": "Tequila1",
+              "measure": "2 cl",
+              "ingredientId": "64aebb7f82d96cc69e0eb4b8"
+            },
+            {
+              "title": "Beer",
+              "measure": "2 cl ",
+              "ingredientId": "64f1d5c169d8333cf130fb4a"
+            },
+            {
+              "title": "Vodka",
+              "measure": "3 cl",
+              "ingredientId": "64aebb7f82d96cc69e0eb4b9"
+            }
+          ],
+          "owner": "654567fe985e7dfc0b25c2b8",
+          "favorite": [],
+          "_id": "6546a9e5be2bad087d921b27"
+        }
+      },
+      "AllOwnDrinksResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "drink": {
+              "type": "string"
+            },
+            "drinkAlternate": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "string"
+            },
+            "video": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "IBA": {
+              "type": "string"
+            },
+            "alcoholic": {
+              "type": "string"
+            },
+            "glass": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "instructions": {
+              "type": "string"
+            },
+            "instructionsES": {
+              "type": "string"
+            },
+            "instructionsDE": {
+              "type": "string"
+            },
+            "instructionsFR": {
+              "type": "string"
+            },
+            "instructionsIT": {
+              "type": "string"
+            },
+            "instructionsRU": {
+              "type": "string"
+            },
+            "instructionsPL": {
+              "type": "string"
+            },
+            "instructionsUK": {
+              "type": "string"
+            },
+            "drinkThumb": {
+              "type": "string"
+            },
+            "ingredients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "measure": {
+                    "type": "string"
+                  },
+                  "ingredientId": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "shortDescription": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "favorite": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "639b6de9ff77d221f190c56a",
+            "drink": "151 Florida Bushwacker",
+            "drinkAlternate": "Sorry, not specified",
+            "tags": "Sorry, not specified",
+            "video": "Sorry, not specified",
+            "category": "Shake",
+            "IBA": "Sorry, not specified",
+            "alcoholic": "Alcoholic",
+            "glass": "Beer mug",
+            "description": "151 Florida Bushwacker is a creamy and indulgent cocktail that combines the flavors of rum, coffee liqueur, cream of coconut, and milk. It is made by blending all the ingredients with ice until smooth and creamy. The result is a decadent and tropical drink that is reminiscent of a milkshake with a kick. Enjoy this delightful treat as a dessert or a special treat on a hot summer day.",
+            "instructions": "Combine all ingredients. Blend until smooth. Garnish with chocolate shavings if desired.",
+            "instructionsES": "Combina todos los ingredientes. Mezclar hasta que esté suave. Adorne con virutas de chocolate si lo desea.",
+            "instructionsDE": "Alle Zutaten vermengen. Mischen, bis alles glatt ist. Auf Wunsch mit Schokoladenraspeln garnieren.",
+            "instructionsFR": "Combinez tous les ingrédients. Mélanger jusqu'à consistance lisse. Garnir de copeaux de chocolat si désiré.",
+            "instructionsIT": "Combina tutti gli ingredienti.\r\nFrulla fino a che è liscio.\r\nGuarnire con scaglie di cioccolato se lo si desidera.",
+            "instructionsRU": "Смешайте все ингредиенты. Смешайте до однородности. По желанию украсьте шоколадной стружкой.",
+            "instructionsPL": "Połącz wszystkie składniki. Miksuj do uzyskania gładkości. W razie potrzeby udekoruj wiórkami czekoladowymi.",
+            "instructionsUK": "З'єднайте всі інгредієнти. Перемішайте до однорідності. За бажанням прикрасьте шоколадною стружкою.",
+            "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/151_Florida_Bushwacker.jpg",
+            "ingredients": [
+              {
+                "title": "Malibu rum",
+                "measure": "1/2 oz ",
+                "ingredientId": "64f1d5c269d8333cf130fb65"
+              },
+              {
+                "title": "Light rum",
+                "measure": "1/2 oz ",
+                "ingredientId": "64aebb7f82d96cc69e0eb4a4"
+              },
+              {
+                "title": "151 proof rum",
+                "measure": "1/2 oz Bacardi ",
+                "ingredientId": "64f1d5c269d8333cf130fb68"
+              },
+              {
+                "title": "Dark Creme de Cacao",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb6b"
+              },
+              {
+                "title": "Cointreau",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb6e"
+              },
+              {
+                "title": "Milk",
+                "measure": "3 oz ",
+                "ingredientId": "64aebb7f82d96cc69e0eb4d5"
+              },
+              {
+                "title": "Coconut liqueur",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb71"
+              },
+              {
+                "title": "Vanilla ice-cream",
+                "measure": "1 cup ",
+                "ingredientId": "64f1d5c369d8333cf130fb74"
+              }
+            ],
+            "shortDescription": "A creamy and indulgent cocktail with a blend of rum, coffee liqueur, and cream of coconut.",
+            "owner": "65cfbb8646c09b62b3f2d5ff",
+            "favorite": ["65cfbb8646c09b62b3f2d5ff"],
+            "updatedAt": "2024-02-22T18:51:18.801Z"
+          }
+        ]
+      },
+      "AllFavoriteDrinksResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "drink": {
+              "type": "string"
+            },
+            "drinkAlternate": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "string"
+            },
+            "video": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "IBA": {
+              "type": "string"
+            },
+            "alcoholic": {
+              "type": "string"
+            },
+            "glass": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "instructions": {
+              "type": "string"
+            },
+            "instructionsES": {
+              "type": "string"
+            },
+            "instructionsDE": {
+              "type": "string"
+            },
+            "instructionsFR": {
+              "type": "string"
+            },
+            "instructionsIT": {
+              "type": "string"
+            },
+            "instructionsRU": {
+              "type": "string"
+            },
+            "instructionsPL": {
+              "type": "string"
+            },
+            "instructionsUK": {
+              "type": "string"
+            },
+            "drinkThumb": {
+              "type": "string"
+            },
+            "ingredients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "measure": {
+                    "type": "string"
+                  },
+                  "ingredientId": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "shortDescription": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "favorite": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "639b6de9ff77d221f190c56a",
+            "drink": "151 Florida Bushwacker",
+            "drinkAlternate": "Sorry, not specified",
+            "tags": "Sorry, not specified",
+            "video": "Sorry, not specified",
+            "category": "Shake",
+            "IBA": "Sorry, not specified",
+            "alcoholic": "Alcoholic",
+            "glass": "Beer mug",
+            "description": "151 Florida Bushwacker is a creamy and indulgent cocktail that combines the flavors of rum, coffee liqueur, cream of coconut, and milk. It is made by blending all the ingredients with ice until smooth and creamy. The result is a decadent and tropical drink that is reminiscent of a milkshake with a kick. Enjoy this delightful treat as a dessert or a special treat on a hot summer day.",
+            "instructions": "Combine all ingredients. Blend until smooth. Garnish with chocolate shavings if desired.",
+            "instructionsES": "Combina todos los ingredientes. Mezclar hasta que esté suave. Adorne con virutas de chocolate si lo desea.",
+            "instructionsDE": "Alle Zutaten vermengen. Mischen, bis alles glatt ist. Auf Wunsch mit Schokoladenraspeln garnieren.",
+            "instructionsFR": "Combinez tous les ingrédients. Mélanger jusqu'à consistance lisse. Garnir de copeaux de chocolat si désiré.",
+            "instructionsIT": "Combina tutti gli ingredienti.\r\nFrulla fino a che è liscio.\r\nGuarnire con scaglie di cioccolato se lo si desidera.",
+            "instructionsRU": "Смешайте все ингредиенты. Смешайте до однородности. По желанию украсьте шоколадной стружкой.",
+            "instructionsPL": "Połącz wszystkie składniki. Miksuj do uzyskania gładkości. W razie potrzeby udekoruj wiórkami czekoladowymi.",
+            "instructionsUK": "З'єднайте всі інгредієнти. Перемішайте до однорідності. За бажанням прикрасьте шоколадною стружкою.",
+            "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/151_Florida_Bushwacker.jpg",
+            "ingredients": [
+              {
+                "title": "Malibu rum",
+                "measure": "1/2 oz ",
+                "ingredientId": "64f1d5c269d8333cf130fb65"
+              },
+              {
+                "title": "Light rum",
+                "measure": "1/2 oz ",
+                "ingredientId": "64aebb7f82d96cc69e0eb4a4"
+              },
+              {
+                "title": "151 proof rum",
+                "measure": "1/2 oz Bacardi ",
+                "ingredientId": "64f1d5c269d8333cf130fb68"
+              },
+              {
+                "title": "Dark Creme de Cacao",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb6b"
+              },
+              {
+                "title": "Cointreau",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb6e"
+              },
+              {
+                "title": "Milk",
+                "measure": "3 oz ",
+                "ingredientId": "64aebb7f82d96cc69e0eb4d5"
+              },
+              {
+                "title": "Coconut liqueur",
+                "measure": "1 oz ",
+                "ingredientId": "64f1d5c369d8333cf130fb71"
+              },
+              {
+                "title": "Vanilla ice-cream",
+                "measure": "1 cup ",
+                "ingredientId": "64f1d5c369d8333cf130fb74"
+              }
+            ],
+            "shortDescription": "A creamy and indulgent cocktail with a blend of rum, coffee liqueur, and cream of coconut.",
+            "owner": "65cfbb8646c09b62b3f2d5ff",
+            "favorite": ["65cfbb8646c09b62b3f2d5ff"],
+            "updatedAt": "2024-02-22T18:51:18.801Z"
+          }
+        ]
+      },
+      "AddFavoriteDrinkResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "drink": {
+            "type": "string"
+          },
+          "drinkAlternate": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "string"
+          },
+          "video": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "IBA": {
+            "type": "string"
+          },
+          "alcoholic": {
+            "type": "string"
+          },
+          "glass": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          },
+          "drinkThumb": {
+            "type": "string"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "measure": {
+                  "type": "string"
+                },
+                "ingredientId": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "shortDescription": {
+            "type": "string"
+          },
+          "owner": { "type": "string" },
+          "favorite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updatedAt": { "type": "string" }
+        },
+        "example": {
+          "_id": "639b6de9ff77d221f190c55f",
+          "drink": "Jamaica Kiss",
+          "drinkAlternate": "Sorry, not specified",
+          "tags": "popular,  tropical,  creamy,  sweet,  coffee,  milk,  rum,  liqueur,  ice,  blender,  hurricane glass,  shake",
+          "video": "Sorry, not specified",
+          "category": "Shake",
+          "IBA": "Sorry, not specified",
+          "alcoholic": "Alcoholic",
+          "glass": "Hurricane glass",
+          "description": "Jamaica Kiss is a sweet and tangy cocktail that brings a taste of the Caribbean to your glass. It is made with Jamaican rum, lime juice, grenadine, and a splash of soda water. The combination of flavors creates a tropical and refreshing drink that is perfect for sipping on a hot summer day. Close your eyes, take a sip, and let the flavors transport you to a Jamaican beach.",
+          "instructions": "Fill a tumbler with ice cubes. Add a shot of Tia Maria and a shot of Jamaican light rum. Fill the tumbler with milk. Blend until smooth and serve immediately.",
+          "instructionsES": "Llena un vaso con cubitos de hielo. Agregue un trago de Tia Maria y un trago de ron ligero de Jamaica. Llene el vaso con leche. Mezcle hasta que quede suave y sirva de inmediato.",
+          "instructionsDE": "Füllen Sie einen Becher mit Eiswürfeln. Füge einen Schuss Tia Maria und einen Schuss jamaikanischen leichten Rum hinzu. Füllen Sie den Becher mit Milch. Mischen, bis sie glatt sind und sofort servieren.",
+          "instructionsFR": "Remplir un gobelet de glaçons. Ajoutez un coup de Tia Maria et un coup de rhum jamaïcain léger. Remplir le gobelet de lait. Mélanger jusqu'à consistance lisse et servir immédiatement.",
+          "instructionsIT": "Riempi un bicchiere con cubetti di ghiaccio.\r\nAggiungi un bicchierino di Tia Maria e un bicchierino di rum chiaro giamaicano.\r\nRiempi il bicchiere di latte.\r\nFrulla fino a ottenere un composto omogeneo e servi immediatamente.",
+          "instructionsRU": "Наполните стакан кубиками льда. Добавьте порцию Tia Maria и порцию ямайского светлого рома. Наполните стакан молоком. Смешайте до однородности и сразу подавайте.",
+          "instructionsPL": "Napełnij szklankę kostkami lodu. Dodaj kieliszek Tia Maria i kieliszek jamajskiego lekkiego rumu. Napełnij kubek mlekiem. Zmiksuj do uzyskania gładkości i natychmiast podawaj.",
+          "instructionsUK": "Наповніть стакан кубиками льоду. Додайте порцію Тіа Марії та порцію ямайського світлого рому. Наповніть стакан молоком. Перемішайте до однорідності та негайно подавайте.",
+          "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/Jamaica_Kiss.jpg",
+          "ingredients": [
+            {
+              "_id": "65d88d5c2a37af2bc1ef2b41",
+              "title": "Coffee liqueur",
+              "measure": "1 shot ",
+              "ingredientId": "64aebb7f82d96cc69e0eb4b6"
+            },
+            {
+              "_id": "65d88d5c2a37af2bc1ef2b42",
+              "title": "Light rum",
+              "measure": "1 shot Jamaican ",
+              "ingredientId": "64aebb7f82d96cc69e0eb4a4"
+            },
+            {
+              "_id": "65d88d5c2a37af2bc1ef2b43",
+              "title": "Ice",
+              "measure": "cubes",
+              "ingredientId": "64f1d5c169d8333cf130fb4d"
+            },
+            {
+              "_id": "65d88d5c2a37af2bc1ef2b44",
+              "title": "Milk",
+              "ingredientId": "64aebb7f82d96cc69e0eb4d5"
+            }
+          ],
+          "shortDescription": "A sweet and tangy cocktail with Jamaican rum, lime juice, and grenadine.",
+          "owner": "65cfbb8646c09b62b3f2d5ff",
+          "favorite": ["65cfbb8646c09b62b3f2d5ff", "65d85afb25efb0f36941416f"],
+          "updatedAt": "2024-02-23T12:18:39.991Z"
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

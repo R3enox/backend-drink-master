@@ -1,4 +1,3 @@
-
 const cloudinary = require("cloudinary").v2;
 const { User } = require("../models/user");
 const path = require("path");
@@ -44,7 +43,7 @@ const updateUser = async (req, res) => {
   if (!updatedUser) {
     return res.status(404).json({ message: "User not found" });
   }
-
+  console.log(updatedUser);
   res.json({
     message: "Avatar uploaded successfully",
     user: {

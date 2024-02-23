@@ -80,7 +80,7 @@ const addFavorite = async (req, res, next) => {
   const drink = await Drink.findById(drinkId);
 
   if (drink.favorite.includes(_id)) {
-    throw HttpError(400, "cocktail is already in favorites");
+    throw HttpError(400, "Cocktail is already in favorites");
   }
 
   const result = await Drink.findByIdAndUpdate(drinkId, {
@@ -99,10 +99,10 @@ const removeFavorite = async (req, res, next) => {
   });
 
   if (!result) {
-    throw HttpError(404, "not found");
+    throw HttpError(404, "Not found");
   }
 
-  res.status(200).json({ message: "Drink removed from favorites" });
+  res.status(200).json({ message: "Drink is removed from favorites" });
 };
 
 const getFavorite = async (req, res, next) => {
@@ -149,9 +149,9 @@ const deleteMyDrink = async (req, res, next) => {
   });
 
   if (!deletedDrink) {
-    throw HttpError(404, "Drink not found or you are not the owner");
+    throw HttpError(404, "Drink not found or user is not the owner");
   }
-  res.status(200).json({ message: "Drink deleted" });
+  res.status(200).json({ message: "Drink is deleted" });
 };
 
 module.exports = {
