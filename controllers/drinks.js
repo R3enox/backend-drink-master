@@ -59,6 +59,25 @@ const listDrinks = async (req, res) => {
   res.json(drinks);
 };
 
+const popularDrinks = async (req, res, next) => {
+  const { dateOfBirth } = req.user;
+  let newArray = [];
+  const { limit = 4 } = req.query;
+  const age = getUserAge(dateOfBirth);
+  let result;
+
+  if (age < 18) {
+    result = await Drink.find({ alcoholic: { $ne: "Alcoholic" } });
+  } else {
+    result = await Drink.find();
+  }
+
+  result.sort((a, b) => b.favorite.length - a.favorite.length);
+  newArray = result.slice(0, limit);
+
+  res.status(200).json(newArray);
+};
+
 const searchDrinks = async (req, res) => {
   const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
@@ -235,6 +254,7 @@ const deleteMyDrink = async (req, res, next) => {
 
 module.exports = {
   listDrinks: ctrlWrapper(listDrinks),
+  popularDrinks: ctrlWrapper(popularDrinks),
   searchDrinks: ctrlWrapper(searchDrinks),
   addDrink: ctrlWrapper(addDrink),
   addFavorite: ctrlWrapper(addFavorite),
