@@ -25,18 +25,17 @@ const updateUser = async (req, res) => {
 
     await cloudinary.uploader.destroy(file.filename);
 
-    const avatarUrl = result.secure_url;
-    body.avatarUrl = avatarUrl;
+    const avatarURL = result.secure_url;
+    user.avatarURL = avatarURL;
   } else {
-    body.avatarUrl = body.avatar;
+    user.avatarURL = user.avatar;
   }
 
   const { _id } = user;
-  console.log(_id);
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
-    { $set: body },
+    { $set: { name: body.name, avatarURL: user.avatarURL } },
     { new: true }
   );
 
@@ -49,7 +48,7 @@ const updateUser = async (req, res) => {
     user: {
       name: updatedUser.name,
       email: updatedUser.email,
-      avatar: updatedUser.avatar,
+      avatarURL: updatedUser.avatarURL,
     },
   });
 };
@@ -120,13 +119,14 @@ module.exports = {
 // };
 
 const getCurrent = async (req, res) => {
-  const { name, avatarUrl, dateOfBirth, _id } = req.user;
+  const { _id, name, email, avatarURL, dateOfBirth } = req.user;
   res.json({
     user: {
-      name,
-      avatarUrl,
-      dateOfBirth,
       id: _id,
+      name,
+      email,
+      dateOfBirth,
+      avatarURL,
     },
   });
 };
