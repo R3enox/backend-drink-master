@@ -1,9 +1,11 @@
 const express = require("express");
-const ctrl = require("../../controllers/updateAvatar");
+const ctrl = require("../../controllers/users");
 
 const { isAuthenticated, upload } = require("../../middlewares");
 
 const router = express.Router();
+
+router.get("/current", isAuthenticated, ctrl.getCurrent);
 
 router.post(
   "/avatar",

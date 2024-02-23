@@ -1,21 +1,20 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-// connect db categories
-const categoriesSchema = new mongoose.Schema(
+//* connect db categories
+const categorySchema = new Schema(
   {
-    categories: [
-      {
-        type: String,
-      },
-    ],
+    title: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const CategoriesDB = mongoose.model("categorie", categoriesSchema);
+const Category = model("category", categorySchema);
 
-// connect db ingredients
-const ingredientsSchema = new mongoose.Schema(
+//* connect db ingredients
+const ingredientSchema = new Schema(
   {
     title: {
       type: String,
@@ -36,20 +35,19 @@ const ingredientsSchema = new mongoose.Schema(
   { versionKey: false, timestamps: true }
 );
 
-const IngredientsDB = mongoose.model("ingredient", ingredientsSchema);
+const Ingredient = model("ingredient", ingredientSchema);
 
-// connect db glasses
-const glassesSchema = new mongoose.Schema(
+//* connect db glasses
+const glassSchema = new Schema(
   {
-    glasses: [
-      {
-        type: String,
-      },
-    ],
+    title: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const GlassesDB = mongoose.model("glasse", glassesSchema);
+const Glass = model("glass", glassSchema);
 
-module.exports = { CategoriesDB, IngredientsDB, GlassesDB };
+module.exports = { Category, Ingredient, Glass };

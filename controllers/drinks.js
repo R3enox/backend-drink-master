@@ -1,6 +1,5 @@
 const { UserDrinksDB } = require("../models/drinks");
 const { ctrlWrapper, userAge, HttpError } = require("../helpers");
-const { User } = require("../models/user");
 const { Drink } = require("../models/drinks");
 
 const listDrinks = async (req, res) => {
@@ -9,7 +8,9 @@ const listDrinks = async (req, res) => {
   const age = userAge(dateOfBirth);
   const data = await Drink.find();
   const filteredData =
-    age < 18 ? data.filter((drink) => drink.alcoholic !== "Alcoholic") : data;
+    age < 18
+      ? data.filter((drink) => drink.alcoholic === "Non alcoholic")
+      : data;
   res.json(filteredData);
 };
 const searchDrinks = async (req, res) => {
@@ -18,7 +19,9 @@ const searchDrinks = async (req, res) => {
   const age = userAge(dateOfBirth);
   const data = await Drink.find();
   let filteredData =
-    age < 18 ? data.filter((drink) => drink.alcoholic !== "Alcoholic") : data;
+    age < 18
+      ? data.filter((drink) => drink.alcoholic === "Non alcoholic")
+      : data;
 
   if (category) {
     filteredData = filteredData.filter(
@@ -120,10 +123,7 @@ const deleteMyDrink = async (req, res, next) => {
   const { _id } = req.user;
   const owner = _id.toString();
 
-  // if (!req.isConfirmed) {
-  //   throw HttpError(404, "No confirmation of deletion provided");
-  // }
-  const deletedDrink = await Drink.findByIdAndDelete({
+   const deletedDrink = await Drink.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
   });
