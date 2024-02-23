@@ -30,7 +30,11 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
       unique: true,
     },
-    token: {
+    accessToken: {
+      type: String,
+      default: null,
+    },
+    refreshToken: {
       type: String,
       default: null,
     },
@@ -75,9 +79,14 @@ const joiSigninSchema = Joi.object({
     .messages({ "any.required": "missing required field email" }),
 });
 
+const joiRefreshSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
 const schemas = {
   joiSignupSchema,
   joiSigninSchema,
+  joiRefreshSchema,
 };
 
 const User = model("user", userSchema);

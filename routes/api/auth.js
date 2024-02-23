@@ -20,8 +20,12 @@ router.post(
   authController.signIn
 );
 
+router.post(
+  "/refresh",
+  validateBody(schemas.joiRefreshSchema),
+  authController.refresh
+);
+
 router.post("/signout", isAuthenticated, authController.signOut);
-
-
 
 module.exports = router;
