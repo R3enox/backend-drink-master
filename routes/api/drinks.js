@@ -6,6 +6,7 @@ const ctrl = require("../../controllers/drinks");
 
 const router = express.Router();
 const { isAuthenticated } = require("../../middlewares");
+
 const uploadDrinkPhoto = require("../../middlewares/uploadDrinkPhoto");
 
 router.get("/", isAuthenticated, ctrl.listDrinks);
