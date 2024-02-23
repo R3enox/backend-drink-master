@@ -25,18 +25,17 @@ const updateUser = async (req, res) => {
 
     await cloudinary.uploader.destroy(file.filename);
 
-    const avatarUrl = result.secure_url;
-    body.avatarUrl = avatarUrl;
+    const avatarURL = result.secure_url;
+    user.avatarURL = avatarURL;
   } else {
-    body.avatarUrl = body.avatar;
+    user.avatarURL = user.avatar;
   }
 
   const { _id } = user;
-  console.log(_id);
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
-    { $set: body },
+    { $set: { name: body.name, avatarURL: user.avatarURL } },
     { new: true }
   );
 
