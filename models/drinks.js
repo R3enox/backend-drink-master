@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// connect db user-drinks
 const ingredientSchema = {
   title: {
     type: String,

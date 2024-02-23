@@ -12,13 +12,13 @@ const uploadDrinkPhoto = require("../../middlewares/uploadDrinkPhoto");
 router.get("/", isAuthenticated, ctrl.listDrinks);
 router.get("/search", isAuthenticated, ctrl.searchDrinks);
 
+router.get("/popular", isAuthenticated, ctrl.popularDrinks);
 router.post(
   "/own/add",
   isAuthenticated,
   uploadDrinkPhoto.single("drinkThumb"),
   ctrl.addDrink
 );
-
 
 router.post("/:drinkId/favorite/add/", isAuthenticated, ctrl.addFavorite);
 router.delete(
