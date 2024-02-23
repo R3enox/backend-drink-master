@@ -5,13 +5,17 @@ const { isAuthenticated, upload } = require("../../middlewares");
 
 const router = express.Router();
 
+
+
+
 router.get("/current", isAuthenticated, ctrl.getCurrent);
 
-router.post(
-  "/avatar",
+router.patch(
+  "/update",
   isAuthenticated,
   upload.single("avatar"),
-  ctrl.updateAvatar
+  ctrl.updateUser
+
 );
 
 module.exports = router;

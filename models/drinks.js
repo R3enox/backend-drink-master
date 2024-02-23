@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // connect db user-drinks
-const ingredientSchema = new mongoose.Schema({
+const ingredientSchema = {
   title: {
     type: String,
     required: true,
@@ -11,10 +11,10 @@ const ingredientSchema = new mongoose.Schema({
     required: true,
   },
   ingredientId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
-});
+};
 
 const userDrinksSchema = new mongoose.Schema(
   {
@@ -60,7 +60,6 @@ const userDrinksSchema = new mongoose.Schema(
   { versionKey: false, timestamps: true }
 );
 
-const UserDrinksDB = mongoose.model("user-drink", userDrinksSchema);
 const Drink = mongoose.model("recipe", userDrinksSchema);
 
-module.exports = { UserDrinksDB, Drink };
+module.exports = { Drink };
