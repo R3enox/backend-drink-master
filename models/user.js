@@ -4,7 +4,7 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
 
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const dateofbirthRegexp =
   /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
 
@@ -26,9 +26,13 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      match: emailRegexp,
+      match: emailRegExp,
       required: [true, "Email is required"],
       unique: true,
+    },
+    subscribe: {
+      type: Boolean,
+      default: false,
     },
     token: {
       type: String,
@@ -55,7 +59,7 @@ const joiSignupSchema = Joi.object({
     .required()
     .messages({ "any.required": "missing required field birthdate" }),
   email: Joi.string()
-    .pattern(emailRegexp)
+    .pattern(emailRegExp)
     .required()
     .messages({ "any.required": "missing required field email" }),
   password: Joi.string()
@@ -70,14 +74,19 @@ const joiSigninSchema = Joi.object({
     .required()
     .messages({ "any.required": "missing required field password" }),
   email: Joi.string()
-    .pattern(emailRegexp)
+    .pattern(emailRegExp)
     .required()
     .messages({ "any.required": "missing required field email" }),
+});
+
+const joiEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegExp).required(),
 });
 
 const schemas = {
   joiSignupSchema,
   joiSigninSchema,
+  joiEmailSchema,
 };
 
 const User = model("user", userSchema);
