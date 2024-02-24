@@ -101,7 +101,7 @@ const refresh = async (req, res) => {
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
     });
-
+    await User.findByIdAndUpdate(isExist._id, { accessToken, refreshToken });
     res.json({ accessToken, refreshToken });
   } catch (error) {
     throw HttpError(403);
