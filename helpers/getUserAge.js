@@ -1,4 +1,4 @@
-const userAge = (dateOfBirth) => {
+const getUserAge = (dateOfBirth) => {
   // Разбиваем строку на компоненты
   const [day, month, year] = dateOfBirth.split("/").map(Number);
 
@@ -19,4 +19,4 @@ const userAge = (dateOfBirth) => {
   return age;
 };
 
-module.exports = userAge;
+module.exports = getUserAge;
