@@ -3,6 +3,9 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerDoc = require("./swagger.json");
+
 const authRouter = require("./routes/api/auth");
 const filtersRouter = require("./routes/api/filters");
 const drinksRouter = require("./routes/api/drinks");
@@ -20,6 +23,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use(async (req, res, next) => {
   const { method, url } = req;
