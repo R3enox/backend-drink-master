@@ -129,6 +129,8 @@ const addDrink = async (req, res, next) => {
   });
   const avatarUrl = resultCloudinary.secure_url;
 
+  await cloudinary.uploader.destroy(file.filename);
+
   const { _id: owner, dateOfBirth } = req.user;
 
   const {
