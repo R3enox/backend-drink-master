@@ -221,6 +221,43 @@
         }
       }
     },
+    "/users/subscribe": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User subscribe",
+        "consumes": ["multipart/form-data"],
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscribeUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscribe email sent"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/filters/categories": {
       "get": {
         "tags": ["Filters"],
@@ -358,6 +395,14 @@
         "tags": ["Drinks"],
         "summary": "Get popular drinks",
         "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "limit",
+            "description": "Limit items per page, default 4"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success response",
@@ -722,7 +767,6 @@
         }
       }
     },
-
     "/drinks/{id}/favorite/remove": {
       "delete": {
         "tags": ["Drinks"],
@@ -961,6 +1005,16 @@
             "name": "Test",
             "email": "test@example.com",
             "avatar": "https://res.cloudinary.com/dh0wbc15k/image/upload/v1708723003/avatars/VK100ZieqtJlRXyciEBYg.jpg"
+          }
+        }
+      },
+      "SubscribeUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "test@example.com"
           }
         }
       },
@@ -1754,23 +1808,23 @@
           },
           "ingredients": {
             "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "Amaretto"
-                },
-                "ingredientId": {
-                  "type": "string",
-                  "example": "64aebb7f82d96cc69e0eb4b3"
-                },
-                "measure": {
-                  "type": "string",
-                  "example": "1cl"
-                }
+            "example": [
+              {
+                "title": "Tequila1",
+                "measure": "2 cl",
+                "ingredientId": "64aebb7f82d96cc69e0eb4b8"
+              },
+              {
+                "title": "Beer",
+                "measure": "2 cl ",
+                "ingredientId": "64f1d5c169d8333cf130fb4a"
+              },
+              {
+                "title": "Vodka",
+                "measure": "3 cl",
+                "ingredientId": "64aebb7f82d96cc69e0eb4b9"
               }
-            }
+            ]
           },
           "drinkThumb": {
             "type": "string",

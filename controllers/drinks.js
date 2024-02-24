@@ -1,4 +1,3 @@
-
 const path = require("path");
 const { nanoid } = require("nanoid");
 const cloudinary = require("cloudinary").v2;
@@ -142,13 +141,12 @@ const addDrink = async (req, res, next) => {
     instructions,
     ingredients,
   } = req.body;
-
   const age = getUserAge(dateOfBirth);
 
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
-
+  console.log(`Sent ${req.body}`);
   const newDrink = new Drink({
     drink,
     description,
@@ -240,9 +238,7 @@ const deleteMyDrink = async (req, res, next) => {
   const { _id } = req.user;
   const owner = _id.toString();
 
-
-   const deletedDrink = await Drink.findByIdAndDelete({
-
+  const deletedDrink = await Drink.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
   });
