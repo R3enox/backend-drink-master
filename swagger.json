@@ -1741,14 +1741,16 @@
         "type": "object",
         "properties": {
           "drink": {
-            "type": "string"
+            "type": "string",
+            "example": "PainKiller"
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "example": "Just drink it"
           },
           "alcoholic": {
             "type": "string",
-            "enum": ["Alcoholic", "Non alcoholic", "Optional alcoholic"]
+            "enum": ["Alcoholic", "Non alcoholic"]
           },
           "category": {
             "type": "string",
@@ -1783,78 +1785,41 @@
               "Nick and Nora Glass",
               "Hurricane glass",
               "Coffee mug",
-              "Shot glass",
-              "Jar",
-              "Irish coffee cup",
-              "Punch bowl",
-              "Pitcher",
-              "Pint glass",
-              "Copper Mug",
-              "Wine Glass",
-              "Beer mug",
-              "Margarita / Coupette glass",
-              "Beer pilsner",
-              "Beer Glass",
-              "Parfait glass",
-              "Mason jar",
-              "Margarita glass",
-              "Martini Glass",
-              "Balloon Glass",
-              "Coupe Glass"
+              "Shot glass"
             ]
           },
           "instructions": {
-            "type": "string"
-          },
-          "ingredients": {
             "type": "string",
-            "example": [
-              {
-                "title": "Tequila1",
-                "measure": "2 cl",
-                "ingredientId": "64aebb7f82d96cc69e0eb4b8"
-              },
-              {
-                "title": "Beer",
-                "measure": "2 cl ",
-                "ingredientId": "64f1d5c169d8333cf130fb4a"
-              },
-              {
-                "title": "Vodka",
-                "measure": "3 cl",
-                "ingredientId": "64aebb7f82d96cc69e0eb4b9"
-              }
-            ]
+            "example": "All you need is glass"
           },
           "drinkThumb": {
             "type": "string",
             "format": "binary"
+          },
+          "ingredients[0][title]": {
+            "type": "string",
+            "example": "Beer"
+          },
+          "ingredients[0][measure]": {
+            "type": "string",
+            "example": "2 cl"
+          },
+          "ingredients[0][ingredientId]": {
+            "type": "string",
+            "example": "64f1d5c169d8333cf130fb4a"
           }
         },
         "example": {
-          "drink": "CovidKiller v5",
+          "drink": "PainKiller v5",
           "category": "Soft Drink",
           "alcoholic": "Alcoholic",
           "glass": "Beer Glass",
-          "description": "For good kill covid v5",
-          "drinkThumb": "https://res.cloudinary.com/dzvvgvwgt/image/upload/v1698700062/drink/shutterstock.jpg.jpg",
-          "ingredients": [
-            {
-              "title": "Tequila1",
-              "measure": "2 cl",
-              "ingredientId": "64aebb7f82d96cc69e0eb4b8"
-            },
-            {
-              "title": "Beer",
-              "measure": "2 cl ",
-              "ingredientId": "64f1d5c169d8333cf130fb4a"
-            },
-            {
-              "title": "Vodka",
-              "measure": "3 cl",
-              "ingredientId": "64aebb7f82d96cc69e0eb4b9"
-            }
-          ]
+          "description": "Just drink it",
+          "instructions": "All you need is glass",
+          "drinkThumb": "https://res.cloudinary.com/dzvvgvwgt/image/upload/v1698700062/drink/34k4kk323dsd9.jpg",
+          "ingredients[0][title]": "Beer",
+          "ingredients[0][measure]": "2 cl",
+          "ingredients[0][ingredientId]": "64f1d5c169d8333cf130fb4a"
         }
       },
       "AddOwnDrinkResponse": {
