@@ -20,24 +20,20 @@ const popularCategories = [
 ];
 
 const listDrinks = async (req, res) => {
-  const { limit = 3 } = req.query;
+  const { per_category = 3 } = req.query;
   const { dateOfBirth } = req.user;
 
   const age = getUserAge(dateOfBirth);
   const mustBeAlcoholic = isAdult(age);
 
-  const query = { category: { $in: popularCategories } };
-  if (!mustBeAlcoholic) query.alcoholic = "Non alcoholic";
+  const filter = { category: { $in: popularCategories } };
+  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
 
   const drinks = await Drink.aggregate([
     {
-      $match: {
-        category: {
-          $in: popularCategories,
-        },
-      },
+      $match: filter,
     },
-    { $sort: { category: 1, createdAt: 1 } },
+    { $sort: { category: 1, createdAt: -1 } },
     {
       $group: {
         _id: "$category",
@@ -46,7 +42,7 @@ const listDrinks = async (req, res) => {
     },
     {
       $project: {
-        items: { $slice: ["$items", Number(limit)] },
+        items: { $slice: ["$items", Number(per_category)] },
       },
     },
     { $unwind: "$items" },
