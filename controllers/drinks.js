@@ -1,4 +1,3 @@
-
 const path = require("path");
 const { nanoid } = require("nanoid");
 const cloudinary = require("cloudinary").v2;
@@ -61,25 +60,6 @@ const listDrinks = async (req, res) => {
   res.json(drinks);
 };
 
-const popularDrinks = async (req, res, next) => {
-  const { dateOfBirth } = req.user;
-  let newArray = [];
-  const { limit = 4 } = req.query;
-  const age = getUserAge(dateOfBirth);
-  let result;
-
-  if (age < 18) {
-    result = await Drink.find({ alcoholic: { $ne: "Alcoholic" } });
-  } else {
-    result = await Drink.find();
-  }
-
-  result.sort((a, b) => b.favorite.length - a.favorite.length);
-  newArray = result.slice(0, limit);
-
-  res.status(200).json(newArray);
-};
-
 const searchDrinks = async (req, res) => {
   const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
@@ -114,6 +94,24 @@ const searchDrinks = async (req, res) => {
   ]);
 
   res.json({ paginatedResult, totalCount });
+};
+
+const popularDrinks = async (req, res, next) => {
+  const { dateOfBirth } = req.user;
+  const { limit = 4 } = req.query;
+
+  const age = getUserAge(dateOfBirth);
+  const mustBeAlcoholic = isAdult(age);
+
+  const filter = {};
+  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+
+  const result = await Drink.find(filter);
+
+  result.sort((a, b) => b.favorite.length - a.favorite.length);
+  const newArray = result.slice(0, limit);
+
+  res.status(200).json(newArray);
 };
 
 const addDrink = async (req, res, next) => {
@@ -240,9 +238,7 @@ const deleteMyDrink = async (req, res, next) => {
   const { _id } = req.user;
   const owner = _id.toString();
 
-
-   const deletedDrink = await Drink.findByIdAndDelete({
-
+  const deletedDrink = await Drink.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
   });
