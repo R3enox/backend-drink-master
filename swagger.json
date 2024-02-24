@@ -319,6 +319,14 @@
         "tags": ["Drinks"],
         "summary": "Get newest drinks sorted by popular categories",
         "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "per_category",
+            "description": "Limit items per category, default 3"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful request",
@@ -391,12 +399,12 @@
           {
             "in": "query",
             "type": "integer",
-            "name": "limit",
+            "name": "per_page",
             "description": "Limit items per page, default 10"
           },
           {
             "in": "query",
-            "name": "keyName",
+            "name": "search",
             "type": "string",
             "description": "Search drinks by name"
           },
@@ -565,7 +573,7 @@
           {
             "in": "query",
             "type": "integer",
-            "name": "page",
+            "name": "per_page",
             "description": "Limit items per page, default 10"
           }
         ],
@@ -629,51 +637,6 @@
         }
       }
     },
-    "/drinks/favorite": {
-      "get": {
-        "tags": ["Drinks"],
-        "summary": "Get user's favorites drinks",
-        "parameters": [
-          {
-            "in": "query",
-            "type": "integer",
-            "name": "page",
-            "description": "Page number, default 1"
-          },
-          {
-            "in": "query",
-            "type": "integer",
-            "name": "page",
-            "description": "Limit items per page, default 10"
-          }
-        ],
-        "security": [{ "Bearer": [] }],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AllFavoriteDrinksResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not found"
-          },
-          "500": {
-            "description": "Server error"
-          }
-        }
-      }
-    },
     "/drinks/{id}/favorite/add/": {
       "post": {
         "tags": ["Drinks"],
@@ -714,6 +677,52 @@
         }
       }
     },
+    "/drinks/favorite": {
+      "get": {
+        "tags": ["Drinks"],
+        "summary": "Get user's favorites drinks",
+        "parameters": [
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "page",
+            "description": "Page number, default 1"
+          },
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "per_page",
+            "description": "Limit items per page, default 10"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllFavoriteDrinksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
     "/drinks/{id}/favorite/remove": {
       "delete": {
         "tags": ["Drinks"],

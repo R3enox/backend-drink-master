@@ -2054,3 +2054,6 @@ POST /api/users/subscribe 24-02-2024_12:21:58
 POST /api/users/subscribe 24-02-2024_12:22:16
 POST /api/users/subscribe 24-02-2024_12:22:43
 POST /api/users/subscribe 24-02-2024_12:22:57
+POST /api/auth/signin 24-02-2024_01:15:54
+POST /api/drinks/own/add 24-02-2024_01:16:56
+POST /api/drinks/own/add 24-02-2024_01:18:17
