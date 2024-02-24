@@ -1,4 +1,3 @@
-
 const path = require("path");
 const { nanoid } = require("nanoid");
 const cloudinary = require("cloudinary").v2;
@@ -21,24 +20,20 @@ const popularCategories = [
 ];
 
 const listDrinks = async (req, res) => {
-  const { limit = 3 } = req.query;
+  const { per_category = 3 } = req.query;
   const { dateOfBirth } = req.user;
 
   const age = getUserAge(dateOfBirth);
   const mustBeAlcoholic = isAdult(age);
 
-  const query = { category: { $in: popularCategories } };
-  if (!mustBeAlcoholic) query.alcoholic = "Non alcoholic";
+  const filter = { category: { $in: popularCategories } };
+  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
 
   const drinks = await Drink.aggregate([
     {
-      $match: {
-        category: {
-          $in: popularCategories,
-        },
-      },
+      $match: filter,
     },
-    { $sort: { category: 1, createdAt: 1 } },
+    { $sort: { category: 1, createdAt: -1 } },
     {
       $group: {
         _id: "$category",
@@ -47,7 +42,7 @@ const listDrinks = async (req, res) => {
     },
     {
       $project: {
-        items: { $slice: ["$items", Number(limit)] },
+        items: { $slice: ["$items", Number(per_category)] },
       },
     },
     { $unwind: "$items" },
@@ -61,39 +56,20 @@ const listDrinks = async (req, res) => {
   res.json(drinks);
 };
 
-const popularDrinks = async (req, res, next) => {
-  const { dateOfBirth } = req.user;
-  let newArray = [];
-  const { limit = 4 } = req.query;
-  const age = getUserAge(dateOfBirth);
-  let result;
-
-  if (age < 18) {
-    result = await Drink.find({ alcoholic: { $ne: "Alcoholic" } });
-  } else {
-    result = await Drink.find();
-  }
-
-  result.sort((a, b) => b.favorite.length - a.favorite.length);
-  newArray = result.slice(0, limit);
-
-  res.status(200).json(newArray);
-};
-
 const searchDrinks = async (req, res) => {
-  const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
+  const { page = 1, per_page = 10, search, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
 
   const age = getUserAge(dateOfBirth);
   const mustBeAlcoholic = isAdult(age);
 
-  const query = {};
-  if (!mustBeAlcoholic) query.alcoholic = "Non alcoholic";
-  if (keyName) query.drink = { $regex: keyName, $options: "i" };
-  if (category) query.category = category;
-  if (ingredient) query.ingredients = { $elemMatch: { title: ingredient } };
+  const filter = {};
+  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  if (search) filter.drink = { $regex: search, $options: "i" };
+  if (category) filter.category = category;
+  if (ingredient) filter.ingredients = { $elemMatch: { title: ingredient } };
 
-  const paginateOptions = setPagination(page, limit);
+  const paginateOptions = setPagination(page, per_page);
 
   const [
     {
@@ -104,16 +80,34 @@ const searchDrinks = async (req, res) => {
     {
       $facet: {
         paginatedResult: [
-          { $match: query },
+          { $match: filter },
           { $skip: paginateOptions.skip },
           { $limit: paginateOptions.limit },
         ],
-        totalCount: [{ $match: query }, { $count: "totalCount" }],
+        totalCount: [{ $match: filter }, { $count: "totalCount" }],
       },
     },
   ]);
 
   res.json({ paginatedResult, totalCount });
+};
+
+const popularDrinks = async (req, res, next) => {
+  const { dateOfBirth } = req.user;
+  const { limit = 4 } = req.query;
+
+  const age = getUserAge(dateOfBirth);
+  const mustBeAlcoholic = isAdult(age);
+
+  const filter = {};
+  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+
+  const result = await Drink.find(filter);
+
+  result.sort((a, b) => b.favorite.length - a.favorite.length);
+  const newArray = result.slice(0, limit);
+
+  res.status(200).json(newArray);
 };
 
 const addDrink = async (req, res, next) => {
@@ -130,6 +124,8 @@ const addDrink = async (req, res, next) => {
     overwrite: true,
   });
   const avatarUrl = resultCloudinary.secure_url;
+
+  await cloudinary.uploader.destroy(file.filename);
 
   const { _id: owner, dateOfBirth } = req.user;
 
@@ -240,9 +236,7 @@ const deleteMyDrink = async (req, res, next) => {
   const { _id } = req.user;
   const owner = _id.toString();
 
-
-   const deletedDrink = await Drink.findByIdAndDelete({
-
+  const deletedDrink = await Drink.findByIdAndDelete({
     _id: drinkId,
     owner: owner,
   });
