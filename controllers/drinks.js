@@ -123,9 +123,10 @@ const addDrink = async (req, res, next) => {
     unique_filename: false,
     overwrite: true,
   });
-  const avatarUrl = resultCloudinary.secure_url;
 
   await cloudinary.uploader.destroy(file.filename);
+
+  const photoDrinkUrl = resultCloudinary.secure_url;
 
   const { _id: owner, dateOfBirth } = req.user;
 
@@ -150,7 +151,7 @@ const addDrink = async (req, res, next) => {
     glass,
     alcoholic,
     instructions,
-    drinkThumb: avatarUrl,
+    drinkThumb: photoDrinkUrl,
     ingredients: ingredients.map(({ title, measure, ingredientId }) => ({
       title,
       measure,
