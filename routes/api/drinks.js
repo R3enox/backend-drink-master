@@ -14,7 +14,7 @@ router.get("/search", isAuthenticated, ctrl.searchDrinks);
 
 router.get("/popular", isAuthenticated, ctrl.popularDrinks);
 router.post(
-  "/own/add",
+  "/add",
   isAuthenticated,
   uploadDrinkPhoto.single("drinkThumb"),
   ctrl.addDrink

@@ -516,7 +516,7 @@
         }
       }
     },
-    "/drinks/own/add": {
+    "/drinks/add": {
       "post": {
         "tags": ["Drinks"],
         "summary": "Add new user's drink recipe",
