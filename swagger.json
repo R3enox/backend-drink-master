@@ -1807,7 +1807,7 @@
             "type": "string"
           },
           "ingredients": {
-            "type": "array",
+            "type": "string",
             "example": [
               {
                 "title": "Tequila1",
