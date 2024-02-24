@@ -57,19 +57,19 @@ const listDrinks = async (req, res) => {
 };
 
 const searchDrinks = async (req, res) => {
-  const { page = 1, limit = 10, keyName, category, ingredient } = req.query;
+  const { page = 1, per_page = 10, search, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
 
   const age = getUserAge(dateOfBirth);
   const mustBeAlcoholic = isAdult(age);
 
-  const query = {};
-  if (!mustBeAlcoholic) query.alcoholic = "Non alcoholic";
-  if (keyName) query.drink = { $regex: keyName, $options: "i" };
-  if (category) query.category = category;
-  if (ingredient) query.ingredients = { $elemMatch: { title: ingredient } };
+  const filter = {};
+  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  if (search) filter.drink = { $regex: search, $options: "i" };
+  if (category) filter.category = category;
+  if (ingredient) filter.ingredients = { $elemMatch: { title: ingredient } };
 
-  const paginateOptions = setPagination(page, limit);
+  const paginateOptions = setPagination(page, per_page);
 
   const [
     {
@@ -80,11 +80,11 @@ const searchDrinks = async (req, res) => {
     {
       $facet: {
         paginatedResult: [
-          { $match: query },
+          { $match: filter },
           { $skip: paginateOptions.skip },
           { $limit: paginateOptions.limit },
         ],
-        totalCount: [{ $match: query }, { $count: "totalCount" }],
+        totalCount: [{ $match: filter }, { $count: "totalCount" }],
       },
     },
   ]);
