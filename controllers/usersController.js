@@ -66,8 +66,47 @@ const subscribe = async (req, res) => {
     to: email,
     from: "nikr3enox@gmail.com",
     subject: "Verify your email",
-    html: `123`,
-    text: `123`,
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Email Title</title>
+</head>
+<body style="font-family: Arial, sans-serif;">
+
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f7f7f7;">
+        <h1 style="color: #333;">Hello!</h1>
+        <p style="color: #555; line-height: 1.6;">This is your HTML email for distribution. You can add any text or content to this block.</p>
+
+        <p style="color: #555; line-height: 1.6;">Example link: <a href="https://r3enox.github.io/frontend-drink-master/home" style="color: #007BFF; text-decoration: underline;">Visit our website</a></p>
+
+        <p style="color: #555; line-height: 1.6;">Example image: <img src="https://cdn.trinixy.ru/pics5/20180809/beautiful_cats_25.jpg" alt="Cat" style="max-width: 100%; height: auto;"></p>
+
+        <p style="color: #555; line-height: 1.6;">If you have any questions, feel free to ask!</p>
+
+        <p style="color: #555; line-height: 1.6;">Best regards,<br>Developer Team</p>
+    </div>
+
+</body>
+</html>
+`,
+    text: `Your Email Title
+
+        Hello!
+        This is your HTML email for distribution. You can add any text or content to this block.
+
+        Example link: Visit our website
+
+        Example image: 
+
+        If you have any questions, feel free to ask!
+
+        Best regards, Developer Team
+    
+
+
+`,
   };
 
   await sendEmail(subscribeEmail);
