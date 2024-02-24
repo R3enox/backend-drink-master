@@ -9,16 +9,16 @@ const listCategories = async (req, res) => {
 
 const listIngredients = async (req, res) => {
   const { dateOfBirth } = req.user;
-  
+
   const age = getUserAge(dateOfBirth);
   const mustHaveAlcohol = isAdult(age);
 
-  const query = {};
-  if (!mustHaveAlcohol) query.alcohol = "No";
+  const filter = {};
+  if (!mustHaveAlcohol) filter.alcohol = "No";
 
   const result = await Ingredient.aggregate([
     { $sort: { title: 1 } },
-    { $match: query },
+    { $match: filter },
   ]);
   res.json(result);
 };
