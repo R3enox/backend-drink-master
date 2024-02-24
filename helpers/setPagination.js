@@ -1,9 +1,9 @@
-const setPagination = (page, limit) => {
-  const skip = (page - 1) * limit;
+const setPagination = (page, perPage) => {
+  const skip = (page - 1) * perPage;
 
   return {
     skip,
-    limit: Number(limit),
+    limit: Number(perPage),
   };
 };
 
