@@ -179,9 +179,13 @@ const addFavorite = async (req, res, next) => {
     throw HttpError(400, "cocktail is already in favorites");
   }
 
-  const result = await Drink.findByIdAndUpdate(drinkId, {
-    $push: { favorite: _id },
-  });
+  const result = await Drink.findByIdAndUpdate(
+    drinkId,
+    {
+      $push: { favorite: _id },
+    },
+    { new: true }
+  );
 
   res.status(200).json(result);
 };
