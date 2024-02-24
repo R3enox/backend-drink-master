@@ -3,7 +3,7 @@
   "info": {
     "version": "2.0.2",
     "title": "Drink Master",
-    "description": "Drink's search and create web API.\r\nUseful links:\n* [Backend GitHub repository](https://github.com/R3enox/backend-drink-master)\n* [Frontend GitHub repository](https://github.com/R3enox/frontend-drink-master)",
+    "description": "Drink's search and create web API. \nUseful links:\n* [Backend GitHub repository](https://github.com/R3enox/backend-drink-master)\n* [Frontend GitHub repository](https://github.com/R3enox/frontend-drink-master)",
     "name": "MIT",
     "url": "https://opensource.org/licenses/MIT"
   },
@@ -88,7 +88,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SinpInRequest"
+                "$ref": "#/components/schemas/SingInRequest"
               }
             }
           }
@@ -765,7 +765,8 @@
             "type": "string"
           },
           "dateOfBirth": {
-            "type": "string"
+            "type": "string",
+            "format": "date"
           }
         },
         "example": {
@@ -796,7 +797,7 @@
               },
               "dateOfBirth": {
                 "type": "string",
-                "format": "dd/mm/yyyy"
+                "format": "date"
               },
               "avatarURL": {
                 "type": "string",
@@ -811,12 +812,12 @@
             "id": "65d85afb25efb0f36941416f",
             "name": "Test",
             "email": "test@example.com",
-            "dateOfBirth": "15/06/2010",
+            "dateOfBirth": "20/08/2088",
             "avatarURL": "avatars/user.png"
           }
         }
       },
-      "SignInRequest": {
+      "SingInRequest": {
         "type": "object",
         "required": ["email", "password"],
         "properties": {
@@ -854,7 +855,7 @@
               },
               "dateOfBirth": {
                 "type": "string",
-                "format": "dd/mm/yyyy"
+                "format": "date"
               },
               "avatarURL": {
                 "type": "string",
@@ -869,35 +870,41 @@
             "id": "65d85afb25efb0f36941416f",
             "name": "Test",
             "email": "test@example.com",
-            "dateOfBirth": "15/06/2010",
-            "avatarURL": "avatars/user.png"
+            "dateOfBirth": "20/08/2000",
+            "avatarURL": "https://res.cloudinary.com/dh0wbc15k/image/upload/v1708723003/avatars/VK100ZieqtJlRXyciEBYg.jpg"
           }
         }
       },
       "CurrentResponse": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name",
-            "example": "Test"
-          },
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email",
-            "example": "test@example.com"
-          },
-          "birthDate": {
-            "type": "string",
-            "description": "User's birthDate",
-            "example": "20 Aug 2020"
+          "user": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "dateOfBirth": {
+              "type": "string",
+              "format": "date"
+            },
+            "avatarURL": {
+              "type": "string",
+              "format": "uri"
+            }
           }
         },
         "example": {
+          "id": "65d85afb25efb0f36941416f",
           "name": "Test",
-          "email": "1example@gmail.com",
-          "birthDate": "20 Aug 2020"
+          "email": "test@example.com",
+          "dateofBirth": "20/08/2000",
+          "avatarURL": "https://res.cloudinary.com/dh0wbc15k/image/upload/v1708723003/avatars/VK100ZieqtJlRXyciEBYg.jpg"
         }
       },
       "UpdateUserRequest": {
@@ -905,13 +912,15 @@
         "properties": {
           "avatar": {
             "type": "string",
-            "format": "binary",
-            "example": "https://res.cloudinary.com/dzvvgvwgt/image/upload/v1699195131/drinkMaster/avatar/65456b585b4eb0cd117b6a6c.jpg"
+            "format": "binary"
           },
           "name": {
-            "type": "string",
-            "example": "Test2"
+            "type": "string"
           }
+        },
+        "example": {
+          "avatar": "https://res.cloudinary.com/dh0wbc15k/image/upload/v1708723003/avatars/VK100ZieqtJlRXyciEBYg.jpg",
+          "name": "Test2"
         }
       },
       "UpdateUserResponse": {
@@ -931,7 +940,8 @@
                 "format": "email"
               },
               "avatar": {
-                "type": "string"
+                "type": "string",
+                "format": "uri"
               }
             }
           }
@@ -941,7 +951,7 @@
           "user": {
             "name": "Test",
             "email": "test@example.com",
-            "avatar": "https://res.cloudinary.com/dzvvgvwgt/image/upload/v1699195131/drinkMaster/avatar/65456b585b4eb0cd117b6a6c.jpg"
+            "avatar": "https://res.cloudinary.com/dh0wbc15k/image/upload/v1708723003/avatars/VK100ZieqtJlRXyciEBYg.jpg"
           }
         }
       },
@@ -1176,8 +1186,11 @@
               }
             ],
             "shortDescription": "A creamy and indulgent cocktail with a blend of rum, coffee liqueur, and cream of coconut.",
-            "owner": "65cfbb8646c09b62b3f2d5ff",
-            "favorite": ["65cfbb8646c09b62b3f2d5ff"],
+            "owner": "65d85afb25efb0f36941416f",
+            "favorite": [
+              "65d85afb25efb0f36941416f",
+              "65cfbb8646c09b62b3f2d5ff"
+            ],
             "updatedAt": "2024-02-22T18:51:18.801Z"
           }
         ]
@@ -1267,12 +1280,13 @@
             "updatedAt": {
               "type": "string"
             },
-            "users": {
+            "favorite": {
               "type": "array",
               "items": {
                 "type": "string"
               }
-            }
+            },
+            "owner": "string"
           }
         },
         "example": [
@@ -1324,8 +1338,7 @@
               "653e747a0d2bb3830f82eb47",
               "6543e1144b22e0e1b4948877",
               "6540c1977366a77795807a1a"
-            ],
-            "popularity": 3
+            ]
           }
         ]
       },
@@ -1510,6 +1523,7 @@
               ],
               "shortDescription": "A creamy and tropical smoothie with the flavors of pineapple and ginger ale.",
               "favorite": [],
+              "owner": "65d85afb25efb0f36941416f",
               "updatedAt": "2024-02-21T17:20:44.025Z"
             }
           ],
@@ -1656,7 +1670,6 @@
           ],
           "shortDescription": "A tropical and fruity cocktail with the flavors of rum, Galliano, lime juice, and pineapple juice.",
           "owner": "65cfbb8646c09b62b3f2d5ff",
-
           "favorite": [],
           "updatedAt": "2024-02-22T20:19:03.200Z"
         }
@@ -1787,9 +1800,6 @@
           "drink": {
             "type": "string"
           },
-          "drinkAlternate": {
-            "type": "string"
-          },
           "category": {
             "type": "string"
           },
@@ -1822,14 +1832,9 @@
                 },
                 "ingredientId": {
                   "type": "string"
-                },
-                "_id": {
-                  "type": "string",
-                  "description": "Unique identifier for the ingredient in the drink"
                 }
               }
-            },
-            "description": "List of ingredients used in the drink"
+            }
           },
           "owner": {
             "type": "string"
@@ -1841,13 +1846,11 @@
             }
           },
           "_id": {
-            "type": "string",
-            "description": "Unique identifier for the new drink"
+            "type": "string"
           }
         },
         "example": {
           "drink": "CovidKiller v5",
-          "drinkAlternate": "Sorry, not specified",
           "category": "Soft Drink",
           "alcoholic": "Alcoholic",
           "glass": "Beer Glass",
@@ -1886,21 +1889,11 @@
             "drink": {
               "type": "string"
             },
-            "drinkAlternate": {
-              "type": "string"
-            },
-            "tags": {
-              "type": "string"
-            },
-            "video": {
-              "type": "string"
-            },
+
             "category": {
               "type": "string"
             },
-            "IBA": {
-              "type": "string"
-            },
+
             "alcoholic": {
               "type": "string"
             },
@@ -1913,29 +1906,10 @@
             "instructions": {
               "type": "string"
             },
-            "instructionsES": {
-              "type": "string"
-            },
-            "instructionsDE": {
-              "type": "string"
-            },
-            "instructionsFR": {
-              "type": "string"
-            },
-            "instructionsIT": {
-              "type": "string"
-            },
-            "instructionsRU": {
-              "type": "string"
-            },
-            "instructionsPL": {
-              "type": "string"
-            },
-            "instructionsUK": {
-              "type": "string"
-            },
+
             "drinkThumb": {
-              "type": "string"
+              "type": "string",
+              "format": "uri"
             },
             "ingredients": {
               "type": "array",
@@ -1954,9 +1928,6 @@
                 }
               }
             },
-            "shortDescription": {
-              "type": "string"
-            },
             "owner": {
               "type": "string"
             },
@@ -1973,22 +1944,11 @@
           {
             "_id": "639b6de9ff77d221f190c56a",
             "drink": "151 Florida Bushwacker",
-            "drinkAlternate": "Sorry, not specified",
-            "tags": "Sorry, not specified",
-            "video": "Sorry, not specified",
             "category": "Shake",
-            "IBA": "Sorry, not specified",
             "alcoholic": "Alcoholic",
             "glass": "Beer mug",
             "description": "151 Florida Bushwacker is a creamy and indulgent cocktail that combines the flavors of rum, coffee liqueur, cream of coconut, and milk. It is made by blending all the ingredients with ice until smooth and creamy. The result is a decadent and tropical drink that is reminiscent of a milkshake with a kick. Enjoy this delightful treat as a dessert or a special treat on a hot summer day.",
             "instructions": "Combine all ingredients. Blend until smooth. Garnish with chocolate shavings if desired.",
-            "instructionsES": "Combina todos los ingredientes. Mezclar hasta que esté suave. Adorne con virutas de chocolate si lo desea.",
-            "instructionsDE": "Alle Zutaten vermengen. Mischen, bis alles glatt ist. Auf Wunsch mit Schokoladenraspeln garnieren.",
-            "instructionsFR": "Combinez tous les ingrédients. Mélanger jusqu'à consistance lisse. Garnir de copeaux de chocolat si désiré.",
-            "instructionsIT": "Combina tutti gli ingredienti.\r\nFrulla fino a che è liscio.\r\nGuarnire con scaglie di cioccolato se lo si desidera.",
-            "instructionsRU": "Смешайте все ингредиенты. Смешайте до однородности. По желанию украсьте шоколадной стружкой.",
-            "instructionsPL": "Połącz wszystkie składniki. Miksuj do uzyskania gładkości. W razie potrzeby udekoruj wiórkami czekoladowymi.",
-            "instructionsUK": "З'єднайте всі інгредієнти. Перемішайте до однорідності. За бажанням прикрасьте шоколадною стружкою.",
             "drinkThumb": "https://ftp.goit.study/img/drinkify/recipes/151_Florida_Bushwacker.jpg",
             "ingredients": [
               {
@@ -2032,9 +1992,8 @@
                 "ingredientId": "64f1d5c369d8333cf130fb74"
               }
             ],
-            "shortDescription": "A creamy and indulgent cocktail with a blend of rum, coffee liqueur, and cream of coconut.",
-            "owner": "65cfbb8646c09b62b3f2d5ff",
-            "favorite": ["65cfbb8646c09b62b3f2d5ff"],
+            "owner": "65d85afb25efb0f36941416f",
+            "favorite": ["65d85afb25efb0f36941416f"],
             "updatedAt": "2024-02-22T18:51:18.801Z"
           }
         ]
@@ -2198,7 +2157,10 @@
             ],
             "shortDescription": "A creamy and indulgent cocktail with a blend of rum, coffee liqueur, and cream of coconut.",
             "owner": "65cfbb8646c09b62b3f2d5ff",
-            "favorite": ["65cfbb8646c09b62b3f2d5ff"],
+            "favorite": [
+              "65cfbb8646c09b62b3f2d5ff",
+              "65d85afb25efb0f36941416f"
+            ],
             "updatedAt": "2024-02-22T18:51:18.801Z"
           }
         ]
@@ -2247,9 +2209,6 @@
             "items": {
               "type": "object",
               "properties": {
-                "_id": {
-                  "type": "string"
-                },
                 "title": {
                   "type": "string"
                 },
@@ -2320,7 +2279,7 @@
             }
           ],
           "shortDescription": "A sweet and tangy cocktail with Jamaican rum, lime juice, and grenadine.",
-          "owner": "65cfbb8646c09b62b3f2d5ff",
+          "owner": "65d85afb25efb0f36941416f",
           "favorite": ["65cfbb8646c09b62b3f2d5ff", "65d85afb25efb0f36941416f"],
           "updatedAt": "2024-02-23T12:18:39.991Z"
         }

@@ -1944,3 +1944,16 @@ GET /api/ 18-02-2024_08:39:06
 GET /api/drinks/ 18-02-2024_08:39:08
 GET /api/drinks/ 18-02-2024_08:41:06
 GET /api/drinks/search?category=cocktail 18-02-2024_08:42:07
+POST /api/drinks/own/add 24-02-2024_01:00:00
+POST /api/drinks/own/add 24-02-2024_01:01:51
+POST /api/auth/signin 24-02-2024_01:02:05
+POST /api/drinks/own/add 24-02-2024_01:02:17
+POST /api/drinks/own/add 24-02-2024_01:03:11
+POST /api/drinks/own/add 24-02-2024_01:03:31
+POST /api/drinks/own/add 24-02-2024_01:03:37
+POST /api/drinks/own/add 24-02-2024_01:05:08
+POST /api/drinks/own/add 24-02-2024_01:06:36
+POST /api/drinks/own/add 24-02-2024_01:07:14
+POST /api/drinks/own/add 24-02-2024_01:59:04
+POST /api/auth/signin 24-02-2024_02:21:39
+POST /api/drinks/own/add 24-02-2024_02:22:32
