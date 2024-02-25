@@ -144,7 +144,6 @@ const addDrink = async (req, res, next) => {
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
-
   const newDrink = new Drink({
     drink,
     description,
