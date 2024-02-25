@@ -7,7 +7,7 @@ const { User } = require("../models/user");
 const { ctrlWrapper, HttpError } = require("../helpers");
 const { default: mongoose } = require("mongoose");
 
-const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
+const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY, FRONTEND_URL } = process.env;
 
 const signUp = async (req, res) => {
   const { email, password } = req.body;
@@ -85,6 +85,22 @@ const signIn = async (req, res) => {
   });
 };
 
+const googleAuth = async (req, res) => {
+  const { _id: id } = req.user;
+  const payload = {
+    id,
+  };
+  const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, { expiresIn: "2m" });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: "7d",
+  });
+  await User.findByIdAndUpdate(id, { accessToken, refreshToken });
+
+  res.redirect(
+    `${FRONTEND_URL}/google?accessToken=${accessToken}&refreshToken=${refreshToken}`
+  );
+};
+
 const refresh = async (req, res) => {
   const { refreshToken: token } = req.body;
   try {
@@ -118,6 +134,7 @@ const signOut = async (req, res) => {
 module.exports = {
   signUp: ctrlWrapper(signUp),
   signIn: ctrlWrapper(signIn),
+  googleAuth: ctrlWrapper(googleAuth),
   refresh: ctrlWrapper(refresh),
   signOut: ctrlWrapper(signOut),
 };
