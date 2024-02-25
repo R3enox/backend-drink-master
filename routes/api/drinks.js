@@ -1,18 +1,22 @@
 const express = require("express");
 
-const ctrl = require("../../controllers/drinks");
-
-// const checkConfirmation = require("../../middlewares/checkConfirmation");
+const {
+  isAuthenticated,
+  checkAge,
+  uploadDrinkPhoto,
+} = require("../../middlewares");
+const ctrl = require("../../controllers/drinksController");
 
 const router = express.Router();
-const { isAuthenticated } = require("../../middlewares");
 
-const uploadDrinkPhoto = require("../../middlewares/uploadDrinkPhoto");
+router.get("/", isAuthenticated, checkAge, ctrl.listDrinks);
 
-router.get("/", isAuthenticated, ctrl.listDrinks);
-router.get("/search", isAuthenticated, ctrl.searchDrinks);
+router.get("/search", isAuthenticated, checkAge, ctrl.searchDrinks);
 
 router.get("/popular", isAuthenticated, ctrl.popularDrinks);
+
+router.get("/own", isAuthenticated, ctrl.getMyDrinks);
+
 router.post(
   "/own/add",
   isAuthenticated,
@@ -20,20 +24,18 @@ router.post(
   ctrl.addDrink
 );
 
+router.get("/favorite", isAuthenticated, ctrl.getFavorite);
+
 router.post("/:drinkId/favorite/add/", isAuthenticated, ctrl.addFavorite);
+
 router.delete(
   "/:drinkId/favorite/remove",
   isAuthenticated,
   ctrl.removeFavorite
 );
-router.get("/favorite", isAuthenticated, ctrl.getFavorite);
 
-router.get("/own", isAuthenticated, ctrl.getMyDrinks);
-router.delete(
-  "/own/remove/:id",
-  isAuthenticated,
-  // checkConfirmation,
-  ctrl.deleteMyDrink
-);
+router.delete("/own/remove/:id", isAuthenticated, ctrl.deleteMyDrink);
+
+router.get("/:drinkId", isAuthenticated, ctrl.getDrinkById);
 
 module.exports = router;

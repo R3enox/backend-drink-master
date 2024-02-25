@@ -7,9 +7,6 @@ const sendEmail = require("../helpers/sendEmail.js");
 
 const updateUser = async (req, res) => {
   const { body, file, user } = req;
-  // if (!file) {
-  //   return res.status(400).json({ message: "Please upload a file" });
-  // }
 
   if (file) {
     const uniqueFilename = nanoid();
@@ -58,7 +55,7 @@ const subscribe = async (req, res) => {
   const { email } = req.body;
   const { _id: id, email: userEmail, subscribe } = req.user;
 
-  if (email !== userEmail) throw HttpError(403, "You can use own email");
+  if (email !== userEmail) throw HttpError(403, "You can use just own Email");
 
   if (subscribe) throw HttpError(400, "Subscribe has already been passed");
 

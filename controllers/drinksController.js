@@ -10,7 +10,7 @@ const {
   isAdult,
 } = require("../helpers");
 
-const { Drink } = require("../models/drinks");
+const { Drink } = require("../models/drink");
 
 const popularCategories = [
   "Ordinary Drink",
@@ -21,13 +21,10 @@ const popularCategories = [
 
 const listDrinks = async (req, res) => {
   const { per_category = 3 } = req.query;
-  const { dateOfBirth } = req.user;
-
-  const age = getUserAge(dateOfBirth);
-  const mustBeAlcoholic = isAdult(age);
+  const { isAdult } = req.user;
 
   const filter = { category: { $in: popularCategories } };
-  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  if (!isAdult) filter.alcoholic = "Non alcoholic";
 
   const drinks = await Drink.aggregate([
     {
@@ -56,15 +53,19 @@ const listDrinks = async (req, res) => {
   res.json(drinks);
 };
 
+const getDrinkById = async (req, res, next) => {
+  const { drinkId } = req.params;
+  const cocktail = await Drink.findById(drinkId);
+  if (!cocktail) throw HttpError(404);
+  res.status(200).json(cocktail);
+};
+
 const searchDrinks = async (req, res) => {
   const { page = 1, per_page = 10, search, category, ingredient } = req.query;
-  const { dateOfBirth } = req.user;
-
-  const age = getUserAge(dateOfBirth);
-  const mustBeAlcoholic = isAdult(age);
+  const { isAdult } = req.user;
 
   const filter = {};
-  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  if (!isAdult) filter.alcoholic = "Non alcoholic";
   if (search) filter.drink = { $regex: search, $options: "i" };
   if (category) filter.category = category;
   if (ingredient) filter.ingredients = { $elemMatch: { title: ingredient } };
@@ -123,9 +124,10 @@ const addDrink = async (req, res, next) => {
     unique_filename: false,
     overwrite: true,
   });
-  const avatarUrl = resultCloudinary.secure_url;
 
   await cloudinary.uploader.destroy(file.filename);
+
+  const photoDrinkUrl = resultCloudinary.secure_url;
 
   const { _id: owner, dateOfBirth } = req.user;
 
@@ -138,13 +140,11 @@ const addDrink = async (req, res, next) => {
     instructions,
     ingredients,
   } = req.body;
-
   const age = getUserAge(dateOfBirth);
 
   if (alcoholic === "Alcoholic" && age < 18) {
     throw HttpError(400);
   }
-
   const newDrink = new Drink({
     drink,
     description,
@@ -152,7 +152,7 @@ const addDrink = async (req, res, next) => {
     glass,
     alcoholic,
     instructions,
-    drinkThumb: avatarUrl,
+    drinkThumb: photoDrinkUrl,
     ingredients: ingredients.map(({ title, measure, ingredientId }) => ({
       title,
       measure,
@@ -176,7 +176,7 @@ const addFavorite = async (req, res, next) => {
   const drink = await Drink.findById(drinkId);
 
   if (drink.favorite.includes(_id)) {
-    throw HttpError(400, "cocktail is already in favorites");
+    throw HttpError(400, "Cocktail is already in favorites");
   }
 
   const result = await Drink.findByIdAndUpdate(
@@ -199,40 +199,66 @@ const removeFavorite = async (req, res, next) => {
   });
 
   if (!result) {
-    throw HttpError(404, "not found");
+    throw HttpError(404, "Not found");
   }
 
-  res.status(200).json({ message: "Drink removed from favorites" });
+  res.status(200).json({ message: "Drink is removed from favorites" });
 };
 
 const getFavorite = async (req, res, next) => {
+  const { page = 1, per_page = 10 } = req.query;
   const { _id } = req.user;
 
-  const favoriteDrinks = await Drink.find({ favorite: _id });
+  const filter = { favorite: _id };
+  const paginateOptions = setPagination(page, per_page);
 
-  if (favoriteDrinks.length === 0) {
-    return res.status(200).json({
-      success: true,
-      message: "You don't have a favorite drink",
-      data: [],
-    });
-  }
+  const [
+    {
+      paginatedResult,
+      totalCount: [{ totalCount } = { totalCount: 0 }],
+    },
+  ] = await Drink.aggregate([
+    {
+      $facet: {
+        paginatedResult: [
+          { $match: filter },
+          { $skip: paginateOptions.skip },
+          { $limit: paginateOptions.limit },
+        ],
+        totalCount: [{ $match: filter }, { $count: "totalCount" }],
+      },
+    },
+  ]);
 
-  res.status(200).json(favoriteDrinks);
+  res.status(200).json({ paginatedResult, totalCount });
 };
 
 const getMyDrinks = async (req, res, next) => {
+  const { page = 1, per_page = 10 } = req.query;
   const { _id: owner } = req.user;
 
-  const myDrink = await Drink.find({ owner });
-  if (myDrink.length === 0) {
-    return res.status(200).json({
-      success: true,
-      message: "You don't have your own drinks yet",
-      data: [],
-    });
-  }
-  res.status(200).json(myDrink);
+  const filter = { owner };
+  const paginateOptions = setPagination(page, per_page);
+
+  const [
+    {
+      paginatedResult,
+      totalCount: [{ totalCount } = { totalCount: 0 }],
+    },
+  ] = await Drink.aggregate([
+    {
+      $facet: {
+        paginatedResult: [
+          { $match: filter },
+          { $skip: paginateOptions.skip },
+          { $limit: paginateOptions.limit },
+        ],
+        totalCount: [{ $match: filter }, { $count: "totalCount" }],
+      },
+    },
+  ]);
+
+  res.status(200).json({ paginatedResult, totalCount });
 };
 
 const deleteMyDrink = async (req, res, next) => {
@@ -246,13 +272,14 @@ const deleteMyDrink = async (req, res, next) => {
   });
 
   if (!deletedDrink) {
-    throw HttpError(404, "Drink not found or you are not the owner");
+    throw HttpError(404, "Drink not found or user is not the owner");
   }
-  res.status(200).json({ message: "Drink deleted" });
+  res.status(200).json({ message: "Drink is deleted" });
 };
 
 module.exports = {
   listDrinks: ctrlWrapper(listDrinks),
+  getDrinkById: ctrlWrapper(getDrinkById),
   popularDrinks: ctrlWrapper(popularDrinks),
   searchDrinks: ctrlWrapper(searchDrinks),
   addDrink: ctrlWrapper(addDrink),
