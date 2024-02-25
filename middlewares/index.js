@@ -4,6 +4,7 @@ const isAuthenticated = require("./isAuthenticated");
 const checkAge = require("./checkAge");
 const upload = require("./upload");
 const uploadDrinkPhoto = require("./uploadDrinkPhoto");
+const passport = require("./google-authenticated");
 
 module.exports = {
   validateBody,
@@ -12,4 +13,5 @@ module.exports = {
   checkAge,
   upload,
   uploadDrinkPhoto,
+  passport,
 };
