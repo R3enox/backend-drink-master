@@ -226,14 +226,6 @@ const getFavorite = async (req, res, next) => {
     },
   ]);
 
-  if (totalCount === 0) {
-    return res.status(200).json({
-      success: true,
-      message: "You don't have a favorite drink",
-      data: [],
-    });
-  }
-
   res.status(200).json({ paginatedResult, totalCount });
 };
 
