@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-//* connect db categories
 const categorySchema = new Schema(
   {
     title: {
@@ -13,7 +12,6 @@ const categorySchema = new Schema(
 
 const Category = model("category", categorySchema);
 
-//* connect db ingredients
 const ingredientSchema = new Schema(
   {
     title: {
@@ -37,7 +35,6 @@ const ingredientSchema = new Schema(
 
 const Ingredient = model("ingredient", ingredientSchema);
 
-//* connect db glasses
 const glassSchema = new Schema(
   {
     title: {

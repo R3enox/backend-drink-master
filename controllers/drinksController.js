@@ -56,6 +56,13 @@ const listDrinks = async (req, res) => {
   res.json(drinks);
 };
 
+const getDrinkById = async (req, res, next) => {
+  const { drinkId } = req.params;
+  const cocktail = await Drink.findById(drinkId);
+  if (!cocktail) throw HttpError(404);
+  res.status(200).json(cocktail);
+};
+
 const searchDrinks = async (req, res) => {
   const { page = 1, per_page = 10, search, category, ingredient } = req.query;
   const { dateOfBirth } = req.user;
@@ -274,6 +281,7 @@ const deleteMyDrink = async (req, res, next) => {
 
 module.exports = {
   listDrinks: ctrlWrapper(listDrinks),
+  getDrinkById: ctrlWrapper(getDrinkById),
   popularDrinks: ctrlWrapper(popularDrinks),
   searchDrinks: ctrlWrapper(searchDrinks),
   addDrink: ctrlWrapper(addDrink),

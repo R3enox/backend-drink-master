@@ -7,9 +7,6 @@ const sendEmail = require("../helpers/sendEmail.js");
 
 const updateUser = async (req, res) => {
   const { body, file, user } = req;
-  // if (!file) {
-  //   return res.status(400).json({ message: "Please upload a file" });
-  // }
 
   if (file) {
     const uniqueFilename = nanoid();

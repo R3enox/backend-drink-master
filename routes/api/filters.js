@@ -2,7 +2,7 @@ const express = require("express");
 
 const { isAuthenticated } = require("../../middlewares");
 
-const ctrl = require("../../controllers/filters");
+const ctrl = require("../../controllers/filtersController");
 
 const router = express.Router();
 
