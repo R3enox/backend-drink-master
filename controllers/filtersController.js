@@ -1,5 +1,5 @@
+const ctrlWrapper = require("../helpers/ctrlWrapper.js");
 const { Category, Ingredient, Glass } = require("../models/filters.js");
-const { ctrlWrapper, getUserAge, isAdult } = require("../helpers/index.js");
 
 const listCategories = async (req, res) => {
   const categories = await Category.aggregate([{ $sort: { title: 1 } }]);
@@ -8,13 +8,10 @@ const listCategories = async (req, res) => {
 };
 
 const listIngredients = async (req, res) => {
-  const { dateOfBirth } = req.user;
-
-  const age = getUserAge(dateOfBirth);
-  const mustHaveAlcohol = isAdult(age);
+  const { isAdult } = req.user;
 
   const filter = {};
-  if (!mustHaveAlcohol) filter.alcohol = "No";
+  if (!isAdult) filter.alcohol = "No";
 
   const result = await Ingredient.aggregate([
     { $sort: { title: 1 } },

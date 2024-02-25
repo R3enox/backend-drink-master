@@ -55,7 +55,7 @@ const subscribe = async (req, res) => {
   const { email } = req.body;
   const { _id: id, email: userEmail, subscribe } = req.user;
 
-  if (email !== userEmail) throw HttpError(400);
+  if (email !== userEmail) throw HttpError(403, "You can use just own Email");
 
   if (subscribe) throw HttpError(400, "Subscribe has already been passed");
 

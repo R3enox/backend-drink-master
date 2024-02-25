@@ -1,15 +1,17 @@
 const express = require("express");
 
+const {
+  isAuthenticated,
+  checkAge,
+  uploadDrinkPhoto,
+} = require("../../middlewares");
 const ctrl = require("../../controllers/drinksController");
 
 const router = express.Router();
-const { isAuthenticated } = require("../../middlewares");
 
-const uploadDrinkPhoto = require("../../middlewares/uploadDrinkPhoto");
+router.get("/", isAuthenticated, checkAge, ctrl.listDrinks);
 
-router.get("/", isAuthenticated, ctrl.listDrinks);
-
-router.get("/search", isAuthenticated, ctrl.searchDrinks);
+router.get("/search", isAuthenticated, checkAge, ctrl.searchDrinks);
 
 router.get("/popular", isAuthenticated, ctrl.popularDrinks);
 

@@ -10,7 +10,7 @@ const {
   isAdult,
 } = require("../helpers");
 
-const { Drink } = require("../models/drinks");
+const { Drink } = require("../models/drink");
 
 const popularCategories = [
   "Ordinary Drink",
@@ -21,13 +21,10 @@ const popularCategories = [
 
 const listDrinks = async (req, res) => {
   const { per_category = 3 } = req.query;
-  const { dateOfBirth } = req.user;
-
-  const age = getUserAge(dateOfBirth);
-  const mustBeAlcoholic = isAdult(age);
+  const { isAdult } = req.user;
 
   const filter = { category: { $in: popularCategories } };
-  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  if (!isAdult) filter.alcoholic = "Non alcoholic";
 
   const drinks = await Drink.aggregate([
     {
@@ -65,13 +62,10 @@ const getDrinkById = async (req, res, next) => {
 
 const searchDrinks = async (req, res) => {
   const { page = 1, per_page = 10, search, category, ingredient } = req.query;
-  const { dateOfBirth } = req.user;
-
-  const age = getUserAge(dateOfBirth);
-  const mustBeAlcoholic = isAdult(age);
+  const { isAdult } = req.user;
 
   const filter = {};
-  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  if (!isAdult) filter.alcoholic = "Non alcoholic";
   if (search) filter.drink = { $regex: search, $options: "i" };
   if (category) filter.category = category;
   if (ingredient) filter.ingredients = { $elemMatch: { title: ingredient } };
@@ -185,9 +179,13 @@ const addFavorite = async (req, res, next) => {
     throw HttpError(400, "Cocktail is already in favorites");
   }
 
-  const result = await Drink.findByIdAndUpdate(drinkId, {
-    $push: { favorite: _id },
-  });
+  const result = await Drink.findByIdAndUpdate(
+    drinkId,
+    {
+      $push: { favorite: _id },
+    },
+    { new: true }
+  );
 
   res.status(200).json(result);
 };
