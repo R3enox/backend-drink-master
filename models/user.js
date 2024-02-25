@@ -51,36 +51,59 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const joiSignupSchema = Joi.object({
-  name: Joi.string()
-    .required()
-    .messages({ "any.required": "missing required field name" }),
+  name: Joi.string().min(2).max(20).required().empty(false).messages({
+    "string.base": "The name must be a string.",
+    "any.required": "The name field is required.",
+    "string.empty": "The name must not be empty.",
+    "string.min": "The name should have at least 2 characters.",
+    "string.max": "The name should have at most 20 characters.",
+  }),
   dateOfBirth: Joi.string()
     .pattern(dateofbirthRegexp)
     .required()
-    .messages({ "any.required": "missing required field birthdate" }),
-  email: Joi.string()
-    .pattern(emailRegExp)
-    .required()
-    .messages({ "any.required": "missing required field email" }),
-  password: Joi.string()
-    .min(6)
-    .required()
-    .messages({ "any.required": "missing required field password" }),
+    .empty(false)
+    .messages({
+      "string.base": "The date of birth must be a string.",
+      "any.required": "The date of birth field is required.",
+      "string.empty": "The date of birth must not be empty.",
+      "string.pattern.base": "The date of birth must be in format dd/mm/yyyy",
+    }),
+  email: Joi.string().pattern(emailRegExp).required().empty(false).messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty.",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
+  password: Joi.string().min(6).required().empty(false).messages({
+    "string.base": "The password must be a string.",
+    "any.required": "The password field is required.",
+    "string.empty": "The password must not be empty.",
+    "string.min": "The password should have at least 6 characters.",
+  }),
 });
 
 const joiSigninSchema = Joi.object({
-  password: Joi.string()
-    .min(6)
-    .required()
-    .messages({ "any.required": "missing required field password" }),
-  email: Joi.string()
-    .pattern(emailRegExp)
-    .required()
-    .messages({ "any.required": "missing required field email" }),
+  password: Joi.string().min(6).required().empty(false).messages({
+    "string.base": "The password must be a string.",
+    "any.required": "The password field is required.",
+    "string.empty": "The password must not be empty.",
+    "string.min": "The password should have at least 6 characters.",
+  }),
+  email: Joi.string().pattern(emailRegExp).required().empty(false).messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty.",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
 });
 
 const joiEmailSchema = Joi.object({
-  email: Joi.string().pattern(emailRegExp).required(),
+  email: Joi.string().empty(false).pattern(emailRegExp).required().messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty.",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
 });
 
 const schemas = {
