@@ -229,17 +229,31 @@ const getFavorite = async (req, res, next) => {
 };
 
 const getMyDrinks = async (req, res, next) => {
+  const { page = 1, per_page = 10 } = req.query;
   const { _id: owner } = req.user;
 
-  const myDrink = await Drink.find({ owner });
-  if (myDrink.length === 0) {
-    return res.status(200).json({
-      success: true,
-      message: "You don't have your own drinks yet",
-      data: [],
-    });
-  }
-  res.status(200).json(myDrink);
+  const filter = { owner };
+  const paginateOptions = setPagination(page, per_page);
+
+  const [
+    {
+      paginatedResult,
+      totalCount: [{ totalCount } = { totalCount: 0 }],
+    },
+  ] = await Drink.aggregate([
+    {
+      $facet: {
+        paginatedResult: [
+          { $match: filter },
+          { $skip: paginateOptions.skip },
+          { $limit: paginateOptions.limit },
+        ],
+        totalCount: [{ $match: filter }, { $count: "totalCount" }],
+      },
+    },
+  ]);
+
+  res.status(200).json({ paginatedResult, totalCount });
 };
 
 const deleteMyDrink = async (req, res, next) => {
