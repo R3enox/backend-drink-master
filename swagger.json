@@ -608,20 +608,6 @@
         "tags": ["Drinks"],
         "summary": "Get user's own drinks",
         "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "in": "query",
-            "type": "integer",
-            "name": "page",
-            "description": "Page number, default 1"
-          },
-          {
-            "in": "query",
-            "type": "integer",
-            "name": "per_page",
-            "description": "Limit items per page, default 10"
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful response",
@@ -726,20 +712,6 @@
       "get": {
         "tags": ["Drinks"],
         "summary": "Get user's favorites drinks",
-        "parameters": [
-          {
-            "in": "query",
-            "type": "integer",
-            "name": "page",
-            "description": "Page number, default 1"
-          },
-          {
-            "in": "query",
-            "type": "integer",
-            "name": "per_page",
-            "description": "Limit items per page, default 10"
-          }
-        ],
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
