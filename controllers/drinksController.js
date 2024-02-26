@@ -206,59 +206,15 @@ const removeFavorite = async (req, res, next) => {
 };
 
 const getFavorite = async (req, res, next) => {
-  const { page = 1, per_page = 10 } = req.query;
   const { _id } = req.user;
-
-  const filter = { favorite: _id };
-  const paginateOptions = setPagination(page, per_page);
-
-  const [
-    {
-      paginatedResult,
-      totalCount: [{ totalCount } = { totalCount: 0 }],
-    },
-  ] = await Drink.aggregate([
-    {
-      $facet: {
-        paginatedResult: [
-          { $match: filter },
-          { $skip: paginateOptions.skip },
-          { $limit: paginateOptions.limit },
-        ],
-        totalCount: [{ $match: filter }, { $count: "totalCount" }],
-      },
-    },
-  ]);
-
-  res.status(200).json({ paginatedResult, totalCount });
+  const drinks = await Drink.find({ favorite: _id });
+  res.status(200).json(drinks);
 };
 
 const getMyDrinks = async (req, res, next) => {
-  const { page = 1, per_page = 10 } = req.query;
   const { _id: owner } = req.user;
-
-  const filter = { owner };
-  const paginateOptions = setPagination(page, per_page);
-
-  const [
-    {
-      paginatedResult,
-      totalCount: [{ totalCount } = { totalCount: 0 }],
-    },
-  ] = await Drink.aggregate([
-    {
-      $facet: {
-        paginatedResult: [
-          { $match: filter },
-          { $skip: paginateOptions.skip },
-          { $limit: paginateOptions.limit },
-        ],
-        totalCount: [{ $match: filter }, { $count: "totalCount" }],
-      },
-    },
-  ]);
-
-  res.status(200).json({ paginatedResult, totalCount });
+  const drinks = await Drink.find({ owner });
+  res.status(200).json(drinks);
 };
 
 const deleteMyDrink = async (req, res, next) => {
