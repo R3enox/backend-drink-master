@@ -59,6 +59,8 @@ APP_NAME = # default App Name
 
 # Host
 DB_HOST = mongodb://127.0.0.1:27017/database_name
+FRONTEND = 
+BACK = 
 # Port
 PORT = 3000
 
