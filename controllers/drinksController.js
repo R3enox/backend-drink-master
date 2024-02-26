@@ -10,7 +10,7 @@ const {
   isAdult,
 } = require("../helpers");
 
-const { Drink } = require("../models/drinks");
+const { Drink } = require("../models/drink");
 
 const popularCategories = [
   "Ordinary Drink",
@@ -21,13 +21,10 @@ const popularCategories = [
 
 const listDrinks = async (req, res) => {
   const { per_category = 3 } = req.query;
-  const { dateOfBirth } = req.user;
-
-  const age = getUserAge(dateOfBirth);
-  const mustBeAlcoholic = isAdult(age);
+  const { isAdult } = req.user;
 
   const filter = { category: { $in: popularCategories } };
-  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  if (!isAdult) filter.alcoholic = "Non alcoholic";
 
   const drinks = await Drink.aggregate([
     {
@@ -56,15 +53,19 @@ const listDrinks = async (req, res) => {
   res.json(drinks);
 };
 
+const getDrinkById = async (req, res, next) => {
+  const { drinkId } = req.params;
+  const cocktail = await Drink.findById(drinkId);
+  if (!cocktail) throw HttpError(404);
+  res.status(200).json(cocktail);
+};
+
 const searchDrinks = async (req, res) => {
   const { page = 1, per_page = 10, search, category, ingredient } = req.query;
-  const { dateOfBirth } = req.user;
-
-  const age = getUserAge(dateOfBirth);
-  const mustBeAlcoholic = isAdult(age);
+  const { isAdult } = req.user;
 
   const filter = {};
-  if (!mustBeAlcoholic) filter.alcoholic = "Non alcoholic";
+  if (!isAdult) filter.alcoholic = "Non alcoholic";
   if (search) filter.drink = { $regex: search, $options: "i" };
   if (category) filter.category = category;
   if (ingredient) filter.ingredients = { $elemMatch: { title: ingredient } };
@@ -178,9 +179,13 @@ const addFavorite = async (req, res, next) => {
     throw HttpError(400, "Cocktail is already in favorites");
   }
 
-  const result = await Drink.findByIdAndUpdate(drinkId, {
-    $push: { favorite: _id },
-  });
+  const result = await Drink.findByIdAndUpdate(
+    drinkId,
+    {
+      $push: { favorite: _id },
+    },
+    { new: true }
+  );
 
   res.status(200).json(result);
 };
@@ -201,59 +206,15 @@ const removeFavorite = async (req, res, next) => {
 };
 
 const getFavorite = async (req, res, next) => {
-  const { page = 1, per_page = 10 } = req.query;
   const { _id } = req.user;
-
-  const filter = { favorite: _id };
-  const paginateOptions = setPagination(page, per_page);
-
-  const [
-    {
-      paginatedResult,
-      totalCount: [{ totalCount } = { totalCount: 0 }],
-    },
-  ] = await Drink.aggregate([
-    {
-      $facet: {
-        paginatedResult: [
-          { $match: filter },
-          { $skip: paginateOptions.skip },
-          { $limit: paginateOptions.limit },
-        ],
-        totalCount: [{ $match: filter }, { $count: "totalCount" }],
-      },
-    },
-  ]);
-
-  res.status(200).json({ paginatedResult, totalCount });
+  const drinks = await Drink.find({ favorite: _id });
+  res.status(200).json(drinks);
 };
 
 const getMyDrinks = async (req, res, next) => {
-  const { page = 1, per_page = 10 } = req.query;
   const { _id: owner } = req.user;
-
-  const filter = { owner };
-  const paginateOptions = setPagination(page, per_page);
-
-  const [
-    {
-      paginatedResult,
-      totalCount: [{ totalCount } = { totalCount: 0 }],
-    },
-  ] = await Drink.aggregate([
-    {
-      $facet: {
-        paginatedResult: [
-          { $match: filter },
-          { $skip: paginateOptions.skip },
-          { $limit: paginateOptions.limit },
-        ],
-        totalCount: [{ $match: filter }, { $count: "totalCount" }],
-      },
-    },
-  ]);
-
-  res.status(200).json({ paginatedResult, totalCount });
+  const drinks = await Drink.find({ owner });
+  res.status(200).json(drinks);
 };
 
 const deleteMyDrink = async (req, res, next) => {
@@ -274,6 +235,7 @@ const deleteMyDrink = async (req, res, next) => {
 
 module.exports = {
   listDrinks: ctrlWrapper(listDrinks),
+  getDrinkById: ctrlWrapper(getDrinkById),
   popularDrinks: ctrlWrapper(popularDrinks),
   searchDrinks: ctrlWrapper(searchDrinks),
   addDrink: ctrlWrapper(addDrink),

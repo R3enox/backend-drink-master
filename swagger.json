@@ -522,7 +522,7 @@
         }
       }
     },
-    "/drink/{id}": {
+    "/drinks/{id}": {
       "get": {
         "tags": ["Drinks"],
         "summary": "Get drink by id",

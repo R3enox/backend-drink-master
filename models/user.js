@@ -30,13 +30,15 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
       unique: true,
     },
+    accessToken: {
+      type: String,
+      default: null,
+    },
+    refreshToken: {type: String,
+      default: null},
     subscribe: {
       type: Boolean,
       default: false,
-    },
-    token: {
-      type: String,
-      default: null,
     },
     avatarURL: {
       type: String,
@@ -97,6 +99,9 @@ const joiSigninSchema = Joi.object({
   }),
 });
 
+const joiRefreshSchema = Joi.object({
+  refreshToken: Joi.string().required()});
+
 const joiEmailSchema = Joi.object({
   email: Joi.string().empty(false).pattern(emailRegExp).required().messages({
     "string.base": "The email must be a string.",
@@ -109,6 +114,7 @@ const joiEmailSchema = Joi.object({
 const schemas = {
   joiSignupSchema,
   joiSigninSchema,
+  joiRefreshSchema,
   joiEmailSchema,
 };
 

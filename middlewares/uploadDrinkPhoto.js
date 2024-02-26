@@ -11,7 +11,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "drinkThumb",
+    folder: "cocktail",
     allowed_formats: ["jpeg", "png", "jpg"],
     transformation: [{ width: 500, height: 500, crop: "limit" }],
   },
