@@ -10,6 +10,7 @@ The project builds RESTful APIs using Node.js, Express and Mongoose
 <p align="left"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" alt="nodejs" width="70" height="60"/>
 <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" alt="mongodb" width="60" height="50"/>
 <img src="https://raw.githubusercontent.com/swagger-api/swagger.io/wordpress/images/assets/SW-logo-clr.png" height="50">
+<img src="/public/readme/google.png" height="40">
 <img src="https://github.com/MarioTerron/logo-images/blob/master/logos/expressjs.png" height="30">
 <img src="https://cloudinary-res.cloudinary.com/image/upload/c_scale,w_300/v1/logo/for_white_bg/cloudinary_logo_for_white_bg.svg" height="30"></p>
 
@@ -103,4 +104,30 @@ The authentication system used in this project is Auth2 `./controllers/authContr
 
 ## Link to Frontend Repo
 To start using our app, go to the [link](https://github.com/R3enox/frontend-drink-master) and sign up for the system. Once you have successfully logged in, enjoy the app's features 😎
+
+## 😎 Our team
+
+- **Mykyta Yeremenko** - Team Lead vs Fullstack [Github][1]
+- **Natalia Mahera** - Scrum Master vs Fullstack [Github][2]
+- **Yakiv Hrubskyi** - Fullstack [Github][3]
+- **Mykola Pavlovych** - Fullstack [Github][4]
+- **Kateryna Mala** - Fullstack [Github][5]
+- **Vadym Bobyrenko** - Fullstack [Github][6]
+- **Serhii Lutsenko** - Fullstack [Github][7]
+- **Alex Prokopiev** - Fullstack [Github][11]
+- **Karina Ahadzhanian** - Fullstack [Github][8]
+- **Eduard Sorokolietov** - Fullstack [Github][9]
+- **Angelina Smaluch** - Fullstack [Github][10]
+
+[1]: https://github.com/R3enox
+[2]: https://github.com/NataliaMahera
+[3]: https://github.com/y-hrubskyi
+[4]: https://github.com/Mykola1612
+[5]: https://github.com/malaya1855
+[6]: https://github.com/wadimcka
+[7]: https://github.com/SergeyLu89
+[8]: https://github.com/KarinaCor
+[9]: https://github.com/soroked
+[10]: https://github.com/AngelinaCholak
+[11]: https://github.com/AlexProkopev
 
