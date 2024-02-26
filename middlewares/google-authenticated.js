@@ -1,6 +1,6 @@
 const passport = require("passport");
 const { Strategy } = require("passport-google-oauth2");
-const { GOOGLE_CLIEND_ID, GOOGLE_CLIENT_SECRET } = process.env;
+const { GOOGLE_CLIEND_ID, GOOGLE_CLIENT_SECRET, BACK_URL } = process.env;
 const bcrypt = require("bcryptjs");
 const { nanoid } = require("nanoid");
 const { User } = require("../models/user");
@@ -8,7 +8,7 @@ const { User } = require("../models/user");
 const googleParams = {
   clientID: GOOGLE_CLIEND_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: `https://drink-master-4fm6.onrender.com/api/auth/google/callback`,
+  callbackURL: `${BACK_URL}/api/auth/google/callback`,
   passReqToCallback: true,
 };
 
