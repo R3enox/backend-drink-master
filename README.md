@@ -105,19 +105,19 @@ The authentication system used in this project is Auth2 `./controllers/authContr
 ## Link to Frontend Repo
 To start using our app, go to the [link](https://github.com/R3enox/frontend-drink-master) and sign up for the system. Once you have successfully logged in, enjoy the app's features 😎
 
-## 😎 Our team
+## 😎 Our Fullstack Web Developer Team
 
-- **Mykyta Yeremenko** - Team Lead vs Fullstack [Github][1]
-- **Natalia Mahera** - Scrum Master vs Fullstack [Github][2]
-- **Yakiv Hrubskyi** - Fullstack [Github][3]
-- **Mykola Pavlovych** - Fullstack [Github][4]
-- **Kateryna Mala** - Fullstack [Github][5]
-- **Vadym Bobyrenko** - Fullstack [Github][6]
-- **Serhii Lutsenko** - Fullstack [Github][7]
-- **Alex Prokopiev** - Fullstack [Github][11]
-- **Karina Ahadzhanian** - Fullstack [Github][8]
-- **Eduard Sorokolietov** - Fullstack [Github][9]
-- **Angelina Smaluch** - Fullstack [Github][10]
+- **Mykyta Yeremenko** - Team Lead [Github][1]
+- **Natalia Mahera** - Scrum Master [Github][2]
+- **Yakiv Hrubskyi** - [Github][3]
+- **Mykola Pavlovych** - [Github][4]
+- **Kateryna Mala** - [Github][5]
+- **Vadym Bobyrenko** - [Github][6]
+- **Serhii Lutsenko** - [Github][7]
+- **Alex Prokopiev** - [Github][11]
+- **Karina Ahadzhanian** - [Github][8]
+- **Eduard Sorokolietov** - [Github][9]
+- **Angelina Smaluch** - [Github][10]
 
 [1]: https://github.com/R3enox
 [2]: https://github.com/NataliaMahera
