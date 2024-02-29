@@ -1,28 +1,24 @@
-require("dotenv").config();
+const fs = require("node:fs/promises");
 const express = require("express");
-const logger = require("morgan");
 const cors = require("cors");
-
+const logger = require("morgan");
+const moment = require("moment");
 const swaggerUi = require("swagger-ui-express");
-const swaggerDoc = require("./swagger.json");
+require("dotenv").config();
 
+const swaggerDoc = require("./swagger.json");
 const authRouter = require("./routes/api/auth");
 const filtersRouter = require("./routes/api/filters");
 const drinksRouter = require("./routes/api/drinks");
 const usersRouter = require("./routes/api/users");
 
-const fs = require("fs/promises");
-const moment = require("moment");
-
 const app = express();
-
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use(async (req, res, next) => {
   const { method, url } = req;
@@ -30,6 +26,12 @@ app.use(async (req, res, next) => {
   await fs.appendFile("./public/server.log", `\n${method} ${url} ${date}`);
   next();
 });
+
+app.get("/ping", async (req, res) => {
+  res.send({ message: `/ping: ${Date.now()}` });
+});
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use("/api/auth", authRouter);
 app.use("/api/filters", filtersRouter);
