@@ -28,7 +28,7 @@ app.use(async (req, res, next) => {
 });
 
 app.get("/ping", async (req, res) => {
-  res.send({ message: `/ping: ${Date.now()}` });
+  res.send({ message: `Pong ${Date.now()}` });
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
