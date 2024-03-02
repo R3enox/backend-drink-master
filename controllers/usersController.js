@@ -4,6 +4,8 @@ const path = require("path");
 const { ctrlWrapper, HttpError } = require("../helpers/index.js");
 const { nanoid } = require("nanoid");
 const sendEmail = require("../helpers/sendEmail.js");
+const { Drink } = require("../models/drink.js");
+const BgMotivModalKeys = require("../constants/achievements/classNameKeys.js");
 
 const updateUser = async (req, res) => {
   const { body, file, user } = req;
@@ -124,8 +126,41 @@ const getCurrent = async (req, res) => {
   });
 };
 
+const checkAddToFavoritesAchievements = async (req, res) => {
+  const { user } = req;
+
+  // first favorite add
+  if (!user.achievements.addedToFavoriteFirst) {
+    user.achievements.addedToFavoriteFirst = true;
+    await user.save();
+
+    return res.json({
+      message: "Wow! You have added the first recipe to your favorites!",
+      classNamesKey: BgMotivModalKeys.THIRD,
+    });
+  }
+
+  // tenth favorite add
+  if (!user.achievements.addedToFavoriteTenth) {
+    const favoritesQty = await Drink.countDocuments({ favorite: user._id });
+
+    if (favoritesQty === 10) {
+      user.achievements.addedToFavoriteTenth = true;
+      await user.save();
+
+      return res.json({
+        message: "Wow! You have added 10 recipes to your favorites!",
+        classNamesKey: BgMotivModalKeys.SECOND,
+      });
+    }
+  }
+
+  res.send(null);
+};
+
 module.exports = {
   updateUser: ctrlWrapper(updateUser),
   getCurrent: ctrlWrapper(getCurrent),
   subscribe: ctrlWrapper(subscribe),
+  checkAddToFavoritesAchievements: ctrlWrapper(checkAddToFavoritesAchievements),
 };

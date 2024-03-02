@@ -23,4 +23,10 @@ router.patch(
   ctrl.updateUser
 );
 
+router.get(
+  "/achievements/add-to-favorites",
+  isAuthenticated,
+  ctrl.checkAddToFavoritesAchievements
+);
+
 module.exports = router;
