@@ -158,9 +158,42 @@ const checkAddToFavoritesAchievements = async (req, res) => {
   res.send(null);
 };
 
+const checkCreateOwnAchievements = async (req, res) => {
+  const { user } = req;
+
+  // first create own
+  if (!user.achievements.createdOwnFirst) {
+    user.achievements.createdOwnFirst = true;
+    await user.save();
+
+    return res.json({
+      message: "Wow! You have created the first own recipe!",
+      classNamesKey: BgMotivModalKeys.THIRD,
+    });
+  }
+
+  // tenth create own
+  if (!user.achievements.createdOwnTenth) {
+    const ownsQty = await Drink.countDocuments({ owner: user._id });
+
+    if (ownsQty === 10) {
+      user.achievements.createdOwnTenth = true;
+      await user.save();
+
+      return res.json({
+        message: "Wow! You have created 10 own recipes!",
+        classNamesKey: BgMotivModalKeys.SECOND,
+      });
+    }
+  }
+
+  res.send(null);
+};
+
 module.exports = {
   updateUser: ctrlWrapper(updateUser),
   getCurrent: ctrlWrapper(getCurrent),
   subscribe: ctrlWrapper(subscribe),
   checkAddToFavoritesAchievements: ctrlWrapper(checkAddToFavoritesAchievements),
+  checkCreateOwnAchievements: ctrlWrapper(checkCreateOwnAchievements),
 };

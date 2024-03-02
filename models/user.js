@@ -54,6 +54,14 @@ const userSchema = new Schema(
         type: Boolean,
         default: false,
       },
+      createdOwnFirst: {
+        type: Boolean,
+        default: false,
+      },
+      createdOwnTenth: {
+        type: Boolean,
+        default: false,
+      },
     },
   },
   { versionKey: false, timestamps: true }

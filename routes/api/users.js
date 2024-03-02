@@ -29,4 +29,10 @@ router.get(
   ctrl.checkAddToFavoritesAchievements
 );
 
+router.get(
+  "/achievements/create-own",
+  isAuthenticated,
+  ctrl.checkCreateOwnAchievements
+);
+
 module.exports = router;
