@@ -46,6 +46,18 @@ const userSchema = new Schema(
       required: true,
     },
     achievements: {
+      registered: {
+        type: Boolean,
+        default: false,
+      },
+      appUsedFor10Days: {
+        type: Boolean,
+        default: false,
+      },
+      appUsedFor100Days: {
+        type: Boolean,
+        default: false,
+      },
       addedToFavoriteFirst: {
         type: Boolean,
         default: false,

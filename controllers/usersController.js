@@ -126,6 +126,56 @@ const getCurrent = async (req, res) => {
   });
 };
 
+const checkActivityAchievements = async (req, res) => {
+  const { user } = req;
+
+  // after register
+  if (!user.achievements.registered) {
+    user.achievements.registered = true;
+    await user.save();
+
+    return res.json({
+      message:
+        "Welcome to digital drinks cookbook! Unlock your inner mixologist!",
+      classNamesKey: BgMotivModalKeys.FIRST,
+    });
+  }
+
+  // app used ten days
+  if (!user.achievements.appUsedFor10Days) {
+    const tenDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 10;
+    const moreThan10Days = user.createdAt <= tenDaysAgo;
+
+    if (moreThan10Days) {
+      user.achievements.appUsedFor10Days = true;
+      await user.save();
+
+      return res.json({
+        message: "Wow! You have been using the application for 10 days!",
+        classNamesKey: BgMotivModalKeys.FIRST,
+      });
+    }
+  }
+
+  // app used hundred days
+  if (!user.achievements.appUsedFor100Days) {
+    const hundredDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 100;
+    const moreThan100Days = user.createdAt <= hundredDaysAgo;
+
+    if (moreThan100Days) {
+      user.achievements.appUsedFor100Days = true;
+      await user.save();
+
+      return res.json({
+        message: "Wow! You have been using the application for 100 days!",
+        classNamesKey: BgMotivModalKeys.FIRST,
+      });
+    }
+  }
+
+  res.send(null);
+};
+
 const checkAddToFavoritesAchievements = async (req, res) => {
   const { user } = req;
 
@@ -194,6 +244,7 @@ module.exports = {
   updateUser: ctrlWrapper(updateUser),
   getCurrent: ctrlWrapper(getCurrent),
   subscribe: ctrlWrapper(subscribe),
+  checkActivityAchievements: ctrlWrapper(checkActivityAchievements),
   checkAddToFavoritesAchievements: ctrlWrapper(checkAddToFavoritesAchievements),
   checkCreateOwnAchievements: ctrlWrapper(checkCreateOwnAchievements),
 };
