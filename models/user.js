@@ -34,8 +34,7 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    refreshToken: {type: String,
-      default: null},
+    refreshToken: { type: String, default: null },
     subscribe: {
       type: Boolean,
       default: false,
@@ -45,6 +44,36 @@ const userSchema = new Schema(
       default:
         "https://res.cloudinary.com/dh0wbc15k/image/upload/v1708685720/avatars/ZgEyxbk_y6uaSlqjj908B.png.png",
       required: true,
+    },
+    achievements: {
+      registered: {
+        type: Boolean,
+        default: false,
+      },
+      appUsedFor10Days: {
+        type: Boolean,
+        default: false,
+      },
+      appUsedFor100Days: {
+        type: Boolean,
+        default: false,
+      },
+      addedToFavoriteFirst: {
+        type: Boolean,
+        default: false,
+      },
+      addedToFavoriteTenth: {
+        type: Boolean,
+        default: false,
+      },
+      createdOwnFirst: {
+        type: Boolean,
+        default: false,
+      },
+      createdOwnTenth: {
+        type: Boolean,
+        default: false,
+      },
     },
   },
   { versionKey: false, timestamps: true }
@@ -100,7 +129,8 @@ const joiSigninSchema = Joi.object({
 });
 
 const joiRefreshSchema = Joi.object({
-  refreshToken: Joi.string().required()});
+  refreshToken: Joi.string().required(),
+});
 
 const joiEmailSchema = Joi.object({
   email: Joi.string().empty(false).pattern(emailRegExp).required().messages({

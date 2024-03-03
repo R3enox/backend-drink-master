@@ -4,6 +4,8 @@ const path = require("path");
 const { ctrlWrapper, HttpError } = require("../helpers/index.js");
 const { nanoid } = require("nanoid");
 const sendEmail = require("../helpers/sendEmail.js");
+const { Drink } = require("../models/drink.js");
+const BgMotivModalKeys = require("../constants/achievements/classNameKeys.js");
 
 const updateUser = async (req, res) => {
   const { body, file, user } = req;
@@ -124,8 +126,125 @@ const getCurrent = async (req, res) => {
   });
 };
 
+const checkActivityAchievements = async (req, res) => {
+  const { user } = req;
+
+  // after register
+  if (!user.achievements.registered) {
+    user.achievements.registered = true;
+    await user.save();
+
+    return res.json({
+      message:
+        "Welcome to digital drinks cookbook! Unlock your inner mixologist!",
+      classNamesKey: BgMotivModalKeys.FIRST,
+    });
+  }
+
+  // app used ten days
+  if (!user.achievements.appUsedFor10Days) {
+    const tenDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 10;
+    const moreThan10Days = user.createdAt <= tenDaysAgo;
+
+    if (moreThan10Days) {
+      user.achievements.appUsedFor10Days = true;
+      await user.save();
+
+      return res.json({
+        message: "Wow! You have been using the application for 10 days!",
+        classNamesKey: BgMotivModalKeys.FIRST,
+      });
+    }
+  }
+
+  // app used hundred days
+  if (!user.achievements.appUsedFor100Days) {
+    const hundredDaysAgo = Date.now() - 1000 * 60 * 60 * 24 * 100;
+    const moreThan100Days = user.createdAt <= hundredDaysAgo;
+
+    if (moreThan100Days) {
+      user.achievements.appUsedFor100Days = true;
+      await user.save();
+
+      return res.json({
+        message: "Wow! You have been using the application for 100 days!",
+        classNamesKey: BgMotivModalKeys.FIRST,
+      });
+    }
+  }
+
+  res.send(null);
+};
+
+const checkAddToFavoritesAchievements = async (req, res) => {
+  const { user } = req;
+
+  // first favorite add
+  if (!user.achievements.addedToFavoriteFirst) {
+    user.achievements.addedToFavoriteFirst = true;
+    await user.save();
+
+    return res.json({
+      message: "Wow! You have added the first recipe to your favorites!",
+      classNamesKey: BgMotivModalKeys.THIRD,
+    });
+  }
+
+  // tenth favorite add
+  if (!user.achievements.addedToFavoriteTenth) {
+    const favoritesQty = await Drink.countDocuments({ favorite: user._id });
+
+    if (favoritesQty === 10) {
+      user.achievements.addedToFavoriteTenth = true;
+      await user.save();
+
+      return res.json({
+        message: "Wow! You have added 10 recipes to your favorites!",
+        classNamesKey: BgMotivModalKeys.SECOND,
+      });
+    }
+  }
+
+  res.send(null);
+};
+
+const checkCreateOwnAchievements = async (req, res) => {
+  const { user } = req;
+
+  // first create own
+  if (!user.achievements.createdOwnFirst) {
+    user.achievements.createdOwnFirst = true;
+    await user.save();
+
+    return res.json({
+      message: "Wow! You have created the first own recipe!",
+      classNamesKey: BgMotivModalKeys.THIRD,
+    });
+  }
+
+  // tenth create own
+  if (!user.achievements.createdOwnTenth) {
+    const ownsQty = await Drink.countDocuments({ owner: user._id });
+
+    if (ownsQty === 10) {
+      user.achievements.createdOwnTenth = true;
+      await user.save();
+
+      return res.json({
+        message: "Wow! You have created 10 own recipes!",
+        classNamesKey: BgMotivModalKeys.SECOND,
+      });
+    }
+  }
+
+  res.send(null);
+};
+
 module.exports = {
   updateUser: ctrlWrapper(updateUser),
   getCurrent: ctrlWrapper(getCurrent),
   subscribe: ctrlWrapper(subscribe),
+  checkActivityAchievements: ctrlWrapper(checkActivityAchievements),
+  checkAddToFavoritesAchievements: ctrlWrapper(checkAddToFavoritesAchievements),
+  checkCreateOwnAchievements: ctrlWrapper(checkCreateOwnAchievements),
 };
