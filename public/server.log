@@ -2550,3 +2550,5 @@ POST /api/auth/refresh 26-02-2024_12:47:15
 GET /api/users/current 26-02-2024_12:47:15
 GET /api/drinks?per_category=3 26-02-2024_12:47:15
 POST /api/auth/signout 26-02-2024_12:47:18
+GET /api/drinks?per_category=1 04-03-2024_10:32:19
+GET /api/drinks?per_category=1 04-03-2024_10:32:40

@@ -832,7 +832,10 @@
       "SignUpResponse": {
         "type": "object",
         "properties": {
-          "token": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
             "type": "string"
           },
           "user": {
@@ -860,7 +863,8 @@
           }
         },
         "example": {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDg1YWZiMjVlZmIwZjM2OTQxNDE2ZiIsImlhdCI6MTcwODY3Nzg4MywiZXhwIjoxNzA4NzIxMDgzfQ.ZFgGpv4dOHiQ6tymYZanl6qbp1VRQj3IC-zPE2Ccg2M",
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTU4NGNkYTU0ZTRiMjgyZDk0OWZkMCIsImlhdCI6MTcwOTU0MDU1NywiZXhwIjoxNzA5NTQwNjc3fQ.2AWqFnMB0rfBwW0sXJ5B_EYEWQ5klkQBSWbohHN8ndc",
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTU4NGNkYTU0ZTRiMjgyZDk0OWZkMCIsImlhdCI6MTcwOTU0MDU1NywiZXhwIjoxNzEwMTQ1MzU3fQ.bTlAj6uLwXa2LJ5fbNHjApvr37cBXkvapn6n1y4kVqE",
           "user": {
             "id": "65d85afb25efb0f36941416f",
             "name": "Test",
@@ -918,7 +922,8 @@
           }
         },
         "example": {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZDg1YWZiMjVlZmIwZjM2OTQxNDE2ZiIsImlhdCI6MTcwODY3Nzg4MywiZXhwIjoxNzA4NzIxMDgzfQ.ZFgGpv4dOHiQ6tymYZanl6qbp1VRQj3IC-zPE2Ccg2M",
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTU4NGNkYTU0ZTRiMjgyZDk0OWZkMCIsImlhdCI6MTcwOTU0MDU1NywiZXhwIjoxNzA5NTQwNjc3fQ.2AWqFnMB0rfBwW0sXJ5B_EYEWQ5klkQBSWbohHN7ndc",
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTU4NGNkYTU0ZTRiMjgyZDk0OWZkMCIsImlhdCI6MTcwOTU0MDU1NywiZXhwIjoxNzEwMTQ1MzU3fQ.bTlAj6uLwXa9LJ5fbNHjApvr37cBXkvapn6n1y4kVqE",
           "user": {
             "id": "65d85afb25efb0f36941416f",
             "name": "Test",
