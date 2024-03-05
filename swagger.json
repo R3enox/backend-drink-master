@@ -119,6 +119,51 @@
         }
       }
     },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User's token refresh",
+        "parameters": [],
+        "requestBody": {
+          "description": "Authorisation's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/auth/signout": {
       "post": {
         "tags": ["Auth"],
@@ -894,7 +939,10 @@
       "SignInResponse": {
         "type": "object",
         "properties": {
-          "token": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
             "type": "string"
           },
           "user": {
@@ -933,6 +981,34 @@
           }
         }
       },
+      "RefreshRequest": {
+        "type": "object",
+        "required": ["refreshToken"],
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR6cCI6IkpXVCJ9.eyJpZCI6IjY1ZTU4NGNkYTU0ZTRiMjgyZDk0OWZkMCIsImlhdCI6MTcwOTU0MDU1NywiZXhwIjoxNzEwMTQ1MzU3fQ.bTlAj6uLwXa2LJ5fbNHjApvr37cBXkvapn6n1y4kVqE"
+        }
+      },
+      "RefreshResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTU4NGNkYTU0ZTRiMjgyZDk0OWZkMCIsImlhdCI6MTcwOTU0MDU1NywiZXhwIjoxNzA5NTQwNjc3fQ.2AWqFnMB0rfBwW0sXJ5B_EYEWQ5klkQBSWbohHN7ndc",
+          "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTU4NGNkYTU0ZTRiMjgyZDk0OWZkMCIsImlhdCI6MTcwOTU0MDU1NywiZXhwIjoxNzEwMTQ1MzU3fQ.bTlAj6uLwXa9LJ5fbNHjApvr37cBXkvapn6n1y4kVqE"
+        }
+      },
+
       "CurrentResponse": {
         "type": "object",
         "properties": {
